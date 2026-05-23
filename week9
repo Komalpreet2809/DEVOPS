@@ -1,0 +1,95 @@
+UNIT IV: MAVEN BUILD AUTOMATION
+WEEK 9: BUILD TOOLS, LIFECYCLES, AND POM STRUCTURE
+
+1. WHY BUILD TOOLS EXIST
+In the early days of Java, compiling a project meant manually executing `javac` commands for every single source file, remembering complex classpath strings, and manually downloading JAR files from the internet.
+Build tools like Apache Maven, Gradle, and Ant were created to automate this entire workflow. They provide a standardized way to build, package, and deploy applications.
+
+2. PROBLEMS SOLVED BY AUTOMATED BUILDS
+- "JAR Hell": Manually managing libraries leads to version conflicts. Build tools automatically resolve and download dependencies.
+- Reproducibility: A project builds the exact same way on a developer's laptop as it does on the CI server.
+- Standardization: Maven enforces a standard directory structure. Any Java developer can immediately understand a Maven project layout.
+- Lifecycle Execution: Running a single command (`mvn clean install`) handles cleaning, compiling, testing, and packaging automatically.
+
+3. DIRECTORY STRUCTURE
+Maven enforces Convention over Configuration:
+- `src/main/java`: The core application source code.
+- `src/main/resources`: Configuration files (e.g., properties, XML, YAML).
+- `src/test/java`: Unit and integration test code.
+- `target/`: The ephemeral output directory where compiled `.class` files and the final `.jar`/`.war` files are stored.
+
+4. PROJECT OBJECT MODEL (POM)
+The `pom.xml` is the brain of a Maven project. It is an XML file that contains information about the project and configuration details used by Maven to build the project.
+Key elements in a POM:
+- `groupId`: Uniquely identifies your project across all projects (usually a reverse domain name, e.g., `com.mycompany`).
+- `artifactId`: The name of the jar without version.
+- `version`: The current version (e.g., `1.0.0-SNAPSHOT`).
+- `dependencies`: The external libraries required by the project.
+- `build`: Configuration for plugins and goals.
+
+5. BUILD LIFECYCLE PHASES
+Maven is based on the central concept of a build lifecycle. The default lifecycle consists of several phases executed sequentially:
+- `validate`: Validates that the project is correct and all necessary information is available.
+- `compile`: Compiles the source code of the project.
+- `test`: Tests the compiled source code using a testing framework.
+- `package`: Takes the compiled code and packages it in its distributable format (JAR).
+- `verify`: Runs any checks on results of integration tests.
+- `install`: Installs the package into the local repository (`~/.m2`).
+- `deploy`: Copies the final package to a remote repository for sharing.
+
+=======================================================
+PRACTICAL LABS FOR WEEK 9
+=======================================================
+
+### Practical 1: Generating a Maven Project from Archetype
+**Question/Scenario:**
+Using the Maven CLI, generate a standard Java project skeleton using the `maven-archetype-quickstart`. Set the `groupId` to `com.devops.demo` and `artifactId` to `calculator-app`.
+
+**Solution / Code:**
+```bash
+mvn archetype:generate \
+  -DgroupId=com.devops.demo \
+  -DartifactId=calculator-app \
+  -DarchetypeArtifactId=maven-archetype-quickstart \
+  -DinteractiveMode=false
+```
+*Explanation:* The Archetype plugin generates the standard Maven directory structure (`src/main/java`, `pom.xml`, etc.) automatically, saving manual folder creation time.
+
+### Practical 2: Executing the Build Lifecycle
+**Question/Scenario:**
+You have made changes to your Maven project. You need to delete the old compiled files, compile the new code, run the unit tests, and package the application into a JAR file. What single command achieves this?
+
+**Solution / Code:**
+```bash
+mvn clean package
+```
+*Explanation:* The `clean` goal wipes the `target/` directory. The `package` phase sequentially triggers `validate`, `compile`, and `test` before finally zipping the compiled `.class` files into a JAR inside the `target/` directory.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

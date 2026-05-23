@@ -1,0 +1,95 @@
+UNIT IV: MAVEN BUILD AUTOMATION
+WEEK 11: MAVEN AND DOCKER INTEGRATION
+
+1. DOCKERIZING MAVEN-BASED APPLICATIONS
+In modern DevOps workflows, the end artifact of a Java build is no longer just a JAR file; it is a Docker image containing the JRE and the JAR file.
+The traditional process involves:
+- Running `mvn clean package` to generate the JAR in the `target/` directory.
+- Writing a `Dockerfile` in the root directory.
+- Running `docker build -t myapp:1.0 .` to package the JAR into a Linux container.
+
+2. WRITING THE DOCKERFILE FOR JAVA
+A standard Java Dockerfile should:
+- Use a lightweight JRE base image (like Alpine or Eclipse Temurin) rather than a full JDK to reduce image size.
+- Define a working directory.
+- Copy the generated JAR file into the image.
+- Expose the application port.
+- Define the `ENTRYPOINT` to execute the JAR.
+
+3. MAVEN AND DOCKER PLUGINS
+Instead of writing shell scripts to run Docker commands, you can integrate Docker directly into the Maven lifecycle using plugins.
+- `dockerfile-maven-plugin` (Spotify - Deprecated but historically important): Builds Docker images using a local Docker daemon during the `package` phase.
+- `fabric8-maven-plugin`: Extremely powerful plugin for building Docker images and generating Kubernetes manifests.
+- `jib-maven-plugin` (Google): A revolutionary plugin that builds optimized Docker and OCI images for Java applications WITHOUT needing a Docker daemon (no `Dockerfile` required). It layers the image efficiently (separating dependencies from classes) for extremely fast rebuilds.
+
+4. PUSHING ARTIFACTS TO REGISTRIES
+Once the Docker image is built, the final step in the CI pipeline is pushing it to a Container Registry (Docker Hub, AWS ECR, GitHub Container Registry).
+Plugins like Jib can be configured with registry credentials in the `pom.xml` or via environment variables to automatically push the image during the `mvn deploy` phase.
+
+=======================================================
+PRACTICAL LABS FOR WEEK 11
+=======================================================
+
+### Practical 5: Standard Dockerfile for a Maven Project
+**Question/Scenario:**
+You have successfully run `mvn package` and produced `target/myapp-1.0.jar`. Write a `Dockerfile` using the `eclipse-temurin:17-jre-alpine` base image to containerize this application. It runs on port 8080.
+
+**Solution / Code:**
+```dockerfile
+# Use a lightweight JRE image
+FROM eclipse-temurin:17-jre-alpine
+
+# Set the working directory inside the container
+WORKDIR /opt/app
+
+# Copy the JAR from the target folder to the container
+COPY target/myapp-1.0.jar app.jar
+
+# Expose the application port
+EXPOSE 8080
+
+# Execute the application
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+*To build:* `docker build -t my-java-app:1.0 .`
+
+### Practical 6: Daemonless Docker Builds with Google Jib
+**Question/Scenario:**
+You are running a CI pipeline on a runner that does NOT have Docker installed. How can you use the Maven CLI and the Google Jib plugin to build a container image and push it directly to Docker Hub repository `myrepo/myapp`?
+
+**Solution / Code:**
+```bash
+mvn compile jib:build \
+  -Dimage=docker.io/myrepo/myapp:latest \
+  -Djib.to.auth.username=myUser \
+  -Djib.to.auth.password=mySecretPassword
+```
+*Explanation:* The `jib:build` goal connects directly to the container registry API. It compiles the Java code, separates dependencies into distinct container layers for optimization, and pushes the image over HTTPS without ever invoking a local Docker daemon.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
