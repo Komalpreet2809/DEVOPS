@@ -1,0 +1,96 @@
+UNIT III: MICROSERVICES WITH DOCKER COMPOSE
+WEEK 8: SERVICE DEPENDENCY & USE CASE DEPLOYMENTS
+
+1. SERVICE DEPENDENCY ORDERING
+In a microservices architecture, the order in which services start is critical. An API service will crash if it tries to connect to a database that hasn't booted up yet.
+- `depends_on`: Controls startup and shutdown order in Compose.
+- Note: Standard `depends_on` only waits for the container to be running, not for the application inside to be "ready". 
+- Healthchecks: For true readiness waiting, you combine `depends_on` with a `condition: service_healthy`, requiring the database container to define a `healthcheck` block (like executing a `pg_isready` ping).
+
+2. MULTI-CONTAINER APPS: DATABASE + BACKEND + FRONTEND
+A classic 3-tier architecture involves:
+- Frontend Container: Serves static assets (React/Angular) via Nginx.
+- Backend Container: The API logic (Node.js/Spring Boot/Django).
+- Database Container: Persistent storage (MySQL/MongoDB/Postgres).
+Docker Compose places all these on a default custom bridge network, allowing them to communicate via service names (e.g., the backend can connect to `http://database:3306`).
+
+3. USE CASE: WORDPRESS + MYSQL
+WordPress requires a relational database to function.
+- We define a `mysql` service with persistent volumes to ensure blog posts aren't lost when the container stops.
+- We define a `wordpress` service that depends on the MySQL service and uses environment variables to configure the database connection automatically.
+
+4. USE CASE: NODE.JS + MONGODB
+The MERN/MEAN stack relies heavily on NoSQL.
+- The Node.js application connects to MongoDB using a connection string like `mongodb://mongo:27017/mydb`.
+- Volumes are mapped to `/data/db` inside the Mongo container to persist JSON documents.
+
+5. USE CASE: JAVA SPRING BOOT + POSTGRESQL
+Enterprise deployments often use Java.
+- Spring Boot uses an `application.properties` file. We can override these properties using Docker environment variables (e.g., `SPRING_DATASOURCE_URL`).
+
+=======================================================
+PRACTICAL LABS FOR WEEK 8
+=======================================================
+
+### Practical 5: WordPress and MySQL Deployment
+**Question/Scenario:**
+Write a full Docker Compose configuration to deploy a WordPress blog backed by a MySQL 5.7 database. Ensure that the database data is persisted using a named volume, and that WordPress uses the correct database credentials.
+
+**Solution / Code:**
+```yaml
+version: '3.8'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_password
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    ports:
+      - "8000:80"
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: wp_password
+      WORDPRESS_DB_NAME: wordpress
+
+volumes:
+  db_data:
+```
+
+### Practical 6: Healthchecks for Dependency Ordering
+**Question/Scenario:**
+Your backend Node.js application crashes immediately because the PostgreSQL database takes 10 seconds to fully initialize. Write a compose snippet using a `healthcheck` on the Postgres container, and configure the backend to wait for that healthcheck before starting.
+
+**Solution / Code:**
+```yaml
+version: '3.8'
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: secret
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+```
+*Explanation:* The `pg_isready` command physically pings the database. The `backend` service will not attempt to boot until the healthcheck returns a success status.
