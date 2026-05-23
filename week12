@@ -1,0 +1,95 @@
+UNIT V: CONTINUOUS INTEGRATION WITH GITHUB ACTIONS
+WEEK 12: WORKFLOW AUTOMATION & TRIGGERS
+
+1. UNDERSTANDING WORKFLOW AUTOMATION
+GitHub Actions makes it easy to automate all your software workflows directly within GitHub. It allows you to build, test, and deploy your code right from the repository where it is hosted.
+Continuous Integration (CI) is the practice of merging all developers' working copies to a shared mainline several times a day. Automated builds and tests run on every merge to verify the integration.
+
+2. WORKFLOW DIRECTORY STRUCTURE
+To use GitHub Actions, you must define workflows using YAML files.
+These files MUST be placed in a specific, hidden directory at the root of your Git repository:
+`.github/workflows/`
+If you name a file `.github/workflows/ci.yml`, GitHub will automatically parse and execute it based on its triggers.
+
+3. KEY COMPONENTS OF ACTIONS
+- Workflows: A configurable automated process made up of one or more jobs.
+- Events/Triggers: A specific activity in a repository that triggers a workflow run (e.g., a push, a pull request).
+- Jobs: A set of steps that execute on the same runner. Jobs run in parallel by default.
+- Steps: Individual tasks within a job. A step can either run a shell script or invoke an Action.
+- Actions: Standalone commands that are combined into steps to create a job (e.g., `actions/checkout`).
+- Runners: A server that runs your workflows when they're triggered. Each runner can run a single job at a time.
+
+4. WORKFLOW TRIGGERS
+Workflows are highly event-driven. Common triggers include:
+- `push`: Runs when code is pushed to specific branches (e.g., `branches: [ "main" ]`).
+- `pull_request`: Runs when a PR is opened, ensuring the incoming code passes tests before it can be merged.
+- `schedule`: Uses Cron syntax to run workflows at specific times (e.g., nightly builds).
+- `workflow_dispatch`: Creates a "Run workflow" button in the GitHub UI, allowing manual execution. You can also define custom input fields for manual runs.
+
+=======================================================
+PRACTICAL LABS FOR WEEK 12
+=======================================================
+
+### Practical 1: Basic CI Workflow for Node.js
+**Question/Scenario:**
+Write a GitHub Actions YAML workflow named "Node CI" that triggers on pushes to the "main" branch. It should checkout the repository, set up Node.js 18, install dependencies, and run `npm test`.
+
+**Solution / Code:**
+```yaml
+name: Node CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run unit tests
+        run: npm test
+```
+
+### Practical 2: Manual Workflow with Inputs (Workflow Dispatch)
+**Question/Scenario:**
+You need a deployment workflow that is triggered manually by developers. It should prompt the user for an "environment" string input (defaulting to 'staging') and then print "Deploying to [environment]".
+
+**Solution / Code:**
+```yaml
+name: Manual Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Deployment Environment'
+        required: true
+        default: 'staging'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute Deployment
+        run: echo "Deploying application to the ${{ github.event.inputs.environment }} environment!"
+```
+*Explanation:* The `workflow_dispatch` trigger activates the manual UI in GitHub. The inputs are accessed using the `github.event.inputs` context object.
+
+
+
+
+
+
+
+
