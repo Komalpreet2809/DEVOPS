@@ -1,0 +1,95 @@
+UNIT VI: CI/CD WITH JENKINS
+WEEK 15: JENKINS FOUNDATIONS & ARCHITECTURE
+
+1. INTRODUCTION TO JENKINS
+Jenkins is the most widely used open-source automation server. It provides hundreds of plugins to support building, deploying, and automating any project. Unlike GitHub Actions which is a SaaS, Jenkins is self-managed infrastructure.
+
+2. JENKINS ARCHITECTURE (MASTER/AGENT MODEL)
+Jenkins operates on a distributed architecture to handle heavy workloads:
+- Master (Controller) Node: The central control unit. It serves the web UI, handles HTTP requests, parses configurations, schedules jobs, and monitors agents. It should NOT execute heavy builds itself to prevent crashing.
+- Agent (Worker/Slave) Nodes: Machines connected to the master that actually execute the jobs. Agents can be static VMs, bare-metal servers, or dynamically provisioned Docker/Kubernetes pods.
+
+3. INSTALLATION & UI OVERVIEW
+Jenkins is a Java application distributed as a `.war` file. It can run standalone via `java -jar jenkins.war`, be deployed on Tomcat, or run inside a Docker container.
+The Classic UI is function-focused, while the "Blue Ocean" plugin UI provides modern, graphical visualizations of CI pipelines.
+
+4. PLUGINS MANAGEMENT
+Jenkins' true power is its plugin ecosystem. Out of the box, Jenkins does very little.
+Plugins add integrations for Git, Maven, Docker, AWS, Slack notifications, and Pipeline syntax.
+Plugins are managed via the web UI (`Manage Jenkins -> Manage Plugins`) or via CLI tools during automated provisioning.
+
+5. SECURITY, USERS, ROLES
+Security is critical because Jenkins executes arbitrary code and holds deployment secrets.
+- Authentication: Can be internal, or integrated with LDAP/Active Directory, GitHub OAuth, or SAML.
+- Authorization (RBAC): Using the Role-Based Strategy plugin, administrators can define who can read jobs, trigger builds, or access the underlying system configuration.
+
+6. FREESTYLE VS PIPELINE JOBS
+- Freestyle Jobs: Configured by clicking through web UI forms. Easy to start, but impossible to track changes (no version control for the job config).
+- Pipeline Jobs: Configured by writing code (a `Jenkinsfile`) stored alongside the application source code in Git (Pipeline-as-Code). This is the industry standard.
+
+=======================================================
+PRACTICAL LABS FOR WEEK 15
+=======================================================
+
+### Practical 1: Installing Jenkins via Docker
+**Question/Scenario:**
+You need to spin up a local Jenkins controller for testing without installing Java on your laptop. Write the docker command to run the official `jenkins/jenkins:lts` image, exposing the UI on port 8080 and persisting the data.
+
+**Solution / Code:**
+```bash
+docker run -d -p 8080:8080 -p 50000:50000 \
+  -v jenkins_home:/var/jenkins_home \
+  --name jenkins-master \
+  jenkins/jenkins:lts
+```
+*Explanation:* Port 8080 serves the Web UI. Port 50000 is used by agents to communicate with the master via JNLP/TCP. The named volume `jenkins_home` ensures job configurations aren't lost when the container stops.
+
+### Practical 2: Extracting the Initial Admin Password
+**Question/Scenario:**
+When you first boot Jenkins, it locks the UI and asks for an "initial admin password" generated during installation. Assuming Jenkins is running in a Docker container named `jenkins-master`, how do you retrieve this password via the CLI?
+
+**Solution / Code:**
+```bash
+docker exec jenkins-master cat /var/jenkins_home/secrets/initialAdminPassword
+```
+*Explanation:* The `docker exec` command allows you to run a command inside a running container. We use `cat` to read the auto-generated security token file required to unlock the Jenkins setup wizard.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
