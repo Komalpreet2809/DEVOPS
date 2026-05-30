@@ -93,7 +93,6 @@ volumes:
   pgdata:
 ```
 *Explanation:* The `env_file` directive loads the `.env` file, and the `${VAR}` syntax interpolates those values into the container's environment natively.
-
 ---
 
 ## WINDOWS PRACTICAL SETUP
@@ -108,6 +107,7 @@ docker compose version
 ### Windows Lab — Multi-service Compose
 ```powershell
 cd labs\unit-3-wordpress
-docker compose config   # validate YAML
+docker compose config
 docker compose up -d
 ```
+

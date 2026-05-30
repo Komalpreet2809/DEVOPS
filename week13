@@ -88,11 +88,6 @@ steps:
     run: mvn -B package --file pom.xml
 ```
 *Explanation:* `hashFiles('**/pom.xml')` generates a unique string based on the contents of the POM. If you add a new dependency, the POM hash changes, causing a cache miss, and downloading the new dependencies cleanly.
-
-
-
-
-
-
 ### Windows Lab — Matrix build
-Add strategy.matrix with Java 17 and 21 in workflow YAML.
+Add `strategy.matrix` with Java 17 and 21 in workflow YAML.
+

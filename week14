@@ -74,29 +74,6 @@ steps:
         docker-compose up -d
 ```
 *Explanation:* This connects to the remote server securely using an SSH private key stored in GitHub Secrets, and executes raw shell commands on the remote machine to restart the Docker stack.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Windows Lab — Docker in CI
-Add step:
-```yaml
-- name: Build Docker image
-  run: docker build -t myapp:${{ github.sha }} ./labs/unit-2-dockerfile
-```
+Add a `docker build` step tagged with `${{ github.sha }}` in your workflow.
+

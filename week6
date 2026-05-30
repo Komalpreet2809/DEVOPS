@@ -114,7 +114,6 @@ EXPOSE 8081
 CMD ["node", "app.js"]
 ```
 *Explanation:* We use `node:18-alpine` for a minimal footprint. The `EXPOSE` directive documents the port, and `CMD` provides the default execution command for the container.
-
 ---
 
 ## WINDOWS PRACTICAL SETUP
@@ -133,3 +132,4 @@ docker build -t inventory-svc:1.0 .
 docker run -d --name inventory -p 8081:3000 inventory-svc:1.0
 curl.exe http://localhost:8081
 ```
+

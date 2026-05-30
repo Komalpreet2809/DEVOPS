@@ -85,15 +85,6 @@ jobs:
         run: echo "Deploying application to the ${{ github.event.inputs.environment }} environment!"
 ```
 *Explanation:* The `workflow_dispatch` trigger activates the manual UI in GitHub. The inputs are accessed using the `github.event.inputs` context object.
+### Windows Lab — GitHub Actions
+Copy `labs/unit-5-github-actions/.github/workflows/java-ci.yml` to your repo and push.
 
-
-
-
-
-
-
-
-
-### Windows Lab — GitHub Actions workflow
-Copy `labs/unit-5-github-actions/.github/workflows/java-ci.yml` to your repo.
-Push to GitHub and verify Actions tab.

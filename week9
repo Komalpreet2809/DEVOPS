@@ -64,60 +64,6 @@ You have made changes to your Maven project. You need to delete the old compiled
 mvn clean package
 ```
 *Explanation:* The `clean` goal wipes the `target/` directory. The `package` phase sequentially triggers `validate`, `compile`, and `test` before finally zipping the compiled `.class` files into a JAR inside the `target/` directory.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-## WINDOWS PRACTICAL SETUP
-
-**Prerequisites:** Docker Desktop running, WSL2 enabled.
-
-```powershell
-docker info
-docker compose version
-```
-
-### Windows Lab — Maven project
-```powershell
-cd labs\unit-4-maven
-mvn -B clean verify
-java -jar target\calculator-app-1.0.0-SNAPSHOT.jar
-```
-
-![Maven version on Windows](../assets/screenshots/unit-4/01-mvn-version.svg)
-*Maven version on Windows — captured on Windows PowerShell + Docker Desktop*
-
-![Maven clean verify build](../assets/screenshots/unit-4/02-mvn-clean-verify.svg)
-*Maven clean verify build — captured on Windows PowerShell + Docker Desktop*
-
 ---
 
 ## WINDOWS PRACTICAL SETUP
@@ -141,3 +87,4 @@ java -jar target\calculator-app-1.0.0-SNAPSHOT.jar
 
 ![Maven clean verify build](assets/screenshots/unit-4/02-mvn-clean-verify.svg)
 *Maven clean verify build — captured on Windows PowerShell + Docker Desktop*
+

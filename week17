@@ -83,17 +83,6 @@ pipeline {
 }
 ```
 *Explanation:* The `junit` step reads the XML files and populates the "Test Result" visualization in the Jenkins dashboard. `catchError` ensures the pipeline proceeds to the `post` block even if a test fails.
+### Windows Lab — Jenkins + Maven + Docker pipeline
+Configure Maven/Docker in Jenkins Global Tool Configuration.
 
-
-
-
-
-
-
-
-
-
-
-### Windows Lab — Jenkins + Maven + Docker
-Configure Maven and Docker tools in Jenkins Global Tool Configuration.
-Run pipeline that builds Maven JAR and Docker image.

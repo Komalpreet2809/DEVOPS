@@ -53,51 +53,10 @@ When you first boot Jenkins, it locks the UI and asks for an "initial admin pass
 docker exec jenkins-master cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 *Explanation:* The `docker exec` command allows you to run a command inside a running container. We use `cat` to read the auto-generated security token file required to unlock the Jenkins setup wizard.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Windows Lab — Jenkins in Docker
 ```powershell
 docker volume create jenkins_home
 docker run -d -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home --name jenkins-lab jenkins/jenkins:lts
 docker exec jenkins-lab cat /var/jenkins_home/secrets/initialAdminPassword
-# Open http://localhost:8080
 ```
+

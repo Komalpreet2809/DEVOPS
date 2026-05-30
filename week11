@@ -65,42 +65,10 @@ mvn compile jib:build \
   -Djib.to.auth.password=mySecretPassword
 ```
 *Explanation:* The `jib:build` goal connects directly to the container registry API. It compiles the Java code, separates dependencies into distinct container layers for optimization, and pushes the image over HTTPS without ever invoking a local Docker daemon.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Windows Lab — Dockerize Maven app
 ```powershell
 cd labs\unit-4-maven
 mvn -B clean package
-# Create Dockerfile with FROM eclipse-temurin:17-jre-alpine
-# COPY target/*.jar app.jar
-# ENTRYPOINT ["java","-jar","/app.jar"]
-docker build -t maven-docker-lab:1.0 .
-docker run -p 8080:8080 maven-docker-lab:1.0
+# Add Dockerfile with JRE base + COPY target/*.jar
 ```
+

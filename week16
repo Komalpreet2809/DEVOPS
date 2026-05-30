@@ -84,15 +84,6 @@ pipeline {
 }
 ```
 *Explanation:* The `archiveArtifacts` step copies files matching the glob pattern from the ephemeral agent workspace to the persistent Jenkins controller storage. `fingerprint: true` allows tracking the artifact across different jobs.
-
-
-
-
-
-
-
-
-
-
 ### Windows Lab — Jenkinsfile
-Create Jenkinsfile with stages: Checkout, Build, Test, Package.
+Create Jenkinsfile with Checkout, Build, Test, Package stages.
+
