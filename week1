@@ -79,7 +79,7 @@ docker pull httpd:alpine
 docker images
 ```
 
-![Listing pulled images on Windows](../assets/screenshots/unit-1/02-docker-images.svg)
+![Listing pulled images on Windows](assets/screenshots/unit-1/02-docker-images.svg)
 *Listing pulled images on Windows — captured on Windows PowerShell + Docker Desktop*
 
 
@@ -129,7 +129,7 @@ Inspect layers:
 docker history httpd:alpine
 ```
 
-![Image layer history](../assets/screenshots/unit-1/07-docker-history.svg)
+![Image layer history](assets/screenshots/unit-1/07-docker-history.svg)
 *Image layer history — captured on Windows PowerShell + Docker Desktop*
 
 
@@ -144,7 +144,7 @@ docker history httpd:alpine
 docker pull httpd:alpine
 ```
 
-![Pulling httpd:alpine from Docker Hub](../assets/screenshots/unit-1/01-docker-pull-httpd.svg)
+![Pulling httpd:alpine from Docker Hub](assets/screenshots/unit-1/01-docker-pull-httpd.svg)
 *Pulling httpd:alpine from Docker Hub — captured on Windows PowerShell + Docker Desktop*
 
 
@@ -153,7 +153,7 @@ docker pull httpd:alpine
 docker run -d --name apache-lab -p 8081:80 httpd:alpine
 ```
 
-![Starting Apache container](../assets/screenshots/unit-1/03-docker-run-apache.svg)
+![Starting Apache container](assets/screenshots/unit-1/03-docker-run-apache.svg)
 *Starting Apache container — captured on Windows PowerShell + Docker Desktop*
 
 
@@ -163,11 +163,11 @@ docker ps
 curl.exe http://localhost:8081
 ```
 
-![Running containers with port mapping](../assets/screenshots/unit-1/04-docker-ps.svg)
+![Running containers with port mapping](assets/screenshots/unit-1/04-docker-ps.svg)
 *Running containers with port mapping — captured on Windows PowerShell + Docker Desktop*
 
 
-![HTTP response from Apache](../assets/screenshots/unit-1/05-curl-apache.svg)
+![HTTP response from Apache](assets/screenshots/unit-1/05-curl-apache.svg)
 *HTTP response from Apache — captured on Windows PowerShell + Docker Desktop*
 
 

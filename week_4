@@ -23,15 +23,15 @@ docker network ls
 docker network inspect devnet-lab
 ```
 
-![Creating custom bridge network](../assets/screenshots/unit-2/06-network-create.svg)
+![Creating custom bridge network](assets/screenshots/unit-2/06-network-create.svg)
 *Creating custom bridge network — captured on Windows PowerShell + Docker Desktop*
 
 
-![Listing custom network](../assets/screenshots/unit-2/07-network-ls.svg)
+![Listing custom network](assets/screenshots/unit-2/07-network-ls.svg)
 *Listing custom network — captured on Windows PowerShell + Docker Desktop*
 
 
-![Network inspect output](../assets/screenshots/unit-2/08-network-inspect.svg)
+![Network inspect output](assets/screenshots/unit-2/08-network-inspect.svg)
 *Network inspect output — captured on Windows PowerShell + Docker Desktop*
 
 
@@ -78,11 +78,11 @@ docker rm -f vol-test
 docker run --rm -v vol-lab:/data alpine cat /data/test.txt
 ```
 
-![Creating named volume](../assets/screenshots/unit-2/09-volume-create.svg)
+![Creating named volume](assets/screenshots/unit-2/09-volume-create.svg)
 *Creating named volume — captured on Windows PowerShell + Docker Desktop*
 
 
-![Listing volumes](../assets/screenshots/unit-2/10-volume-ls.svg)
+![Listing volumes](assets/screenshots/unit-2/10-volume-ls.svg)
 *Listing volumes — captured on Windows PowerShell + Docker Desktop*
 
 

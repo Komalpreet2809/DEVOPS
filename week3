@@ -45,7 +45,7 @@ cd labs\unit-2-dockerfile
 docker build -t devops-node-lab:1.0 .
 ```
 
-![Building custom Node.js image on Windows](../assets/screenshots/unit-2/01-docker-build.svg)
+![Building custom Node.js image on Windows](assets/screenshots/unit-2/01-docker-build.svg)
 *Building custom Node.js image on Windows — captured on Windows PowerShell + Docker Desktop*
 
 
@@ -64,11 +64,11 @@ docker history devops-node-lab:1.0
 docker inspect devops-node-lab:1.0
 ```
 
-![Custom built image listed](../assets/screenshots/unit-2/02-docker-images.svg)
+![Custom built image listed](assets/screenshots/unit-2/02-docker-images.svg)
 *Custom built image listed — captured on Windows PowerShell + Docker Desktop*
 
 
-![Layer history of custom image](../assets/screenshots/unit-2/03-docker-history.svg)
+![Layer history of custom image](assets/screenshots/unit-2/03-docker-history.svg)
 *Layer history of custom image — captured on Windows PowerShell + Docker Desktop*
 
 
@@ -81,11 +81,11 @@ docker run -d --name devops-node-lab -p 3000:3000 devops-node-lab:1.0
 curl.exe http://localhost:3000
 ```
 
-![Running custom container](../assets/screenshots/unit-2/04-docker-run.svg)
+![Running custom container](assets/screenshots/unit-2/04-docker-run.svg)
 *Running custom container — captured on Windows PowerShell + Docker Desktop*
 
 
-![JSON response from custom app](../assets/screenshots/unit-2/05-curl-app.svg)
+![JSON response from custom app](assets/screenshots/unit-2/05-curl-app.svg)
 *JSON response from custom app — captured on Windows PowerShell + Docker Desktop*
 
 
