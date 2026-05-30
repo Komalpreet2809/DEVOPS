@@ -144,20 +144,4 @@ All screenshots in `assets/screenshots/` were captured by running commands on **
 - `docker compose up` (WordPress stack)
 - `mvn clean verify` (Maven lifecycle)
 
-Regenerate after running labs locally:
 
-```powershell
-node scripts\terminal-to-svg.js assets\screenshots\unit-1\my-output.txt assets\screenshots\unit-1\my-output.svg "Lab Title"
-```
-
----
-
-## Regenerate Notes
-
-```powershell
-node scripts\build-enhanced-notes.js
-```
-
----
-
-*Maintained for INT332 Advanced DevOps — Windows-first practical approach.*
