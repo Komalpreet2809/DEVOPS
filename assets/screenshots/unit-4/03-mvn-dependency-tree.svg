@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="428" viewBox="0 0 920 428">
+  <rect width="100%" height="100%" fill="#0f172a" rx="8"/>
+  <rect x="0" y="0" width="920" height="32" fill="#1e293b" rx="8"/>
+  <circle cx="18" cy="16" r="6" fill="#ef4444"/>
+  <circle cx="38" cy="16" r="6" fill="#eab308"/>
+  <circle cx="58" cy="16" r="6" fill="#22c55e"/>
+  <text x="80" y="20" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="12">Windows PowerShell — Maven Lab</text>
+  <text x="16" y="70" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">[INFO] Scanning for projects...</text>
+<text x="16" y="88" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/mojo/maven-metadata.xml</text>
+<text x="16" y="106" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-metadata.xml</text>
+<text x="16" y="124" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Progress (1): 3.9 kB</text>
+<text x="16" y="142" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Progress (2): 3.9 kB | 3.1 kB</text>
+<text x="16" y="160" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Progress (2): 3.9 kB | 7.7 kB</text>
+<text x="16" y="178" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Progress (2): 7.7 kB | 7.7 kB</text>
+<text x="16" y="196" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Progress (2): 7.7 kB | 12 kB </text>
+<text x="16" y="214" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Progress (2): 10 kB | 12 kB </text>
+<text x="16" y="232" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Progress (2): 10 kB | 17 kB</text>
+<text x="16" y="250" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Progress (2): 10 kB | 20 kB</text>
+<text x="16" y="268" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Progress (2): 10 kB | 21 kB</text>
+<text x="16" y="286" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">                           </text>
+<text x="16" y="304" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-metadata.xml (10 kB at 22 kB/s)</text>
+<text x="16" y="322" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/mojo/maven-metadata.xml (21 kB at 40 kB/s)</text>
+<text x="16" y="340" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-dependency-plugin/3.7.0/maven-dependency-plugin-3.7.0.pom</text>
+<text x="16" y="358" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Progress (1): 747 B</text>
+<text x="16" y="376" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Progress (1): 1.7 kB</text>
+<text x="16" y="394" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Progress (1): 3.6 kB</text>
+<text x="16" y="412" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Progress (1): 8.7 kB</text>
+</svg>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="122" viewBox="0 0 920 122">
+  <rect width="100%" height="100%" fill="#0f172a" rx="8"/>
+  <rect x="0" y="0" width="920" height="32" fill="#1e293b" rx="8"/>
+  <circle cx="18" cy="16" r="6" fill="#ef4444"/>
+  <circle cx="38" cy="16" r="6" fill="#eab308"/>
+  <circle cx="58" cy="16" r="6" fill="#22c55e"/>
+  <text x="80" y="20" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="12">Windows PowerShell — DevOps Lab</text>
+  <text x="16" y="70" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">NAME                           IMAGE              COMMAND                  SERVICE     CREATED          STATUS                    PORTS</text>
+<text x="16" y="88" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">unit-3-wordpress-db-1          mysql:8.0          &quot;docker-entrypoint.sΓÇª&quot;   db          37 seconds ago   Up 36 seconds (healthy)   3306/tcp, 33060/tcp</text>
+<text x="16" y="106" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">unit-3-wordpress-wordpress-1   wordpress:latest   &quot;docker-entrypoint.sΓÇª&quot;   wordpress   36 seconds ago   Up 15 seconds             0.0.0.0:8000-&gt;80/tcp, [::]:8000-&gt;80/tcp</text>
+</svg>

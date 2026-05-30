@@ -1,0 +1,39 @@
+name: INT332 CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  maven-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and test Maven lab
+        run: mvn -B clean verify
+        working-directory: labs/unit-4-maven
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker lab image
+        run: docker build -t int332-node-lab ./labs/unit-2-dockerfile
+
+      - name: Test container starts
+        run: |
+          docker run -d --name test-lab -p 3000:3000 int332-node-lab
+          sleep 3
+          curl -f http://localhost:3000

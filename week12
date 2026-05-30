@@ -93,3 +93,7 @@ jobs:
 
 
 
+
+### Windows Lab — GitHub Actions workflow
+Copy `labs/unit-5-github-actions/.github/workflows/java-ci.yml` to your repo.
+Push to GitHub and verify Actions tab.

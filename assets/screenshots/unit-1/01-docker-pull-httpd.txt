@@ -1,0 +1,24 @@
+﻿alpine: Pulling from library/httpd
+556f7d883f13: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+be8c83ee2c5d: Pulling fs layer
+2a78605f330c: Pulling fs layer
+cbd14e012d26: Pulling fs layer
+4a26ec43485c: Pulling fs layer
+4f4fb700ef54: Already exists
+9612d438b1bb: Download complete
+be8c83ee2c5d: Download complete
+be8c83ee2c5d: Pull complete
+cbd14e012d26: Download complete
+4f4fb700ef54: Pull complete
+cbd14e012d26: Pull complete
+556f7d883f13: Download complete
+1f767cf4d2b6: Download complete
+2a78605f330c: Download complete
+4a26ec43485c: Download complete
+4a26ec43485c: Pull complete
+556f7d883f13: Pull complete
+2a78605f330c: Pull complete
+Digest: sha256:0136c2d4462f3b8ecc92bea70efdfef4d06523999ae8d7aa533969dea6db4576
+Status: Downloaded newer image for httpd:alpine
+docker.io/library/httpd:alpine

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="1364" viewBox="0 0 920 1364">
+  <rect width="100%" height="100%" fill="#0f172a" rx="8"/>
+  <rect x="0" y="0" width="920" height="32" fill="#1e293b" rx="8"/>
+  <circle cx="18" cy="16" r="6" fill="#ef4444"/>
+  <circle cx="38" cy="16" r="6" fill="#eab308"/>
+  <circle cx="58" cy="16" r="6" fill="#22c55e"/>
+  <text x="80" y="20" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="12">Windows PowerShell — Docker Practical</text>
+  <text x="16" y="70" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">docker : #0 building with &quot;desktop-linux&quot; instance using docker driver</text>
+<text x="16" y="88" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">At C:\Users\AMAN KUMAR SINGH\AppData\Local\Temp\ps-script-b10e0613-3c2b-4c65-97a4-f09640905220.ps1:82 char:1</text>
+<text x="16" y="106" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">+ docker build -t devops-node-lab:1.0 ./labs/unit-2-dockerfile 2&gt;&amp;1 | O ...</text>
+<text x="16" y="124" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</text>
+<text x="16" y="142" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">    + CategoryInfo          : NotSpecified: (#0 building wit...g docker driver:String) [], RemoteException</text>
+<text x="16" y="160" fill="#f87171" font-family="Consolas, 'Courier New', monospace" font-size="13">    + FullyQualifiedErrorId : NativeCommandError</text>
+<text x="16" y="178" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="196" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="214" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#1 [internal] load build definition from Dockerfile</text>
+<text x="16" y="232" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#1 transferring dockerfile: 263B done</text>
+<text x="16" y="250" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#1 DONE 0.0s</text>
+<text x="16" y="268" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="286" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#2 [internal] load metadata for docker.io/library/node:20-alpine</text>
+<text x="16" y="304" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#2 ...</text>
+<text x="16" y="322" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="340" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#3 [auth] library/node:pull token for registry-1.docker.io</text>
+<text x="16" y="358" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#3 DONE 0.0s</text>
+<text x="16" y="376" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="394" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#2 [internal] load metadata for docker.io/library/node:20-alpine</text>
+<text x="16" y="412" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#2 DONE 1.9s</text>
+<text x="16" y="430" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="448" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#4 [internal] load .dockerignore</text>
+<text x="16" y="466" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#4 transferring context: 81B done</text>
+<text x="16" y="484" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#4 DONE 0.0s</text>
+<text x="16" y="502" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="520" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#5 [1/5] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293</text>
+<text x="16" y="538" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#5 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 </text>
+<text x="16" y="556" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">0.0s done</text>
+<text x="16" y="574" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#5 DONE 0.0s</text>
+<text x="16" y="592" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="610" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#6 [internal] load build context</text>
+<text x="16" y="628" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#6 transferring context: 552B done</text>
+<text x="16" y="646" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#6 DONE 0.0s</text>
+<text x="16" y="664" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="682" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#7 [2/5] WORKDIR /app</text>
+<text x="16" y="700" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#7 CACHED</text>
+<text x="16" y="718" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="736" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#8 [3/5] COPY package.json ./</text>
+<text x="16" y="754" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#8 DONE 0.0s</text>
+<text x="16" y="772" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="790" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 [4/5] RUN npm install --production</text>
+<text x="16" y="808" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 0.673 npm warn config production Use `--omit=dev` instead.</text>
+<text x="16" y="826" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 4.999 </text>
+<text x="16" y="844" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 4.999 added 68 packages, and audited 69 packages in 4s</text>
+<text x="16" y="862" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 4.999 </text>
+<text x="16" y="880" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 4.999 15 packages are looking for funding</text>
+<text x="16" y="898" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 4.999   run `npm fund` for details</text>
+<text x="16" y="916" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 5.000 </text>
+<text x="16" y="934" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 5.000 found 0 vulnerabilities</text>
+<text x="16" y="952" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 5.004 npm notice</text>
+<text x="16" y="970" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 5.004 npm notice New major version of npm available! 10.8.2 -&gt; 11.16.0</text>
+<text x="16" y="988" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 5.004 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.16.0</text>
+<text x="16" y="1006" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 5.004 npm notice To update run: npm install -g npm@11.16.0</text>
+<text x="16" y="1024" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 5.004 npm notice</text>
+<text x="16" y="1042" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#9 DONE 5.1s</text>
+<text x="16" y="1060" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="1078" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#10 [5/5] COPY app.js ./</text>
+<text x="16" y="1096" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#10 DONE 0.0s</text>
+<text x="16" y="1114" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="1132" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#11 exporting to image</text>
+<text x="16" y="1150" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#11 exporting layers</text>
+<text x="16" y="1168" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#11 exporting layers 0.3s done</text>
+<text x="16" y="1186" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#11 exporting manifest sha256:74e3ff800e873fdd90fe6cb158f87ea9b387db29a619a3019fda1a8ce07aba42 0.0s done</text>
+<text x="16" y="1204" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#11 exporting config sha256:8ab8fe38373988de7e31859885ce24ea37f833dff35e271eeef82e2d1a903bc2 0.0s done</text>
+<text x="16" y="1222" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#11 exporting attestation manifest sha256:0a0444a4a2c56ef213713625f67a8e4c4575fcb62e96d7d3aab32a9379f4ec3c 0.0s done</text>
+<text x="16" y="1240" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#11 exporting manifest list sha256:9a10f8b34ce3eea74f17a41718dc14cbd6eca392fbcf884d242d5ae672b162b1 0.0s done</text>
+<text x="16" y="1258" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#11 naming to docker.io/library/devops-node-lab:1.0 done</text>
+<text x="16" y="1276" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#11 unpacking to docker.io/library/devops-node-lab:1.0</text>
+<text x="16" y="1294" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#11 unpacking to docker.io/library/devops-node-lab:1.0 0.3s done</text>
+<text x="16" y="1312" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">#11 DONE 0.8s</text>
+<text x="16" y="1330" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="1348" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/xq1elcbviycgeiswqhp8ssdfr</text>
+</svg>

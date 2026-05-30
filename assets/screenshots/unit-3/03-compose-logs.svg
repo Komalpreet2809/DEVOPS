@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="158" viewBox="0 0 920 158">
+  <rect width="100%" height="100%" fill="#0f172a" rx="8"/>
+  <rect x="0" y="0" width="920" height="32" fill="#1e293b" rx="8"/>
+  <circle cx="18" cy="16" r="6" fill="#ef4444"/>
+  <circle cx="38" cy="16" r="6" fill="#eab308"/>
+  <circle cx="58" cy="16" r="6" fill="#22c55e"/>
+  <text x="80" y="20" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="12">Windows PowerShell — DevOps Lab</text>
+  <text x="16" y="70" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">db-1  | 2026-05-30T06:09:44.481497Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.</text>
+<text x="16" y="88" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">db-1  | 2026-05-30T06:09:44.481555Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.</text>
+<text x="16" y="106" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">db-1  | 2026-05-30T06:09:44.484327Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.</text>
+<text x="16" y="124" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">db-1  | 2026-05-30T06:09:44.500183Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /var/run/mysqld/mysqlx.sock</text>
+<text x="16" y="142" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">db-1  | 2026-05-30T06:09:44.500341Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.0.46'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL.</text>
+</svg>

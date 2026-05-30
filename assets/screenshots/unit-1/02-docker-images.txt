@@ -1,0 +1,9 @@
+﻿docker : WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+At C:\Users\AMAN KUMAR SINGH\AppData\Local\Temp\ps-script-9015dbb7-ce28-49bd-8c8f-88bfedbf6ffa.ps1:83 char:1
++ docker images httpd:alpine 2>&1 | Out-File "assets\screenshots\unit-1 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: This o...e use --format.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+IMAGE          ID             DISK USAGE   CONTENT SIZE   EXTRA
+httpd:alpine   0136c2d4462f       97.9MB         22.1MB        

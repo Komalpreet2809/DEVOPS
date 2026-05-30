@@ -93,3 +93,6 @@ steps:
 
 
 
+
+### Windows Lab — Matrix build
+Add strategy.matrix with Java 17 and 21 in workflow YAML.

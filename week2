@@ -1,397 +1,153 @@
-1. Container Image
-Definition
+# UNIT I (continued): DOCKER ARCHITECTURE & OBJECTS
+## WEEK 2: Container Runtime, CLI, Registry & Filesystem Deep Dive
 
-A container image is a read-only, executable package that contains everything required to run an application, including the application code, runtime, libraries, dependencies, and configuration files.
+---
 
-Explanation
+### 2.1 Container Runtime Stack (OCI)
+The **Open Container Initiative (OCI)** defines standards for container images and runtimes.
 
-A container image acts as a blueprint or template from which containers are created. It defines what the application environment should look like and ensures that the application runs consistently across different systems. Since the image is read-only, it cannot be modified once it is created. Any changes result in the creation of a new image rather than altering the existing one.
+| Layer | Tool |
+|-------|------|
+| High-level runtime | containerd, CRI-O |
+| Low-level runtime | runc, crun |
+| Orchestration | Kubernetes, Docker Compose |
 
-This immutability is important because it guarantees consistency and reliability. Developers can build an image once and use it in multiple environments such as development, testing, and production without worrying about unexpected behavior.
+---
 
-Key Characteristics of Container Images
-Read-only and immutable
-Contains application and dependencies
-Platform-independent (within compatible environments)
-Used to create containers
-Example
+### 2.2 Docker CLI Essentials (Windows PowerShell)
 
-An image like python:3.11-slim includes:
+```powershell
+docker version          # Client + server versions
+docker info             # Daemon details, storage driver, CPUs
+docker help run         # Command reference
+```
 
-A minimal Linux operating system
-Python 3.11 runtime
-Standard libraries required for Python
-2. Image Layers
-Definition
+**Common object commands:**
+```powershell
+docker images           # List images
+docker ps               # Running containers
+docker ps -a            # All containers
+docker network ls       # Networks
+docker volume ls        # Volumes
+```
 
-Image layers are individual, stacked components that together form a complete container image. Each layer represents a change or instruction applied during the image creation process.
+---
 
-Explanation
+### 2.3 Working with Containers — Lifecycle
 
-When a container image is built, it is not created as a single file. Instead, it is composed of multiple layers stacked on top of each other. Each instruction in a Dockerfile (such as installing software or copying files) creates a new layer.
+```powershell
+docker run -d --name my-nginx -p 8082:80 nginx:alpine   # Create + start
+docker stop my-nginx                                       # Stop gracefully
+docker start my-nginx                                      # Restart stopped
+docker restart my-nginx                                    # Stop + start
+docker pause my-nginx                                      # Freeze processes
+docker unpause my-nginx
+docker rm -f my-nginx                                      # Force remove
+```
 
-These layers are immutable and are cached by the system. This means that if a layer has not changed, it does not need to be rebuilt, which significantly improves efficiency.
+---
 
-Key Properties of Image Layers
-Immutable: Once created, layers cannot be modified
-Reusable: Multiple images can share common layers
-Cached: Unchanged layers are reused during builds
-Stacked structure: Layers are combined to form a complete image
-Working of Layers
+### 2.4 Copy Files: Container ↔ Host (Windows paths)
 
-When building an image:
+```powershell
+docker run -d --name file-lab nginx:alpine
+docker exec file-lab sh -c "echo 'DevOps Notes' > /tmp/notes.txt"
+docker cp file-lab:/tmp/notes.txt "$env:USERPROFILE\Desktop\notes.txt"
+docker rm -f file-lab
+```
 
-Base layer (operating system) is created
-Additional layers are added (libraries, dependencies)
-Final layer contains the application code
+> **Windows tip:** Use `$env:USERPROFILE\Desktop` instead of Linux `/home/user/Desktop`.
 
-When a container runs:
+---
 
-A writable layer is added on top of these read-only layers
-Benefits of Image Layers
-Faster Builds
+### 2.5 Docker Registry & Docker Hub
 
-If only one layer changes, Docker rebuilds only that layer instead of the entire image.
+**Workflow:** Build → Tag → Push → Pull
 
-Reduced Storage
+```powershell
+docker tag httpd:alpine yourusername/my-httpd:1.0
+docker login
+docker push yourusername/my-httpd:1.0
+docker pull yourusername/my-httpd:1.0
+```
 
-Common layers are shared across multiple images, saving disk space.
+**Tag format:** `registry/namespace/repository:tag`
+- `nginx:alpine` → Docker Hub, library namespace
+- `ghcr.io/user/app:v1` → GitHub Container Registry
 
-Faster Deployment
+---
 
-Only missing layers are downloaded from the registry.
+### 2.6 Image Layers — Deep Dive
 
-3. Container Image vs Container
-Explanation
+Each `docker pull` downloads only missing layers. Inspect with:
+```powershell
+docker image inspect httpd:alpine --format "{{.RootFS.Layers}}"
+docker history httpd:alpine
+```
 
-A container image is a static definition of an application, while a container is a running instance of that image.
+**Benefits:**
+- Faster builds (cache unchanged layers)
+- Less disk (shared base layers)
+- Faster deploys (partial pulls)
 
-Key Differences
-Image	Container
-Read-only	Writable
-Static	Running
-Blueprint	Execution
-Stored in registry	Runs on host
-4. Image Registry
-Definition
+---
 
-An image registry is a centralized system used to store, manage, version, and distribute container images.
+### 2.7 Copy-on-Write (CoW)
+When a container modifies a file from a read-only layer:
+1. File is copied to the writable container layer
+2. Modification happens on the copy
+3. Original image layer stays unchanged
 
-Explanation
+This is why containers are ephemeral — delete container = lose writable layer.
 
-An image registry acts as a repository where container images are stored and shared. It allows developers to upload (push) images and users to download (pull) them. Registries are essential in DevOps workflows because they ensure that the same image can be used across different environments, maintaining consistency.
+---
 
-Importance of Image Registry
+### 2.8 Docker Desktop on Windows Architecture
 
-Without a registry:
+```
+Windows Host
+  └── Docker Desktop
+        └── WSL2 Linux VM (dockerd runs here)
+              └── Your Linux containers
+```
 
-Each system must build images separately
-No consistency between environments
-No version control
+Enable WSL2 backend in Docker Desktop → Settings → General.
 
-With a registry:
+---
 
-Build once, use everywhere
-Faster deployment
-Version management
-Easy rollback
-5. Types of Image Registries
-Public Registry
+## PRACTICAL LAB — Explore Docker Objects
 
-Definition:
-A registry where images are openly available to everyone.
+```powershell
+# Images
+docker pull redis:alpine
+docker images redis
 
-Explanation:
-Public registries allow users to share and download images freely. These are commonly used for base images and open-source projects.
+# Container with env var
+docker run -d --name redis-lab -e REDIS_PASSWORD=secret redis:alpine
 
-Example:
-Docker Hub
+# Logs
+docker logs redis-lab
 
-Private Registry
+# Exec into container
+docker exec -it redis-lab sh
 
-Definition:
-A registry with restricted access, used within organizations.
+# Cleanup
+docker rm -f redis-lab
+```
 
-Explanation:
-Private registries are used to store proprietary applications and ensure security. Access is controlled using authentication and authorization mechanisms.
+---
 
-Examples:
+## PRACTICE QUESTIONS
 
-AWS Elastic Container Registry (ECR)
-Azure Container Registry (ACR)
-GitHub Container Registry (GHCR)
-6. Image Naming Convention
-Definition
+1. What is the OCI and why does it matter?
+2. Difference between `docker stop` and `docker kill`?
+3. Explain Docker Hub tagging convention.
+4. What happens to data in the writable layer when a container is removed?
+5. Why does Docker Desktop on Windows use WSL2?
 
-Container images follow a standard naming format:
-
-<registry>/<namespace>/<image>:<tag>
-
-Explanation
-
-Each part of the name provides specific information:
-
-Registry: Location of the image
-Namespace: User or organization name
-Image: Application name
-Tag: Version of the image
-Example
-
-docker.io/user/webapp:v1
-
-docker.io → registry
-user → namespace
-webapp → image name
-v1 → version
-7. Tags and Versioning
-Definition
-
-Tags are labels used to identify different versions of the same image.
-
-Explanation
-
-Tags help in managing different versions of an application. For example, an application may have multiple versions such as v1, v2, or latest. Using tags allows developers to control which version is deployed and provides the ability to roll back to a previous version if needed.
-
-8. Image Distribution Process
-Explanation
-
-The image distribution process describes how images move from development to production.
-
-Steps:
-Developer builds an image locally
-Image is pushed to a registry
-Registry stores the image
-Servers pull the image
-Containers are created from the image
-9. Push and Pull Operations
-Push Operation
-
-Uploading an image from local system to registry.
-
-Requires authentication
-Only new layers are uploaded
-Pull Operation
-
-Downloading an image from registry.
-
-Uses caching
-Faster if layers already exist
-10. Role of Image Registry in CI/CD
-Explanation
-
-In DevOps pipelines, image registries act as an intermediary between development and deployment stages.
-
-Workflow:
-Code is pushed to version control
-CI system builds the image
-Image is pushed to registry
-CD system pulls the image
-Application is deployed
-Key Concept
-
-The registry acts as a bridge between Continuous Integration and Continuous Deployment.
-
-11. Comparison: Public vs Private Registry
-Feature	Public Registry	Private Registry
-Access	Open	Restricted
-Usage	Open-source	Enterprise
-Security	Low	High
-Cost	Often free	Paid/Managed
-
-
-1. Introduction to Docker
-Definition
-
-Docker is an open-source platform used to develop, package, distribute, and run applications inside containers. It simplifies application deployment by ensuring that applications run consistently across different environments.
-
-Explanation
-
-Docker provides a complete ecosystem for containerization. It allows developers to create container images, store them in registries, and run containers on any system that has Docker installed. By using Docker, developers can eliminate environment-related issues and ensure that applications behave the same way in development, testing, and production environments.
-
-Docker uses operating system-level virtualization and relies on underlying Linux kernel features such as namespaces and control groups to manage containers efficiently.
-
-2. Docker Architecture
-Definition
-
-Docker architecture refers to the internal structure and components of Docker that work together to build, manage, and run containers.
-
-Explanation
-
-Docker follows a client-server architecture. The Docker client communicates with the Docker daemon, which performs the actual work of building images, running containers, and managing system resources.
-
-Key Components of Docker Architecture
-2.1 Docker Client
-
-Definition:
-The Docker client is the command-line interface (CLI) used by users to interact with Docker.
-
-Explanation:
-Users execute commands such as docker run, docker pull, and docker build through the client. These commands are sent to the Docker daemon for execution. The client can communicate with the daemon either locally or remotely.
-
-2.2 Docker Daemon
-
-Definition:
-The Docker daemon is a background service that manages Docker objects such as images, containers, networks, and volumes.
-
-Explanation:
-The daemon listens for API requests from the Docker client and processes them. It is responsible for building images, running containers, managing storage, and handling networking. It acts as the core engine of Docker.
-
-2.3 Docker Images
-
-Definition:
-Docker images are read-only templates used to create containers.
-
-Explanation:
-Images contain the application code and dependencies required to run a container. They are built using Dockerfiles and stored in registries. When a container is created, it is based on an image.
-
-2.4 Docker Containers
-
-Definition:
-A container is a running instance of a Docker image.
-
-Explanation:
-Containers are lightweight and isolated environments where applications run. Each container operates independently but shares the host system’s kernel.
-
-2.5 Docker Registry
-
-Definition:
-A Docker registry is a repository used to store and distribute Docker images.
-
-Explanation:
-Docker Hub is the default public registry. Users can push images to a registry and pull them when needed. Registries enable sharing and versioning of images.
-
-3. Working of Docker Architecture
-Explanation
-
-The workflow of Docker architecture can be understood as follows:
-
-The user enters a command using the Docker client
-The client sends the request to the Docker daemon
-The daemon processes the request
-If required, it pulls the image from the registry
-The daemon creates and runs the container
-
-This architecture ensures that Docker operations are efficient and scalable.
-
-4. Docker Lifecycle
-Definition
-
-The Docker lifecycle describes the stages through which a container goes, from creation to execution and termination.
-
-Stages of Docker Lifecycle
-4.1 Build Stage
-
-Explanation:
-In this stage, a Docker image is created using a Dockerfile. The image includes all the necessary components required to run the application.
-
-4.2 Ship Stage
-
-Explanation:
-The image is pushed to a Docker registry so that it can be accessed by other systems. This ensures portability and consistency.
-
-4.3 Run Stage
-
-Explanation:
-The image is pulled from the registry and used to create and run containers. The application becomes operational at this stage.
-
-Container States
-
-A container can exist in different states during its lifecycle:
-
-Created: Container is initialized but not running
-Running: Container is actively executing
-Paused: Execution is temporarily stopped
-Stopped: Container has been terminated
-5. Basic Docker Commands
-5.1 Image Management Commands
-docker pull
-
-Definition:
-Downloads an image from a registry.
-
-Explanation:
-This command retrieves an image from Docker Hub or another registry and stores it locally.
-
-docker images
-
-Definition:
-Lists all available images on the system.
-
-docker rmi
-
-Definition:
-Removes a Docker image.
-
-5.2 Container Management Commands
-docker run
-
-Definition:
-Creates and starts a container from an image.
-
-Explanation:
-This is one of the most important Docker commands. It combines multiple actions such as creating, starting, and executing a container.
-
-docker stop
-
-Definition:
-Stops a running container.
-
-docker start
-
-Definition:
-Starts a stopped container.
-
-docker rm
-
-Definition:
-Removes a container.
-
-5.3 Example Commands
-
-Running a container:
-
-docker run ubuntu
-
-Running with terminal:
-
-docker run -it ubuntu /bin/bash
-
-Stopping container:
-
-docker stop <container_id>
-
-Removing container:
-
-docker rm <container_id>
-
-Removing image:
-
-docker rmi ubuntu
-6. Additional Useful Commands
-docker ps
-
-Lists running containers
-
-docker ps -a
-
-Lists all containers (running and stopped)
-
-docker system prune
-
-Removes unused data such as stopped containers and unused images
-
-7. Real-World Example
-
-To run a web server using Docker:
-
-Pull image:
-docker pull nginx
-Run container:
-docker run -d -p 8080:80 nginx
-Access in browser:
-http://localhost:8080
-
-
-
-
-
+**Answers:**
+1. OCI standardizes container image format and runtime — enables interoperability.
+2. `stop` sends SIGTERM (graceful); `kill` sends SIGKILL (immediate).
+3. `[registry/]namespace/repo:tag` — defaults to Docker Hub/library if omitted.
+4. Writable layer is deleted — data is lost unless stored in volumes.
+5. Linux containers need a Linux kernel; WSL2 provides one efficiently on Windows.

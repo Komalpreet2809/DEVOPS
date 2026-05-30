@@ -93,3 +93,6 @@ pipeline {
 
 
 
+
+### Windows Lab — Jenkinsfile
+Create Jenkinsfile with stages: Checkout, Build, Test, Package.

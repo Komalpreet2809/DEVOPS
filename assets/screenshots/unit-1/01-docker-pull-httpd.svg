@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="500" viewBox="0 0 920 500">
+  <rect width="100%" height="100%" fill="#0f172a" rx="8"/>
+  <rect x="0" y="0" width="920" height="32" fill="#1e293b" rx="8"/>
+  <circle cx="18" cy="16" r="6" fill="#ef4444"/>
+  <circle cx="38" cy="16" r="6" fill="#eab308"/>
+  <circle cx="58" cy="16" r="6" fill="#22c55e"/>
+  <text x="80" y="20" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="12">Windows PowerShell — Docker Practical</text>
+  <text x="16" y="70" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">alpine: Pulling from library/httpd</text>
+<text x="16" y="88" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">556f7d883f13: Pulling fs layer</text>
+<text x="16" y="106" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">4f4fb700ef54: Pulling fs layer</text>
+<text x="16" y="124" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">be8c83ee2c5d: Pulling fs layer</text>
+<text x="16" y="142" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">2a78605f330c: Pulling fs layer</text>
+<text x="16" y="160" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">cbd14e012d26: Pulling fs layer</text>
+<text x="16" y="178" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">4a26ec43485c: Pulling fs layer</text>
+<text x="16" y="196" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">4f4fb700ef54: Already exists</text>
+<text x="16" y="214" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">9612d438b1bb: Download complete</text>
+<text x="16" y="232" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">be8c83ee2c5d: Download complete</text>
+<text x="16" y="250" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">be8c83ee2c5d: Pull complete</text>
+<text x="16" y="268" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">cbd14e012d26: Download complete</text>
+<text x="16" y="286" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">4f4fb700ef54: Pull complete</text>
+<text x="16" y="304" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">cbd14e012d26: Pull complete</text>
+<text x="16" y="322" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">556f7d883f13: Download complete</text>
+<text x="16" y="340" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">1f767cf4d2b6: Download complete</text>
+<text x="16" y="358" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">2a78605f330c: Download complete</text>
+<text x="16" y="376" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">4a26ec43485c: Download complete</text>
+<text x="16" y="394" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">4a26ec43485c: Pull complete</text>
+<text x="16" y="412" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">556f7d883f13: Pull complete</text>
+<text x="16" y="430" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">2a78605f330c: Pull complete</text>
+<text x="16" y="448" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Digest: sha256:0136c2d4462f3b8ecc92bea70efdfef4d06523999ae8d7aa533969dea6db4576</text>
+<text x="16" y="466" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">Status: Downloaded newer image for httpd:alpine</text>
+<text x="16" y="484" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">docker.io/library/httpd:alpine</text>
+</svg>

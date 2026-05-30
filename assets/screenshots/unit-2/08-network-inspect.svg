@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="518" viewBox="0 0 920 518">
+  <rect width="100%" height="100%" fill="#0f172a" rx="8"/>
+  <rect x="0" y="0" width="920" height="32" fill="#1e293b" rx="8"/>
+  <circle cx="18" cy="16" r="6" fill="#ef4444"/>
+  <circle cx="38" cy="16" r="6" fill="#eab308"/>
+  <circle cx="58" cy="16" r="6" fill="#22c55e"/>
+  <text x="80" y="20" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="12">Windows PowerShell — Docker Practical</text>
+  <text x="16" y="70" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">[</text>
+<text x="16" y="88" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">    {</text>
+<text x="16" y="106" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        &quot;Name&quot;: &quot;devnet-lab&quot;,</text>
+<text x="16" y="124" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        &quot;Id&quot;: &quot;f3aebc68e781c32dd5ae416003a9bd08b440151afc06168b6028d66ccb316885&quot;,</text>
+<text x="16" y="142" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        &quot;Created&quot;: &quot;2026-05-30T06:08:08.72955808Z&quot;,</text>
+<text x="16" y="160" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        &quot;Scope&quot;: &quot;local&quot;,</text>
+<text x="16" y="178" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        &quot;Driver&quot;: &quot;bridge&quot;,</text>
+<text x="16" y="196" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        &quot;EnableIPv4&quot;: true,</text>
+<text x="16" y="214" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        &quot;EnableIPv6&quot;: false,</text>
+<text x="16" y="232" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        &quot;IPAM&quot;: {</text>
+<text x="16" y="250" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">            &quot;Driver&quot;: &quot;default&quot;,</text>
+<text x="16" y="268" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">            &quot;Options&quot;: {},</text>
+<text x="16" y="286" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">            &quot;Config&quot;: [</text>
+<text x="16" y="304" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">                {</text>
+<text x="16" y="322" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">                    &quot;Subnet&quot;: &quot;172.21.0.0/16&quot;,</text>
+<text x="16" y="340" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">                    &quot;Gateway&quot;: &quot;172.21.0.1&quot;</text>
+<text x="16" y="358" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">                }</text>
+<text x="16" y="376" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">            ]</text>
+<text x="16" y="394" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        },</text>
+<text x="16" y="412" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        &quot;Internal&quot;: false,</text>
+<text x="16" y="430" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        &quot;Attachable&quot;: false,</text>
+<text x="16" y="448" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        &quot;Ingress&quot;: false,</text>
+<text x="16" y="466" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        &quot;ConfigFrom&quot;: {</text>
+<text x="16" y="484" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">            &quot;Network&quot;: &quot;&quot;</text>
+<text x="16" y="502" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">        },</text>
+</svg>

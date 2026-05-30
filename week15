@@ -93,3 +93,11 @@ docker exec jenkins-master cat /var/jenkins_home/secrets/initialAdminPassword
 
 
 
+
+### Windows Lab — Jenkins in Docker
+```powershell
+docker volume create jenkins_home
+docker run -d -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home --name jenkins-lab jenkins/jenkins:lts
+docker exec jenkins-lab cat /var/jenkins_home/secrets/initialAdminPassword
+# Open http://localhost:8080
+```

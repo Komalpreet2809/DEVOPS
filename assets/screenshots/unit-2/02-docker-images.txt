@@ -1,0 +1,9 @@
+﻿docker : WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+At C:\Users\AMAN KUMAR SINGH\AppData\Local\Temp\ps-script-b10e0613-3c2b-4c65-97a4-f09640905220.ps1:83 char:1
++ docker images devops-node-lab 2>&1 | Out-File "assets\screenshots\uni ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: This o...e use --format.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+IMAGE                 ID             DISK USAGE   CONTENT SIZE   EXTRA
+devops-node-lab:1.0   9a10f8b34ce3        208MB         50.8MB        

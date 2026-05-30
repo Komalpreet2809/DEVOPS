@@ -93,3 +93,11 @@ Your command-line application requires the Apache Commons library. Write the plu
 
 
 
+
+![Maven dependency tree](../assets/screenshots/unit-4/03-mvn-dependency-tree.svg)
+*Maven dependency tree — captured on Windows PowerShell + Docker Desktop*
+
+```powershell
+cd labs\unit-4-maven
+mvn dependency:tree
+```

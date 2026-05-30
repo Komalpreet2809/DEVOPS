@@ -1,0 +1,2 @@
+﻿CONTAINER ID   IMAGE          COMMAND              CREATED        STATUS                  PORTS                                     NAMES
+c8d19bd0610a   httpd:alpine   "httpd-foreground"   1 second ago   Up Less than a second   0.0.0.0:8081->80/tcp, [::]:8081->80/tcp   apache-lab

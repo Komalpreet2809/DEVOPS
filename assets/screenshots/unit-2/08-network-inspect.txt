@@ -1,0 +1,25 @@
+﻿[
+    {
+        "Name": "devnet-lab",
+        "Id": "f3aebc68e781c32dd5ae416003a9bd08b440151afc06168b6028d66ccb316885",
+        "Created": "2026-05-30T06:08:08.72955808Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv4": true,
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.21.0.0/16",
+                    "Gateway": "172.21.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },

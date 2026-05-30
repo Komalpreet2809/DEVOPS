@@ -93,3 +93,14 @@ mvn compile jib:build \
 
 
 
+
+### Windows Lab — Dockerize Maven app
+```powershell
+cd labs\unit-4-maven
+mvn -B clean package
+# Create Dockerfile with FROM eclipse-temurin:17-jre-alpine
+# COPY target/*.jar app.jar
+# ENTRYPOINT ["java","-jar","/app.jar"]
+docker build -t maven-docker-lab:1.0 .
+docker run -p 8080:8080 maven-docker-lab:1.0
+```

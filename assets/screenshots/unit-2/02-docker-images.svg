@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="230" viewBox="0 0 920 230">
+  <rect width="100%" height="100%" fill="#0f172a" rx="8"/>
+  <rect x="0" y="0" width="920" height="32" fill="#1e293b" rx="8"/>
+  <circle cx="18" cy="16" r="6" fill="#ef4444"/>
+  <circle cx="38" cy="16" r="6" fill="#eab308"/>
+  <circle cx="58" cy="16" r="6" fill="#22c55e"/>
+  <text x="80" y="20" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="12">Windows PowerShell — Docker Practical</text>
+  <text x="16" y="70" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">docker : WARNING: This output is designed for human readability. For machine-readable output, please use --format.</text>
+<text x="16" y="88" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">At C:\Users\AMAN KUMAR SINGH\AppData\Local\Temp\ps-script-b10e0613-3c2b-4c65-97a4-f09640905220.ps1:83 char:1</text>
+<text x="16" y="106" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">+ docker images devops-node-lab 2&gt;&amp;1 | Out-File &quot;assets\screenshots\uni ...</text>
+<text x="16" y="124" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</text>
+<text x="16" y="142" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">    + CategoryInfo          : NotSpecified: (WARNING: This o...e use --format.:String) [], RemoteException</text>
+<text x="16" y="160" fill="#f87171" font-family="Consolas, 'Courier New', monospace" font-size="13">    + FullyQualifiedErrorId : NativeCommandError</text>
+<text x="16" y="178" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13"> </text>
+<text x="16" y="196" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">IMAGE                 ID             DISK USAGE   CONTENT SIZE   EXTRA</text>
+<text x="16" y="214" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="13">devops-node-lab:1.0   9a10f8b34ce3        208MB         50.8MB</text>
+</svg>

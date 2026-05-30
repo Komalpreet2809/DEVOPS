@@ -93,3 +93,7 @@ pipeline {
 
 
 
+
+### Windows Lab — Jenkins + Maven + Docker
+Configure Maven and Docker tools in Jenkins Global Tool Configuration.
+Run pipeline that builds Maven JAR and Docker image.

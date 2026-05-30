@@ -94,3 +94,20 @@ services:
         condition: service_healthy
 ```
 *Explanation:* The `pg_isready` command physically pings the database. The `backend` service will not attempt to boot until the healthcheck returns a success status.
+
+### Windows Lab — WordPress + MySQL
+```powershell
+cd labs\unit-3-wordpress
+docker compose up -d
+docker compose ps
+# Open http://localhost:8000 in browser
+```
+
+![docker compose up on Windows](../assets/screenshots/unit-3/01-compose-up.svg)
+*docker compose up on Windows — captured on Windows PowerShell + Docker Desktop*
+
+![Compose services running](../assets/screenshots/unit-3/02-compose-ps.svg)
+*Compose services running — captured on Windows PowerShell + Docker Desktop*
+
+![Database container logs](../assets/screenshots/unit-3/03-compose-logs.svg)
+*Database container logs — captured on Windows PowerShell + Docker Desktop*

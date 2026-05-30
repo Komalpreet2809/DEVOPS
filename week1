@@ -1,517 +1,213 @@
-: DevOps Basics + Virtualization
-1. INTRODUCTION TO DEVOPS
-Definition:
-
-DevOps is a combination of Development (Dev) and Operations (Ops) practices that aims to automate and integrate the processes of software development and IT operations.
-
-In simple words:
-DevOps is a methodology that ensures faster, reliable, and continuous delivery of software.
-
-Objectives of DevOps:
-Faster software delivery
-Continuous integration & deployment (CI/CD)
-Improved collaboration between teams
-Automation of manual processes
-High-quality and reliable systems
-Why DevOps is Needed?
-Traditional Approach Problems:
-
-Before DevOps:
-
-Developers write code → handover to operations
-Operations deploy and manage
-Issues:
-Communication gap
-Delayed deployments
-Frequent errors
-Difficult debugging
-DevOps Solution:
-
-DevOps introduces:
-
-Continuous collaboration
-Automation tools
-Monitoring systems
-
-Result:
-
-Faster releases
-Reduced failures
-Better productivity
-2. TRADITIONAL INFRASTRUCTURE PROBLEM
-Real-World Analogy (from PPT):
-
-One house = One physical server
-One family = One application
-
-Problem:
-Resources (CPU, RAM, storage) are underutilized
-High infrastructure cost
-Not scalable
-Technical Meaning:
-
-In traditional IT:
-
-One server runs one application
-Remaining resources are wasted
-Problems:
-Inefficient resource usage
-High hardware cost
-Maintenance overhead
-Difficult scalability
-3. VIRTUALIZATION
-Definition:
-
-Virtualization is the process of creating multiple virtual machines (VMs) on a single physical machine using a software called a hypervisor.
-
-Key Concept:
-
-One physical server → multiple virtual servers (VMs)
-
-Each VM has:
-
-Its own OS
-Its own applications
-Its own resources
-3.1 Hypervisor
-Definition:
-
-A hypervisor is a software that:
-
-Creates and manages virtual machines
-Allocates hardware resources to each VM
-Types of Hypervisor:
-1. Type 1 (Bare Metal)
-Runs directly on hardware
-Example: VMware ESXi
-2. Type 2
-Runs on top of OS
-Example: VirtualBox
-3.2 Architecture of Virtualization
-Structure:
-
-Physical Server → Hypervisor → Multiple VMs → Apps
-
-3.3 Features of Virtual Machines
-
-Each VM:
-
-Fully isolated
-Has separate OS
-Works like real computer
-3.4 Advantages of Virtualization
-1. Better Resource Utilization
-Multiple VMs share one system
-2. Strong Isolation
-If one VM fails → others unaffected
-3. Multiple OS Support
-Run Windows + Linux together
-4. Cost Saving
-Less hardware required
-5. Disaster Recovery
-Easy backup and restore
-6. Scalability
-Add/remove VMs easily
-3.5 Disadvantages of Virtualization
-
-These are VERY IMPORTANT (often asked in exams)
-
-1. Heavy Resource Usage
-Each VM requires full OS
-2. Slow Boot Time
-OS takes time to start
-3. Inefficient Scalability
-Not suitable for microservices
-4. Limited Portability
-Moving VMs is complex
-5. High Maintenance
-Manage multiple OS
-6. Increased Cost
-Licensing + infrastructure cost
-4. WHY VIRTUALIZATION WAS NOT ENOUGH
-Problem Summary:
+# UNIT I: BASICS OF DEVOPS INFRASTRUCTURE
+## WEEK 1: Introduction to Containers & DevOps Foundations
+
+---
+
+### 1.1 What is DevOps?
+DevOps combines **Development (Dev)** and **Operations (Ops)** to deliver software faster and more reliably through automation, collaboration, and continuous feedback.
+
+**Core objectives:**
+- Continuous Integration & Continuous Delivery (CI/CD)
+- Infrastructure as Code (IaC)
+- Automated testing and monitoring
+- Breaking silos between dev and ops teams
+
+---
+
+### 1.2 Origin of Containers
+| Era | Technology | Limitation |
+|-----|-----------|------------|
+| Physical servers | One app per machine | Poor resource utilization |
+| Virtual Machines (VMs) | Hypervisor + guest OS | Heavy — each VM runs full OS |
+| **Containers** | Shared OS kernel, isolated processes | Lightweight, fast startup |
+
+**Key insight:** Containers are **not** mini-VMs. They share the host kernel and isolate processes using Linux kernel features (namespaces + cgroups).
+
+---
+
+### 1.3 Process Isolation & Namespaces
+**Namespaces** isolate what a process can *see*:
+
+| Namespace | Isolates |
+|-----------|----------|
+| PID | Process IDs |
+| NET | Network interfaces, ports, routing |
+| MNT | Mount points / filesystem view |
+| UTS | Hostname |
+| IPC | Inter-process communication |
+| USER | User/group IDs |
+
+**Demo (inside a running container on Windows):**
+```powershell
+docker run -it --rm alpine sh
+# Inside container:
+hostname          # container ID as hostname
+ps                # only processes inside container
+```
 
-Even after virtualization:
+---
 
-Systems were still heavy
-Startup time was slow
-Resource usage was high
-Need for Better Solution:
+### 1.4 Control Groups (cgroups)
+**cgroups** limit what resources a process can *use*:
+- CPU shares and quotas
+- Memory limits (OOM killer per group)
+- I/O bandwidth
 
-This led to:
-Containerization (next topic in Week 2)
+Docker applies cgroups automatically when you use `--memory` or `--cpus`:
+```powershell
+docker run -d --name limited-nginx --memory=128m --cpus=0.5 nginx:alpine
+docker stats limited-nginx --no-stream
+docker rm -f limited-nginx
+```
 
-5. COMPARISON: TRADITIONAL vs VIRTUALIZATION
-Feature	Traditional	Virtualization
-Apps per server	1	Multiple
-Resource usage	Poor	Better
-Cost	High	Reduced
-Isolation	N/A	Strong
-Flexibility	Low	High
+---
 
-WEEK 2: CONTAINERIZATION AND CONTAINER RUNTIME
-1. INTRODUCTION TO CONTAINERIZATION
-Definition
+### 1.5 Container Images & Layers
+- An **image** is a read-only template (stacked layers).
+- A **container** is a running instance with a thin writable layer on top.
+- Each Dockerfile instruction creates a new layer (cached for speed).
 
-Containerization is a lightweight virtualization technique in which applications and their dependencies are packaged together into a single unit called a container, which can run consistently across different environments.
+---
 
-Key Concept
+### 1.6 Image Registries & Distribution
+- **Docker Hub** — public default registry (`docker.io`)
+- **GHCR** — GitHub Container Registry (`ghcr.io`)
+- **Private registries** — Harbor, AWS ECR, Azure ACR
 
-Unlike virtual machines, containers:
+```powershell
+docker pull httpd:alpine
+docker images
+```
 
-Do not include a full operating system
-Share the host operating system kernel
-Contain only required libraries and dependencies
-Technical Explanation
+![Listing pulled images on Windows](../assets/screenshots/unit-1/02-docker-images.svg)
+*Listing pulled images on Windows — captured on Windows PowerShell + Docker Desktop*
 
-A container includes:
 
-Application code
-Runtime environment
-Libraries and dependencies
-Configuration files
+---
 
-However, it does not include a separate OS, which makes it lightweight.
+### 1.7 Introduction to Docker
+Docker packages applications with dependencies into portable containers.
 
-Real-World Analogy
+**Docker Architecture:**
+```
+[Docker CLI]  -->  [Docker Daemon (dockerd)]  -->  [containerd]  -->  [runc]
+                           |
+                    [Images / Containers / Networks / Volumes]
+                           |
+                    [Docker Hub / GHCR / Private Registry]
+```
 
-Container = Packed lunch
-It contains only what is needed, not the entire kitchen.
+| Component | Role |
+|-----------|------|
+| **Docker CLI** | User commands (`docker run`, `docker build`) |
+| **Docker Daemon** | Background service managing objects |
+| **containerd** | Container runtime managing lifecycle |
+| **runc** | OCI-compliant low-level runtime |
 
-2. NEED FOR CONTAINERIZATION
+On **Windows**, Docker Desktop runs the Linux engine inside WSL2 or a lightweight VM.
 
-Containerization emerged due to limitations of virtualization.
+---
 
-Problems with Virtualization
-Each VM requires a full OS
-High memory and CPU usage
-Slow startup time
-Difficult scalability
-Portability issues
-How Containerization Solves These Problems
-Lightweight
+### 1.8 Docker Object Types
+| Object | Purpose |
+|--------|---------|
+| **Image** | Read-only blueprint |
+| **Container** | Running (or stopped) instance |
+| **Network** | Communication between containers |
+| **Volume** | Persistent data storage |
 
-Containers use fewer resources because they share the host OS.
+---
 
-Fast Startup
+### 1.9 Docker Layering & Filesystem
+Docker uses **Union File Systems** (overlay2 on Linux):
+- Lower layers: read-only image layers
+- Top layer: container writable layer (Copy-on-Write)
+- When a file is modified, it's copied to the writable layer
 
-Containers start in seconds, unlike VMs.
+Inspect layers:
+```powershell
+docker history httpd:alpine
+```
 
-High Scalability
+![Image layer history](../assets/screenshots/unit-1/07-docker-history.svg)
+*Image layer history — captured on Windows PowerShell + Docker Desktop*
 
-You can run many containers on a single system.
 
-Portability
+---
 
-Containers run the same across development, testing, and production.
+## PRACTICAL LAB 1 — Deploy Apache on Windows (Unit I)
 
-Evolution of Application Deployment
-Monolithic Applications
-Single large application
-Deployed on physical servers
-Virtualized Systems
-Applications split into components
-Hosted on VMs
-Microservices Architecture
-Applications divided into small services
-Each service runs in a container
-3. CHARACTERISTICS OF CONTAINERS
-1. Lightweight
-
-No separate OS, minimal overhead
-
-2. Fast Boot Time
+**Scenario:** Pull Apache httpd, run on port 8081, verify in browser.
 
-Starts almost instantly
+**Step 1 — Pull image:**
+```powershell
+docker pull httpd:alpine
+```
 
-3. Portable
+![Pulling httpd:alpine from Docker Hub](../assets/screenshots/unit-1/01-docker-pull-httpd.svg)
+*Pulling httpd:alpine from Docker Hub — captured on Windows PowerShell + Docker Desktop*
 
-Runs anywhere with same behavior
 
-4. Scalable
+**Step 2 — Run container:**
+```powershell
+docker run -d --name apache-lab -p 8081:80 httpd:alpine
+```
 
-Easily create or destroy containers
+![Starting Apache container](../assets/screenshots/unit-1/03-docker-run-apache.svg)
+*Starting Apache container — captured on Windows PowerShell + Docker Desktop*
 
-5. Efficient Resource Usage
 
-Multiple containers share system resources
+**Step 3 — Verify:**
+```powershell
+docker ps
+curl.exe http://localhost:8081
+```
 
-4. CONTAINER VS VIRTUAL MACHINE
-Feature	Virtual Machine	Container
-OS	Separate OS	Shared OS
-Size	Large	Small
-Startup	Slow	Fast
-Resource usage	High	Low
-Portability	Limited	High
-5. CONTAINER RUNTIME
-Definition
+![Running containers with port mapping](../assets/screenshots/unit-1/04-docker-ps.svg)
+*Running containers with port mapping — captured on Windows PowerShell + Docker Desktop*
 
-A container runtime is the software responsible for creating, running, and managing containers.
 
-Key Role
+![HTTP response from Apache](../assets/screenshots/unit-1/05-curl-apache.svg)
+*HTTP response from Apache — captured on Windows PowerShell + Docker Desktop*
 
-It converts a container image into a running container.
 
-Simple Explanation
+**Step 4 — Inspect port mapping:**
+```powershell
+docker inspect apache-lab --format "{{.NetworkSettings.Ports}}"
+```
 
-Image = blueprint
-Runtime = engine that runs it
+**Step 5 — Cleanup:**
+```powershell
+docker stop apache-lab
+docker rm apache-lab
+```
 
-Responsibilities of Container Runtime
-Create isolated environment
-Start application process
-Apply resource limits
-Monitor container lifecycle
-Stop or delete containers
-6. NEED FOR CONTAINER RUNTIME
+---
 
-A container image is:
+## PRACTICAL LAB 2 — Custom HTML in Apache Container
 
-Read-only
-Static
+```powershell
+docker run -d --name web-lab -p 8080:80 httpd:alpine
+docker exec web-lab sh -c "echo '<h1>AMAN IS LEARNING DOCKER</h1>' > /usr/local/apache2/htdocs/index.html"
+curl.exe http://localhost:8080
+docker stop web-lab; docker rm web-lab
+```
 
-To execute it, a runtime is required to:
+Open **http://localhost:8080** in Edge/Chrome on Windows.
 
-Allocate system resources
-Create isolation
-Execute application inside container
+---
 
-Without runtime, containers cannot run.
+## PRACTICE QUESTIONS
 
-7. TYPES OF CONTAINER RUNTIMES
-1. High-Level Runtimes
-Definition
+1. What is the difference between a container image and a running container?
+2. Explain how namespaces provide process isolation.
+3. What role do cgroups play in container resource management?
+4. Name the four main Docker object types.
+5. Why does Docker use layered filesystems?
 
-User-facing tools that manage container lifecycle and provide additional features.
-
-Examples
-Docker Engine
-containerd
-CRI-O
-Functions
-Pull images from registry
-Manage networking
-Manage storage
-Start/stop containers
-2. Low-Level Runtimes
-Definition
-
-Responsible for directly interacting with the operating system to run containers.
-
-Example
-runc
-Functions
-Interface with Linux kernel
-Handle namespaces
-Apply cgroups
-Execute container process
-Key Difference
-High-Level Runtime	Low-Level Runtime
-User-facing	System-level
-Manages lifecycle	Executes container
-Example: Docker	Example: runc
-8. HOW CONTAINERS WORK (INTERNAL FLOW)
-Developer creates container image
-Runtime loads the image
-Runtime creates isolated environment
-Application starts running inside container
-9. ROLE OF CONTAINERS IN DEVOPS
-
-Containers are a core part of modern DevOps because they enable:
-
-1. Continuous Integration
-
-Same environment for building and testing
-
-2. Continuous Deployment
-
-Deploy identical containers in production
-
-3. Microservices Architecture
-
-Each service runs independently
-
-4. Automation
-
-Easy integration with CI/CD pipelines
-
-10. REAL-WORLD SCENARIO
-
-Suppose you build an application on your laptop:
-
-Without containers → may fail on server
-With containers → runs exactly the same everywhere
-11. IMPORTANT EXAM CONCEPTS
-Difference Between Image and Container
-Image	Container
-Static	Running instance
-Read-only	Writable
-Blueprint	Execution
-
-1. Process Isolation
-Definition
-
-Process isolation is a mechanism that ensures each container runs independently as if it is the only process on the system, even though multiple containers share the same operating system.
-
-Explanation
-
-In a normal operating system, all processes can potentially interact with each other, which may lead to conflicts or security issues. In containerized environments, multiple applications run on the same host system. Therefore, it is essential to isolate processes so that one container cannot interfere with another.
-
-Process isolation creates the illusion that each container has its own dedicated system. Even though containers share the same OS kernel, they behave as independent environments. This isolation is achieved using Linux kernel features called namespaces, which restrict what a container can see and access.
-
-Importance of Process Isolation
-Prevents interference between containers
-Improves security
-Ensures stability of applications
-Allows multiple applications to run safely on the same system
-2. Namespaces
-Definition
-
-Namespaces are Linux kernel features that provide isolation by partitioning system resources so that each container only sees its own resources.
-
-Explanation
-
-Namespaces work by creating separate views of system resources for different processes. Each container is assigned its own set of namespaces, which restrict its visibility to only its own processes, files, and network interfaces. As a result, a container behaves as if it is running on a separate machine, even though it is sharing the host system.
-
-In simple terms, namespaces create isolated environments within a single operating system.
-
-Key Concept
-
-“Namespaces create isolation by hiding system resources from other containers.”
-
-3. Types of Namespaces
-3.1 PID Namespace (Process Isolation)
-
-Definition:
-The PID namespace isolates process IDs so that each container has its own process tree.
-
-Explanation:
-Inside a container, processes are assigned their own IDs starting from 1. These processes are not visible outside the container, and the container cannot see processes running on the host or in other containers.
-
-Example:
-A web server container may have:
-
-PID 1 → main application
-Worker processes → handle requests
-Logger process → manage logs
-
-These processes are only visible within the container.
-
-3.2 Network Namespace
-
-Definition:
-The network namespace provides each container with its own network stack.
-
-Explanation:
-Each container gets its own:
-
-IP address
-Network interfaces
-Port space
-
-This allows multiple containers to run applications on the same port without conflict.
-
-Example:
-Multiple containers can run web servers on port 80:
-
-Container 1 → 172.x.x.x:80
-Container 2 → 172.x.x.x:80
-3.3 Mount Namespace
-
-Definition:
-The mount namespace isolates the file system of each container.
-
-Explanation:
-Each container has its own view of the file system. Changes made inside a container do not affect the host system or other containers.
-
-3.4 UTS Namespace
-
-Definition:
-The UTS namespace allows each container to have its own hostname and domain name.
-
-Explanation:
-This helps in identifying containers independently, especially in distributed systems.
-
-3.5 User Namespace
-
-Definition:
-The user namespace maps container users to different users on the host system.
-
-Explanation:
-It enhances security by preventing containers from running as root users on the host system, even if they appear as root inside the container.
-
-4. Summary of Namespaces
-Namespace	Purpose
-PID	Process isolation
-Network	Separate networking
-Mount	File system isolation
-UTS	Hostname isolation
-User	Security and user mapping
-5. Control Groups (cgroups)
-Definition
-
-Control Groups (cgroups) are Linux kernel features used to limit, control, and monitor the resource usage of processes or containers.
-
-Explanation
-
-While namespaces provide isolation, they do not control how much resource a container can use. Without proper control, one container could consume excessive CPU or memory, affecting other containers and the host system.
-
-cgroups solve this problem by enforcing limits on resource usage. They ensure fair distribution of system resources and prevent any single container from overwhelming the system.
-
-Key Concept
-
-“Namespaces isolate resources, cgroups control resource usage.”
-
-6. Need for cgroups
-Explanation
-
-In a multi-container environment:
-
-Multiple applications share the same system
-Some applications may consume more resources
-
-Without cgroups:
-
-One container could use all CPU or memory
-Other containers may crash
-System performance degrades
-With cgroups:
-Resource limits are enforced
-System remains stable
-Fair resource sharing is ensured
-7. Types of Resources Controlled by cgroups
-1. CPU
-
-Limits how much CPU a container can use and assigns CPU shares.
-
-2. Memory
-
-Sets maximum memory usage and can terminate containers if limits are exceeded.
-
-3. Disk I/O
-
-Controls read and write speeds to prevent excessive disk usage.
-
-4. Network (Indirect Control)
-
-Managed through traffic shaping mechanisms.
-
-8. Working of cgroups
-Explanation
-
-cgroups organize processes into groups and apply limits to each group. When a container is created, it is assigned to a specific cgroup, which defines how much CPU, memory, and other resources it can use.
-
-The system continuously monitors resource usage and ensures that containers do not exceed their allocated limits.
-
-9. Namespaces vs cgroups
-Feature	Namespaces	cgroups
-Purpose	Isolation	Resource control
-Function	Hide resources	Limit usage
-Focus	Visibility	Allocation
-10. Real-World Analogy
-Namespaces
-
-
-
-
-
+**Answers:**
+1. Image = read-only template; Container = running instance with writable layer.
+2. Namespaces restrict process view of PIDs, network, mounts, etc.
+3. cgroups enforce CPU/memory/I/O limits per container.
+4. Image, Container, Network, Volume.
+5. Layer caching speeds builds; shared layers save disk; CoW enables efficient storage.

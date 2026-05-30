@@ -1,0 +1,10 @@
+﻿IMAGE          CREATED         CREATED BY                                      SIZE      COMMENT
+9a10f8b34ce3   1 second ago    CMD ["node" "app.js"]                           0B        buildkit.dockerfile.v0
+<missing>      1 second ago    ENV APP_NAME=DevOps Lab                         0B        buildkit.dockerfile.v0
+<missing>      1 second ago    EXPOSE [3000/tcp]                               0B        buildkit.dockerfile.v0
+<missing>      1 second ago    COPY app.js ./ # buildkit                       12.3kB    buildkit.dockerfile.v0
+<missing>      1 second ago    RUN /bin/sh -c npm install --production # buΓÇª   12.7MB    buildkit.dockerfile.v0
+<missing>      6 seconds ago   COPY package.json ./ # buildkit                 12.3kB    buildkit.dockerfile.v0
+<missing>      8 days ago      WORKDIR /app                                    8.19kB    buildkit.dockerfile.v0
+<missing>      6 weeks ago     CMD ["node"]                                    0B        buildkit.dockerfile.v0
+<missing>      6 weeks ago     ENTRYPOINT ["docker-entrypoint.sh"]             0B        buildkit.dockerfile.v0

@@ -1,265 +1,171 @@
-Solutions**********************
-1. )
-You are a DevOps trainee and need to deploy the Apache HTTP Server (httpd) using Docker for testing a static website. Pull the Apache server image from Docker Hub, create a container named apache-web, and run it in detached mode. Map port 8081 on the host machine to port 80 inside the container so that the website can be accessed through a browser.
-Tasks:
-Pull the Apache (httpd) Docker image.
-Verify that the image is successfully downloaded.
-Run the container with the specified name and port mapping.
-Check the list of running containers.
-Access the Apache web server using a browser.
+# INT332 — Exam-Style Questions & Solutions (Windows / Docker Desktop)
 
-Answer:
-# Pull Apache image
-docker pull httpd
+All commands tested on **Windows PowerShell** with Docker Desktop.
 
-# Verify image
+---
+
+## Unit I — Container Basics
+
+### Q1. Deploy Apache httpd on port 8081
+```powershell
+docker pull httpd:alpine
 docker images
-
-# Run container
-docker run -d --name apache-web -p 8081:80 httpd
-
-# Check running containers
+docker run -d --name apache-web -p 8081:80 httpd:alpine
 docker ps
+curl.exe http://localhost:8081
+```
+**Browser:** http://localhost:8081
 
-2. )
-Run a Docker container named “DB-app" based on the “mongodb" image, and expose port 80 on the host to port 8082 on the container?
+### Q2. Display custom message in Apache container
+```powershell
+docker run -d --name web-test -p 8080:80 httpd:alpine
+docker exec web-test sh -c "echo '<h1>AMAN IS LEARNING DOCKER</h1>' > /usr/local/apache2/htdocs/index.html"
+curl.exe http://localhost:8080
+docker stop web-test; docker rm web-test
+```
 
-docker run -d --name DB-app -p 80:8082 mongodb
+### Q3. Run MongoDB with port mapping
+```powershell
+# Host port 27017 → container port 27017
+docker run -d --name DB-app -p 27017:27017 mongo:7
+docker ps
+```
 
+### Q4. List all Docker object types
+```powershell
+docker images      # Images
+docker ps -a       # Containers
+docker network ls  # Networks
+docker volume ls   # Volumes
+```
 
-3. ) 
+---
 
-You are a DevOps engineer in a startup company. The development team asks you to quickly deploy a simple web page that displays the message:
+## Unit II — Dockerfile & Networking
 
-Use the official httpd Docker image.
-Run the container so it is accessible on port 8080 of the host machine.
-Create or update an HTML file inside the container to display the required message.
-Verify the output using a command-line tool.
-Properly stop and remove the container after testing
+### Q5. Build and run custom Node.js app
+```powershell
+cd labs\unit-2-dockerfile
+docker build -t devops-node-lab:1.0 .
+docker run -d --name node-lab -p 3000:3000 devops-node-lab:1.0
+curl.exe http://localhost:3000
+```
 
-docker run -dit --name web-test -p 8080:80 httpd
+### Q6. Create custom network and connect containers
+```powershell
+docker network create app-network
+docker run -d --name redis --network app-network redis:alpine
+docker run -it --rm --network app-network alpine ping -c 3 redis
+```
 
-# Enter container
-docker exec -it web-test bash
+### Q7. Create named volume for persistence
+```powershell
+docker volume create mydata
+docker run -d -v mydata:/data --name vol-test alpine sleep 3600
+docker exec vol-test sh -c "echo persistent > /data/file.txt"
+docker rm -f vol-test
+docker run --rm -v mydata:/data alpine cat /data/file.txt
+```
 
-# Create HTML file
-echo "<h1>Welcome DevOps Engineer</h1>" > /usr/local/apache2/htdocs/index.html
+### Q8. Copy file from container to Windows Desktop
+```powershell
+docker run -d --name task nginx:alpine
+docker exec task sh -c "mkdir -p /project && echo 'I am Learning Docker' > /project/notes.txt"
+docker cp task:/project/notes.txt "$env:USERPROFILE\Desktop\notes.txt"
+docker rm -f task
+```
 
-# Exit container
-exit
+### Q9. Push image to GHCR
+```powershell
+docker build -t ghcr.io/YOUR_USERNAME/myapp:1.0 .
+docker login ghcr.io -u YOUR_USERNAME
+# Password: GitHub PAT (not account password)
+docker push ghcr.io/YOUR_USERNAME/myapp:1.0
+```
 
-# Verify using curl
-curl http://localhost:8080
+---
 
-# Stop and remove container
-docker stop web-test
-docker rm web-test
+## Unit III — Docker Compose
 
-4) 
+### Q10. WordPress + MySQL with Compose
+```powershell
+cd labs\unit-3-wordpress
+docker compose up -d
+docker compose ps
+# Browser: http://localhost:8000
+docker compose down -v
+```
 
-3. How would you use the docker run command with -it, -e, -v, and --name to:
-•	Set an environment variable APP_ENV=production.	
-•	Bind a local directory /app/data to /data inside the container.	
-•	Name the container my_app.	
+### Q11. Validate compose file
+```powershell
+docker compose config
+```
 
-docker run -it -e APP_ENV=production -v C:\app\data:/data --name my_app ubuntu
+---
 
-5) 
+## Unit IV — Maven
 
-Inside this same running container, you are required to:
-Create a new directory named /project.
-Inside /project, create a file called report.txt.
-Add the following text inside the file:
-    This is our container interaction with our host machine.
-Verify the file content.
-Copy report.txt from the container to your Desktop.
-Create another file named notes.txt in the same /project directory.
-Append the text:
-Verify that both files exist inside /project.
+### Q12. Full Maven lifecycle
+```powershell
+cd labs\unit-4-maven
+mvn clean compile test package install
+java -jar target\calculator-app-1.0.0-SNAPSHOT.jar
+```
 
-# Enter container
-docker exec -it my_app bash
+### Q13. Dependency tree
+```powershell
+mvn dependency:tree
+```
 
-# Create directory
-mkdir /project
+---
 
-# Create file
-echo "This is our container interaction with our host machine." > /project/report.txt
+## Unit V — GitHub Actions
 
-# Verify content
-cat /project/report.txt
+### Q14. Workflow triggers
+- `push` — on code push
+- `pull_request` — on PR open/update
+- `schedule` — cron-based
+- `workflow_dispatch` — manual run from GitHub UI
 
-# Exit
-exit
+See: `labs/unit-5-github-actions/.github/workflows/java-ci.yml`
 
-# Copy file to Desktop
-docker cp my_app:/project/report.txt C:\Users\AMAN KUMAR SINGH\Desktop
+---
 
-# Re-enter container
-docker exec -it my_app bash
+## Unit VI — Jenkins
 
-# Create another file
-echo "Notes file created" > /project/notes.txt
+### Q15. Run Jenkins on Windows via Docker
+```powershell
+docker volume create jenkins_home
+docker run -d -p 8080:8080 -p 50000:50000 `
+  -v jenkins_home:/var/jenkins_home `
+  --name jenkins-lab jenkins/jenkins:lts
+docker exec jenkins-lab cat /var/jenkins_home/secrets/initialAdminPassword
+```
+**Browser:** http://localhost:8080
 
-# Verify both files
-ls /project
+### Q16. Jenkins pipeline stages (typical)
+1. Checkout (Git)
+2. Build (Maven/npm)
+3. Test (Surefire/JUnit)
+4. Package (JAR/Docker image)
+5. Deploy (SSH/cloud)
+6. Post (always notify/cleanup)
 
-exit
+---
 
+## Quick Reference — Most Used Commands
 
-6) 
+| Task | Command |
+|------|---------|
+| Pull image | `docker pull nginx:alpine` |
+| Run detached | `docker run -d --name app -p 8080:80 nginx` |
+| View logs | `docker logs app` |
+| Shell into container | `docker exec -it app sh` |
+| Stop & remove | `docker stop app; docker rm app` |
+| Build image | `docker build -t myapp:1.0 .` |
+| Compose up | `docker compose up -d` |
+| Maven build | `mvn clean verify` |
 
-1. You need to start a new container using the nginx image while setting an environment variable ENV_MODE=production. Write the docker run command to achieve this.
+---
 
-2. You have a running container named my_app, but it's not behaving as expected. You want to check its logs to debug any errors. Write the command to view its logs and follow new log entries in real-time.
-
-3. A container named web_server was stopped. Write the command to:a) Start the container again.b) Stop the container when needed.
-
-1: Run nginx with env variable
-docker run -d -e ENV_MODE=production nginx
-2: View logs in real-time
-docker logs -f my_app
-3: Start & Stop container
-# Start
-docker start web_server
-
-# Stop
-docker stop web_server
-
-7) 
-
-Create a Docker volume named projectdata.
-Verify that the volume has been created successfully.
-Inspect the volume and identify:The mount point (where Docker stores it on the host system).
-Run an Ubuntu container in detached mode:
-     Name the container project_container.
-Attach the volume     projectdata inside the container at /app/data.
-Inside the running container:Create a file named report.txt inside /app/data.
-Add the text: This is my first volume.
-Stop and remove the container.
-Run a new Ubuntu container:Name it project_container_new.
-Attach the same volume projectdata at /app/data.
-Verify that report.txt still exists and contains the same data.
-
-# Create volume
-docker volume create projectdata
-
-# Verify
-docker volume ls
-
-# Inspect volume
-docker volume inspect projectdata
-# Run container
-docker run -dit --name project_container -v projectdata:/app/data ubuntu
-# Inside container
-docker exec -it project_container bash
-
-echo "This is my first volume." > /app/data/report.txt
-
-exit
-# Stop & remove
-docker stop project_container
-docker rm project_container
-# Run new container
-docker run -dit --name project_container_new -v projectdata:/app/data ubuntu
-
-# Verify file
-docker exec -it project_container_new cat /app/data/report.txt
-
-
-
-8)
-
-You are a DevOps engineer at a university. The web development team has built a simple HTML-based portal and wants it deployed using Docker.
-Use the official httpd image.
-Name the container college_portal.
-Run it in detached mode.
-Expose container port 80 to host port 8080.
-Set environment variable ENV=production.
-Attach a Docker volume named portaldata to store website files.
-Modify the index.html file inside the container.
-Verify the output in the browser.
-Check logs if the page is not loading.
-Stop and remove the container.
-Remove the volume and image after testing.
-
-
-# Create volume
-docker volume create portaldata
-# Run container
-docker run -dit --name college_portal -p 8080:80 -e ENV=production -v portaldata:/usr/local/apache2/htdocs httpd
-# Modify HTML
-docker exec -it college_portal bash
-
-echo "<h1>College Portal</h1>" > /usr/local/apache2/htdocs/index.html
-
-exit
-
-# Logs
-docker logs college_portal
-# Stop & cleanup
-docker stop college_portal
-docker rm college_portal
-docker volume rm portaldata
-docker rmi httpd
-
-9)
-
-Your backend team reports that their MySQL container is failing to start.
-Use mysql:8 image.
-Set required environment variables:
-MYSQL_ROOT_PASSWORD
-MYSQL_DATABASE
-MYSQL_USER
-MYSQL_PASSWORD
-Run in background.
-Expose port 3306 to host port 3307.
-Check logs to identify errors.
-Enter inside container to verify database.
-Stop and remove container after debugging
-
-
-docker run -d --name mysql-test -p 3307:3306 `
--e MYSQL_ROOT_PASSWORD=root123 `
--e MYSQL_DATABASE=testdb `
--e MYSQL_USER=aman `
--e MYSQL_PASSWORD=aman123 `
-mysql:8
-# Check logs
-docker logs mysql-test
-# Enter container
-docker exec -it mysql-test bash
-# Open MySQL
-mysql -u root -p
-# Stop & remove
-docker stop mysql-test
-docker rm mysql-test
-
-10)
-IMAGE CREATION PROCESS MANUAL USING BUILD -T: Node and nginx
-
-Q10: Node image build
-
-Create a Dockerfile:
-
-FROM node:18
-WORKDIR /app
-COPY . .
-RUN npm install
-CMD ["node", "app.js"]
-Build Image:
-docker build -t node-app .
-Run:
-docker run -d -p 3000:3000 node-app
-
-Docker Image Build (Nginx)
-Nginx custom image
-
-Create Dockerfile:
-
-FROM nginx
-COPY index.html /usr/share/nginx/html/index.html
-Build Image:
-docker build -t nginx-custom .
-Run Container:
-docker run -d -p 8080:80 nginx-custom
+*See `week1`–`week17` for detailed theory and screenshot references.*

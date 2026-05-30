@@ -93,3 +93,10 @@ steps:
 
 
 
+
+### Windows Lab — Docker in CI
+Add step:
+```yaml
+- name: Build Docker image
+  run: docker build -t myapp:${{ github.sha }} ./labs/unit-2-dockerfile
+```
