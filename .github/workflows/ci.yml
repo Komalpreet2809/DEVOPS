@@ -22,7 +22,7 @@ jobs:
 
       - name: Maven build and test
         run: mvn -B clean verify
-        working-directory: labs/unit-4-maven
+        working-directory: labs/lab4-maven-project
 
   container-build:
     runs-on: ubuntu-latest
@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build Node.js container image
-        run: docker build -t demo-node-app ./labs/unit-2-dockerfile
+        run: docker build -t demo-node-app ./labs/lab2-custom-image
 
       - name: Verify container runs
         run: |

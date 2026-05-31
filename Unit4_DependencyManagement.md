@@ -76,7 +76,7 @@ Your CLI application depends on the Apache Commons library. Add the `maven-shade
 *Viewing the dependency tree output in PowerShell*
 
 ```powershell
-cd labs\unit-4-maven
+cd labs\lab4-maven-project
 mvn dependency:tree
 ```
 

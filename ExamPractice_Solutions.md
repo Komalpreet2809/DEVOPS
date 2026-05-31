@@ -45,7 +45,7 @@ docker volume ls   # List volumes
 
 ### Q5. Build and launch a custom Node.js application
 ```powershell
-cd labs\unit-2-dockerfile
+cd labs\lab2-custom-image
 docker build -t node-app-demo:1.0 .
 docker run -d --name node-demo -p 3001:3000 node-app-demo:1.0
 curl.exe http://localhost:3001
@@ -89,7 +89,7 @@ docker push ghcr.io/YOUR_USERNAME/myapp:1.0
 
 ### Q10. Deploy WordPress + MySQL using Compose
 ```powershell
-cd labs\unit-3-wordpress
+cd labs\lab3-compose-stack
 docker compose up -d
 docker compose ps
 # Open in browser: http://localhost:8005
@@ -107,7 +107,7 @@ docker compose config
 
 ### Q12. Execute the complete Maven build lifecycle
 ```powershell
-cd labs\unit-4-maven
+cd labs\lab4-maven-project
 mvn clean compile test package install
 java -jar target\calculator-app-1.0.0-SNAPSHOT.jar
 ```
@@ -127,7 +127,7 @@ mvn dependency:tree
 - `schedule` — runs on a cron schedule
 - `workflow_dispatch` — allows manual execution from the GitHub interface
 
-Reference: `labs/unit-5-github-actions/.github/workflows/java-ci.yml`
+Reference: `labs/lab5-ci-workflow/.github/workflows/java-ci.yml`
 
 ---
 
@@ -168,4 +168,4 @@ docker exec jenkins-server cat /var/jenkins_home/secrets/initialAdminPassword
 
 ---
 
-*Refer to `week1`–`week17` folders for in-depth theory notes and screenshot references.*
+*Refer to the `Unit1_*` through `Unit6_*` files for in-depth theory notes and screenshot references.*

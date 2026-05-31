@@ -97,7 +97,7 @@ services:
 
 ### Windows Lab — WordPress + MySQL Stack
 ```powershell
-cd labs\unit-3-wp-demo
+cd labs\lab3-compose-stack
 docker compose up -d
 docker compose ps
 # Visit http://localhost:8005 in your browser

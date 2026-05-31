@@ -4,7 +4,7 @@ Syllabus-aligned course notes featuring **hands-on labs for Windows (PowerShell 
 
 ## Directory Layout
 
-- `week1` … `week17` — Weekly modules covering theory, labs, and exercises
+- `Unit1_*.md` through `Unit6_*.md` — Topic-wise modules covering theory, labs, and exercises
 - `labs/` — Self-contained lab projects — clone and run directly on Windows
 - `assets/screenshots/` — Authentic terminal output captured on Windows (`.svg` screenshot files)
 - `scripts/` — Helper tools for generating screenshot SVGs from command output
@@ -29,47 +29,47 @@ git --version
 
 ## Course Outline
 
-### Unit I — DevOps Infrastructure Essentials (`week1`, `week2`)
+### Unit I — DevOps Infrastructure Essentials (`Unit1_ContainersAndDevOps.md`, `Unit1_DockerArchitecture.md`)
 Containers, namespaces, control groups, Docker platform architecture, object types, image layering.
 
-**Lab:** `labs/unit-1-apache/` (pull & run httpd)  
+**Lab:** `labs/lab1-apache-deployment/` (pull & run httpd)  
 **Screenshots:** `assets/screenshots/unit-1/`
 
-### Unit II — Image Creation & Container Operations (`week3`, `week_4`, `week5`)
+### Unit II — Image Creation & Container Operations (`Unit2_DockerfileAndImages.md`, `Unit2_NetworkingAndVolumes.md`, `Unit2_RegistriesAndDistribution.md`)
 Dockerfile syntax, build workflow, networking modes, volumes, registries (Docker Hub, GHCR).
 
-**Lab:** `labs/unit-2-dockerfile/`  
+**Lab:** `labs/lab2-custom-image/`  
 **Screenshots:** `assets/screenshots/unit-2/`
 
-### Unit III — Multi-Container Apps with Docker Compose (`week6`, `week7`, `week8`)
+### Unit III — Multi-Container Apps with Docker Compose (`Unit3_MicroservicesIntro.md`, `Unit3_DockerCompose.md`, `Unit3_MultiContainerApps.md`)
 Service-oriented design, compose YAML structure, WordPress+MySQL, Node+MongoDB, Spring+Postgres stacks.
 
-**Lab:** `labs/unit-3-wordpress/`  
+**Lab:** `labs/lab3-compose-stack/`  
 **Screenshots:** `assets/screenshots/unit-3/`
 
-### Unit IV — Maven Build Toolchain (`week9`, `week10`, `week11`)
+### Unit IV — Maven Build Toolchain (`Unit4_MavenFundamentals.md`, `Unit4_DependencyManagement.md`, `Unit4_MavenPlugins.md`)
 POM configuration, lifecycle phases, dependencies, plugins, Maven + Docker workflows.
 
-**Lab:** `labs/unit-4-maven/`  
+**Lab:** `labs/lab4-maven-project/`  
 **Screenshots:** `assets/screenshots/unit-4/`
 
-### Unit V — CI Using GitHub Actions (`week12`, `week13`, `week14`)
+### Unit V — CI Using GitHub Actions (`Unit5_GitHubActionsIntro.md`, `Unit5_WorkflowsAndJobs.md`, `Unit5_CIDeployments.md`)
 Workflow files, jobs, matrix strategies, caching, Docker in CI, deployment steps.
 
-**Lab:** `labs/unit-5-github-actions/.github/workflows/`
+**Lab:** `labs/lab5-ci-workflow/.github/workflows/`
 
-### Unit VI — CI/CD Using Jenkins (`week15`, `week16`, `week17`)
+### Unit VI — CI/CD Using Jenkins (`Unit6_JenkinsSetup.md`, `Unit6_JenkinsPipelines.md`, `Unit6_JenkinsAdvanced.md`)
 Controller-agent model, pipeline syntax, Jenkinsfile, Docker/Maven integration.
 
-**Lab:** `labs/unit-6-jenkins/`
+**Lab:** `labs/lab6-jenkins-setup/`
 
 ## Running a Lab (Windows)
 
 ```powershell
 # Example: Unit II — create a custom Node.js image
-cd labs\unit-2-dockerfile
+cd labs\lab2-custom-image
 docker build -t node-app-demo:1.0 .
-docker run -d --name node-app-demo -p 3001:3000 node-app-demo:1.0
+docker run -d --name node-app-demo -p 3001:3001 node-app-demo:1.0
 curl.exe http://localhost:3001
 docker stop node-app-demo; docker rm node-app-demo
 ```

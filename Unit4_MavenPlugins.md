@@ -68,7 +68,7 @@ mvn compile jib:build \
 
 ### Windows Lab — Containerize Maven application
 ```powershell
-cd labs\unit-4-maven
+cd labs\lab4-maven-project
 mvn -B clean package
 # Create Dockerfile with JRE base image and COPY target/*.jar
 ```

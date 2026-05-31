@@ -39,7 +39,7 @@ A smaller build context means faster image builds.
 ### C. Building Images on Windows
 
 ```powershell
-cd labs\unit-2-dockerfile
+cd labs\lab2-custom-image
 docker build -t node-app-demo:1.0 .
 ```
 
@@ -121,9 +121,9 @@ docker run myapp --port 4000        # entrypoint runs with overridden args
 
 ---
 
-## LAB EXERCISE — Build from labs/unit-2-dockerfile
+## LAB EXERCISE — Build from labs/lab2-custom-image
 
-The project in `labs/unit-2-dockerfile/` includes:
+The project in `labs/lab2-custom-image/` includes:
 - `Dockerfile` — multi-layer Node.js image build
 - `.dockerignore` — filters out node_modules
 - `app.js` — returns "DEVOPS STUDENT — LEARNING DOCKER"

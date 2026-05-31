@@ -68,7 +68,7 @@ docker push registry.company.com/team/myapp:1.0
 
 ## LAB EXERCISE — Push an Image to GHCR
 
-1. Build the image from `labs/unit-2-dockerfile` and tag it for GHCR
+1. Build the image from `labs/lab2-custom-image` and tag it for GHCR
 2. Authenticate using your PAT
 3. Push the image and verify it appears on your GitHub Packages page
 4. Pull the image on a different machine to confirm availability

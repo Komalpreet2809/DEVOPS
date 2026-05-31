@@ -6,18 +6,23 @@
 
 ## Contents Overview
 
-- `week1` through `week17` — Weekly modules containing theory, lab exercises, and practice problems
+- `Unit1_ContainersAndDevOps.md`, `Unit1_DockerArchitecture.md` — Part A modules
+- `Unit2_DockerfileAndImages.md`, `Unit2_NetworkingAndVolumes.md`, `Unit2_NetworkingNotes.md`, `Unit2_RegistriesAndDistribution.md` — Part B modules
+- `Unit3_MicroservicesIntro.md`, `Unit3_DockerCompose.md`, `Unit3_MultiContainerApps.md` — Part C modules
+- `Unit4_MavenFundamentals.md`, `Unit4_DependencyManagement.md`, `Unit4_MavenPlugins.md` — Part D modules
+- `Unit5_GitHubActionsIntro.md`, `Unit5_WorkflowsAndJobs.md`, `Unit5_CIDeployments.md` — Part E modules
+- `Unit6_JenkinsSetup.md`, `Unit6_JenkinsPipelines.md`, `Unit6_JenkinsAdvanced.md` — Part F modules
 - `labs/` — Ready-to-run lab projects (Dockerfile, Compose, Maven, CI pipelines)
 - `assets/screenshots/` — Actual terminal output from Windows sessions (SVG format)
 - `notes/README.md` — Comprehensive index with environment setup instructions
-- `All Questions Solutions` — Practice questions with worked solutions
+- `ExamPractice_Solutions.md` — Practice questions with worked solutions
 
 ---
 
 ## Topics Covered
 
 ### Part A — DevOps Infrastructure Fundamentals
-**Modules:** `week1`, `week2`
+**Modules:** `Unit1_ContainersAndDevOps.md`, `Unit1_DockerArchitecture.md`
 
 - Evolution of containers, modern containerization practices, DevOps workflow
 - Container runtime internals, namespaces, control groups
@@ -27,7 +32,7 @@
 - Storage layering & filesystem mechanics (overlay2, Copy-on-Write)
 
 ### Part B — Building Images & Managing Containers
-**Modules:** `week3`, `week4`, `week5`
+**Modules:** `Unit2_DockerfileAndImages.md`, `Unit2_NetworkingAndVolumes.md`, `Unit2_RegistriesAndDistribution.md`
 
 - Dockerfile directives (FROM, RUN, COPY, ADD, CMD, ENTRYPOINT, etc.)
 - Build context, `.dockerignore`, `docker build`, image tagging
@@ -36,7 +41,7 @@
 - Docker Hub, GitHub Container Registry, private registries, token-based auth
 
 ### Part C — Microservices & Docker Compose
-**Modules:** `week6`, `week7`, `week8`
+**Modules:** `Unit3_MicroservicesIntro.md`, `Unit3_DockerCompose.md`, `Unit3_MultiContainerApps.md`
 
 - Monolithic vs microservice design, API Gateway patterns
 - Compose YAML syntax: services, volumes, networks, environment variables, secrets
@@ -44,7 +49,7 @@
 - Example stacks: WordPress + MySQL, Node.js + MongoDB, Spring Boot + PostgreSQL
 
 ### Part D — Build Automation with Maven
-**Modules:** `week9`, `week10`, `week11`
+**Modules:** `Unit4_MavenFundamentals.md`, `Unit4_DependencyManagement.md`, `Unit4_MavenPlugins.md`
 
 - POM file anatomy, build lifecycle stages
 - Dependency scoping, transitive dependencies, version resolution
@@ -52,7 +57,7 @@
 - Containerizing Maven applications, pushing to registries
 
 ### Part E — Continuous Integration via GitHub Actions
-**Modules:** `week12`, `week13`, `week14`
+**Modules:** `Unit5_GitHubActionsIntro.md`, `Unit5_WorkflowsAndJobs.md`, `Unit5_CIDeployments.md`
 
 - Workflow definitions, trigger events (push, PR, cron, manual dispatch)
 - Jobs, steps, reusable actions, hosted runners
@@ -60,7 +65,7 @@
 - Docker image build/push within CI, GHCR integration, deployment stages
 
 ### Part F — CI/CD Pipelines with Jenkins
-**Modules:** `week15`, `week16`, `week17`
+**Modules:** `Unit6_JenkinsSetup.md`, `Unit6_JenkinsPipelines.md`, `Unit6_JenkinsAdvanced.md`
 
 - Controller/agent topology, plugin ecosystem, security & RBAC
 - Declarative vs scripted pipeline syntax, Jenkinsfile authoring
@@ -95,18 +100,18 @@ curl.exe http://localhost:8085
 # Open in browser: http://localhost:8085
 
 # Part B — Build a custom image
-cd labs\unit-2-dockerfile
+cd labs\lab2-custom-image
 docker build -t node-app-demo:1.0 .
-docker run -d -p 3001:3000 node-app-demo:1.0
+docker run -d -p 3001:3001 node-app-demo:1.0
 curl.exe http://localhost:3001
 
 # Part C — WordPress + MySQL stack
-cd ..\unit-3-wordpress
+cd ..\lab3-compose-stack
 docker compose up -d
 # Open in browser: http://localhost:8005
 
 # Part D — Maven project build
-cd ..\unit-4-maven
+cd ..\lab4-maven-project
 mvn -B clean verify
 ```
 
@@ -114,12 +119,12 @@ mvn -B clean verify
 
 ## Lab Directory
 
-- **Apache httpd deployment** — `labs/unit-1-apache/` (Part A)
-- **Custom Node.js Dockerfile** — `labs/unit-2-dockerfile/` (Part B)
-- **WordPress + MySQL Compose** — `labs/unit-3-wordpress/` (Part C)
-- **Maven calculator project** — `labs/unit-4-maven/` (Part D)
-- **GitHub Actions CI pipeline** — `labs/unit-5-github-actions/` (Part E)
-- **Jenkins Docker configuration** — `labs/unit-6-jenkins/` (Part F)
+- **Apache httpd deployment** — `labs/lab1-apache-deployment/` (Part A)
+- **Custom Node.js Dockerfile** — `labs/lab2-custom-image/` (Part B)
+- **WordPress + MySQL Compose** — `labs/lab3-compose-stack/` (Part C)
+- **Maven calculator project** — `labs/lab4-maven-project/` (Part D)
+- **GitHub Actions CI pipeline** — `labs/lab5-ci-workflow/` (Part E)
+- **Jenkins Docker configuration** — `labs/lab6-jenkins-setup/` (Part F)
 
 ---
 

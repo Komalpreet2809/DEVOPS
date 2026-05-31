@@ -78,7 +78,7 @@ docker compose version
 
 ### Windows Lab — Build Maven project
 ```powershell
-cd labs\unit-4-maven
+cd labs\lab4-maven-project
 mvn -B clean verify
 java -jar target\math-utils-1.0.0-SNAPSHOT.jar
 ```

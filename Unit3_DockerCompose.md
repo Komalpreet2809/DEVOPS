@@ -107,7 +107,7 @@ docker compose version
 
 ### Windows Lab — Multi-container stack
 ```powershell
-cd labs\unit-3-wp-demo
+cd labs\lab3-compose-stack
 docker compose config
 docker compose up -d
 ```

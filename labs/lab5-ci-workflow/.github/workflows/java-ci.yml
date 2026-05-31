@@ -22,10 +22,10 @@ jobs:
 
       - name: Run Maven build
         run: mvn -B clean verify
-        working-directory: labs/unit-4-maven
+        working-directory: labs/lab4-maven-project
 
       - name: Archive build artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-jar
-          path: labs/unit-4-maven/target/*.jar
+          path: labs/lab4-maven-project/target/*.jar

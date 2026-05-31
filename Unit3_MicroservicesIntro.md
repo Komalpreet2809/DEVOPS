@@ -128,7 +128,7 @@ docker compose version
 
 ### Windows Lab — Launch catalog microservice
 ```powershell
-cd labs\unit-2-dockerfile
+cd labs\lab2-custom-image
 docker build -t catalog-svc:1.0 .
 docker run -d --name catalog-demo -p 8085:3002 catalog-svc:1.0
 curl.exe http://localhost:8085
