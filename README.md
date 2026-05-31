@@ -6,23 +6,17 @@
 
 ## Contents Overview
 
-- `Unit1_ContainersAndDevOps.md`, `Unit1_DockerArchitecture.md` — Part A modules
-- `Unit2_DockerfileAndImages.md`, `Unit2_NetworkingAndVolumes.md`, `Unit2_NetworkingNotes.md`, `Unit2_RegistriesAndDistribution.md` — Part B modules
-- `Unit3_MicroservicesIntro.md`, `Unit3_DockerCompose.md`, `Unit3_MultiContainerApps.md` — Part C modules
-- `Unit4_MavenFundamentals.md`, `Unit4_DependencyManagement.md`, `Unit4_MavenPlugins.md` — Part D modules
-- `Unit5_GitHubActionsIntro.md`, `Unit5_WorkflowsAndJobs.md`, `Unit5_CIDeployments.md` — Part E modules
-- `Unit6_JenkinsSetup.md`, `Unit6_JenkinsPipelines.md`, `Unit6_JenkinsAdvanced.md` — Part F modules
+- `course_notes/` — Weekly modules containing theory, lab exercises, and practice problems
 - `labs/` — Ready-to-run lab projects (Dockerfile, Compose, Maven, CI pipelines)
 - `assets/screenshots/` — Actual terminal output from Windows sessions (SVG format)
-- `notes/README.md` — Comprehensive index with environment setup instructions
-- `ExamPractice_Solutions.md` — Practice questions with worked solutions
+- `practice_questions/ExamPractice_Solutions.md` — Practice questions with worked solutions
 
 ---
 
 ## Topics Covered
 
 ### Part A — DevOps Infrastructure Fundamentals
-**Modules:** `Unit1_ContainersAndDevOps.md`, `Unit1_DockerArchitecture.md`
+**Modules:** `course_notes/Unit1_ContainersAndDevOps.md`, `course_notes/Unit1_DockerArchitecture.md`
 
 - Evolution of containers, modern containerization practices, DevOps workflow
 - Container runtime internals, namespaces, control groups
@@ -32,7 +26,7 @@
 - Storage layering & filesystem mechanics (overlay2, Copy-on-Write)
 
 ### Part B — Building Images & Managing Containers
-**Modules:** `Unit2_DockerfileAndImages.md`, `Unit2_NetworkingAndVolumes.md`, `Unit2_RegistriesAndDistribution.md`
+**Modules:** `course_notes/Unit2_DockerfileAndImages.md`, `course_notes/Unit2_NetworkingAndVolumes.md`, `course_notes/Unit2_RegistriesAndDistribution.md`
 
 - Dockerfile directives (FROM, RUN, COPY, ADD, CMD, ENTRYPOINT, etc.)
 - Build context, `.dockerignore`, `docker build`, image tagging
@@ -41,7 +35,7 @@
 - Docker Hub, GitHub Container Registry, private registries, token-based auth
 
 ### Part C — Microservices & Docker Compose
-**Modules:** `Unit3_MicroservicesIntro.md`, `Unit3_DockerCompose.md`, `Unit3_MultiContainerApps.md`
+**Modules:** `course_notes/Unit3_MicroservicesIntro.md`, `course_notes/Unit3_DockerCompose.md`, `course_notes/Unit3_MultiContainerApps.md`
 
 - Monolithic vs microservice design, API Gateway patterns
 - Compose YAML syntax: services, volumes, networks, environment variables, secrets
@@ -49,7 +43,7 @@
 - Example stacks: WordPress + MySQL, Node.js + MongoDB, Spring Boot + PostgreSQL
 
 ### Part D — Build Automation with Maven
-**Modules:** `Unit4_MavenFundamentals.md`, `Unit4_DependencyManagement.md`, `Unit4_MavenPlugins.md`
+**Modules:** `course_notes/Unit4_MavenFundamentals.md`, `course_notes/Unit4_DependencyManagement.md`, `course_notes/Unit4_MavenPlugins.md`
 
 - POM file anatomy, build lifecycle stages
 - Dependency scoping, transitive dependencies, version resolution
@@ -57,7 +51,7 @@
 - Containerizing Maven applications, pushing to registries
 
 ### Part E — Continuous Integration via GitHub Actions
-**Modules:** `Unit5_GitHubActionsIntro.md`, `Unit5_WorkflowsAndJobs.md`, `Unit5_CIDeployments.md`
+**Modules:** `course_notes/Unit5_GitHubActionsIntro.md`, `course_notes/Unit5_WorkflowsAndJobs.md`, `course_notes/Unit5_CIDeployments.md`
 
 - Workflow definitions, trigger events (push, PR, cron, manual dispatch)
 - Jobs, steps, reusable actions, hosted runners
@@ -65,7 +59,7 @@
 - Docker image build/push within CI, GHCR integration, deployment stages
 
 ### Part F — CI/CD Pipelines with Jenkins
-**Modules:** `Unit6_JenkinsSetup.md`, `Unit6_JenkinsPipelines.md`, `Unit6_JenkinsAdvanced.md`
+**Modules:** `course_notes/Unit6_JenkinsSetup.md`, `course_notes/Unit6_JenkinsPipelines.md`, `course_notes/Unit6_JenkinsAdvanced.md`
 
 - Controller/agent topology, plugin ecosystem, security & RBAC
 - Declarative vs scripted pipeline syntax, Jenkinsfile authoring
