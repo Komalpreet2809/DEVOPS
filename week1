@@ -1,94 +1,90 @@
-# UNIT I: BASICS OF DEVOPS INFRASTRUCTURE
-## WEEK 1: Introduction to Containers & DevOps Foundations.
+# UNIT I: DEVOPS INFRASTRUCTURE FUNDAMENTALS
+## WEEK 1: Containers, DevOps Principles & Core Concepts
 
 ---
 
-### 1.1 What is DevOps?
-DevOps combines **Development (Dev)** and **Operations (Ops)** to deliver software faster and more reliably through automation, collaboration, and continuous feedback.
+### A. Understanding DevOps
+DevOps is a methodology that bridges the gap between **Development (Dev)** and **Operations (Ops)** teams, enabling faster software delivery through automation, teamwork, and iterative feedback loops.
 
-**Core objectives:**
-- Continuous Integration & Continuous Delivery (CI/CD)
-- Infrastructure as Code (IaC)
-- Automated testing and monitoring
-- Breaking silos between dev and ops teams
-
----
-
-### 1.2 Origin of Containers
-| Era | Technology | Limitation |
-|-----|-----------|------------|
-| Physical servers | One app per machine | Poor resource utilization |
-| Virtual Machines (VMs) | Hypervisor + guest OS | Heavy — each VM runs full OS |
-| **Containers** | Shared OS kernel, isolated processes | Lightweight, fast startup |
-
-**Key insight:** Containers are **not** mini-VMs. They share the host kernel and isolate processes using Linux kernel features (namespaces + cgroups).
+**Primary goals:**
+- Automating build, test, and deployment pipelines (CI/CD)
+- Managing infrastructure through code (IaC)
+- Implementing automated testing and system monitoring
+- Eliminating communication barriers between development and operations
 
 ---
 
-### 1.3 Process Isolation & Namespaces
-**Namespaces** isolate what a process can *see*:
+### B. Evolution of Containerization
+- **Physical servers** — One application per machine, leading to wasted resources
+- **Virtual Machines (VMs)** — Hypervisor-based isolation with full guest OS, but heavyweight
+- **Containers** — Process-level isolation sharing the host OS kernel, extremely lightweight and fast to start
 
-| Namespace | Isolates |
-|-----------|----------|
-| PID | Process IDs |
-| NET | Network interfaces, ports, routing |
-| MNT | Mount points / filesystem view |
-| UTS | Hostname |
-| IPC | Inter-process communication |
-| USER | User/group IDs |
+**Important distinction:** Containers should not be confused with lightweight VMs. They leverage Linux kernel capabilities (namespaces and cgroups) to isolate processes while sharing the same kernel.
 
-**Demo (inside a running container on Windows):**
+---
+
+### C. Namespaces & Process Isolation
+**Namespaces** control what a process is allowed to *see*:
+
+- **PID** — Isolates process ID trees
+- **NET** — Separates network interfaces, ports, and routing tables
+- **MNT** — Provides distinct filesystem mount points
+- **UTS** — Gives each container its own hostname
+- **IPC** — Isolates inter-process communication channels
+- **USER** — Maps user and group IDs separately per container
+
+**Example (running inside a container on Windows):**
 ```powershell
 docker run -it --rm alpine sh
-# Inside container:
-hostname          # container ID as hostname
-ps                # only processes inside container
+# Within the container shell:
+hostname          # displays the container ID
+ps                # shows only container-local processes
 ```
 
 ---
 
-### 1.4 Control Groups (cgroups)
-**cgroups** limit what resources a process can *use*:
-- CPU shares and quotas
-- Memory limits (OOM killer per group)
-- I/O bandwidth
+### D. Resource Limits with Control Groups (cgroups)
+**cgroups** restrict what system resources a process can *consume*:
+- CPU time allocation and quotas
+- Memory caps (triggers OOM killer when exceeded)
+- Disk I/O throughput control
 
-Docker applies cgroups automatically when you use `--memory` or `--cpus`:
+Docker enforces cgroups transparently when flags like `--memory` or `--cpus` are specified:
 ```powershell
-docker run -d --name limited-nginx --memory=128m --cpus=0.5 nginx:alpine
-docker stats limited-nginx --no-stream
-docker rm -f limited-nginx
+docker run -d --name resource-test --memory=128m --cpus=0.5 nginx:alpine
+docker stats resource-test --no-stream
+docker rm -f resource-test
 ```
 
 ---
 
-### 1.5 Container Images & Layers
-- An **image** is a read-only template (stacked layers).
-- A **container** is a running instance with a thin writable layer on top.
-- Each Dockerfile instruction creates a new layer (cached for speed).
+### E. Understanding Container Images & Layers
+- An **image** is an immutable, read-only template composed of stacked layers.
+- A **container** is a live instance of an image with an additional thin writable layer.
+- Every instruction in a Dockerfile generates a new layer, which Docker caches to speed up rebuilds.
 
 ---
 
-### 1.6 Image Registries & Distribution
-- **Docker Hub** — public default registry (`docker.io`)
-- **GHCR** — GitHub Container Registry (`ghcr.io`)
-- **Private registries** — Harbor, AWS ECR, Azure ACR
+### F. Image Registries & Distribution
+- **Docker Hub** — the default public registry (`docker.io`)
+- **GHCR** — GitHub's own Container Registry (`ghcr.io`)
+- **Private registries** — options like Harbor, AWS ECR, Azure ACR
 
 ```powershell
 docker pull httpd:alpine
 docker images
 ```
 
-![Listing pulled images on Windows](assets/screenshots/unit-1/02-docker-images.svg)
-*Listing pulled images on Windows — captured on Windows PowerShell + Docker Desktop*
+![Viewing downloaded images in PowerShell](assets/screenshots/unit-1/02-docker-images.svg)
+*Viewing downloaded images — Docker Desktop on Windows*
 
 
 ---
 
-### 1.7 Introduction to Docker
-Docker packages applications with dependencies into portable containers.
+### G. Docker Overview
+Docker wraps applications along with their dependencies into self-contained, portable containers.
 
-**Docker Architecture:**
+**Architecture at a glance:**
 ```
 [Docker CLI]  -->  [Docker Daemon (dockerd)]  -->  [containerd]  -->  [runc]
                            |
@@ -97,117 +93,113 @@ Docker packages applications with dependencies into portable containers.
                     [Docker Hub / GHCR / Private Registry]
 ```
 
-| Component | Role |
-|-----------|------|
-| **Docker CLI** | User commands (`docker run`, `docker build`) |
-| **Docker Daemon** | Background service managing objects |
-| **containerd** | Container runtime managing lifecycle |
-| **runc** | OCI-compliant low-level runtime |
+- **Docker CLI** — Interface for user commands (`docker run`, `docker build`)
+- **Docker Daemon** — Background service that manages all Docker objects
+- **containerd** — High-level runtime handling container lifecycle
+- **runc** — Low-level OCI-compliant runtime for spawning containers
 
-On **Windows**, Docker Desktop runs the Linux engine inside WSL2 or a lightweight VM.
+On **Windows**, Docker Desktop runs the Linux engine through WSL2 or a lightweight Hyper-V VM.
 
 ---
 
-### 1.8 Docker Object Types
-| Object | Purpose |
-|--------|---------|
-| **Image** | Read-only blueprint |
-| **Container** | Running (or stopped) instance |
-| **Network** | Communication between containers |
-| **Volume** | Persistent data storage |
+### H. Docker Object Types
+- **Image** — A read-only blueprint for creating containers
+- **Container** — A running (or stopped) instance of an image
+- **Network** — Enables communication between containers
+- **Volume** — Provides persistent data storage
 
 ---
 
-### 1.9 Docker Layering & Filesystem
-Docker uses **Union File Systems** (overlay2 on Linux):
-- Lower layers: read-only image layers
-- Top layer: container writable layer (Copy-on-Write)
-- When a file is modified, it's copied to the writable layer
+### I. Docker Layering & Union Filesystem
+Docker relies on **Union File Systems** (overlay2 on Linux):
+- Base layers are read-only image layers
+- The topmost layer is a writable container layer using Copy-on-Write (CoW)
+- Modifying a file causes it to be copied up to the writable layer first
 
-Inspect layers:
+To inspect the layer structure:
 ```powershell
 docker history httpd:alpine
 ```
 
-![Image layer history](assets/screenshots/unit-1/07-docker-history.svg)
-*Image layer history — captured on Windows PowerShell + Docker Desktop*
+![Inspecting image layer structure](assets/screenshots/unit-1/07-docker-history.svg)
+*Layer details for httpd:alpine — Docker Desktop on Windows*
 
 
 ---
 
-## PRACTICAL LAB 1 — Deploy Apache on Windows (Unit I)
+## LAB EXERCISE 1 — Deploying Apache on Windows
 
-**Scenario:** Pull Apache httpd, run on port 8081, verify in browser.
+**Objective:** Pull the Apache httpd image, run it on port 8085, and confirm it works in the browser.
 
-**Step 1 — Pull image:**
+**Step 1 — Download the image:**
 ```powershell
 docker pull httpd:alpine
 ```
 
-![Pulling httpd:alpine from Docker Hub](assets/screenshots/unit-1/01-docker-pull-httpd.svg)
-*Pulling httpd:alpine from Docker Hub — captured on Windows PowerShell + Docker Desktop*
+![Downloading httpd:alpine from registry](assets/screenshots/unit-1/01-docker-pull-httpd.svg)
+*Downloading httpd:alpine — Docker Desktop on Windows*
 
 
-**Step 2 — Run container:**
+**Step 2 — Launch the container:**
 ```powershell
-docker run -d --name apache-lab -p 8081:80 httpd:alpine
+docker run -d --name httpd-server -p 8085:80 httpd:alpine
 ```
 
-![Starting Apache container](assets/screenshots/unit-1/03-docker-run-apache.svg)
-*Starting Apache container — captured on Windows PowerShell + Docker Desktop*
+![Launching Apache container in detached mode](assets/screenshots/unit-1/03-docker-run-apache.svg)
+*Apache container started — Docker Desktop on Windows*
 
 
-**Step 3 — Verify:**
+**Step 3 — Confirm it is running:**
 ```powershell
 docker ps
-curl.exe http://localhost:8081
+curl.exe http://localhost:8085
 ```
 
-![Running containers with port mapping](assets/screenshots/unit-1/04-docker-ps.svg)
-*Running containers with port mapping — captured on Windows PowerShell + Docker Desktop*
+![Active containers with mapped ports](assets/screenshots/unit-1/04-docker-ps.svg)
+*Active containers showing port mapping — Docker Desktop on Windows*
 
 
-![HTTP response from Apache](assets/screenshots/unit-1/05-curl-apache.svg)
-*HTTP response from Apache — captured on Windows PowerShell + Docker Desktop*
+![Apache HTTP response output](assets/screenshots/unit-1/05-curl-apache.svg)
+*HTTP response from the Apache server — Docker Desktop on Windows*
 
 
-**Step 4 — Inspect port mapping:**
+**Step 4 — Check port binding details:**
 ```powershell
-docker inspect apache-lab --format "{{.NetworkSettings.Ports}}"
+docker inspect httpd-server --format "{{.NetworkSettings.Ports}}"
 ```
 
-**Step 5 — Cleanup:**
+**Step 5 — Remove the container:**
 ```powershell
-docker stop apache-lab
-docker rm apache-lab
+docker stop httpd-server
+docker rm httpd-server
 ```
 
 ---
 
-## PRACTICAL LAB 2 — Custom HTML in Apache Container
+## LAB EXERCISE 2 — Serving Custom HTML via Apache
 
 ```powershell
-docker run -d --name web-lab -p 8080:80 httpd:alpine
-docker exec web-lab sh -c "echo '<h1>AMAN IS LEARNING DOCKER</h1>' > /usr/local/apache2/htdocs/index.html"
-curl.exe http://localhost:8080
-docker stop web-lab; docker rm web-lab
+docker run -d --name html-server -p 8088:80 httpd:alpine
+docker exec html-server sh -c "echo '<h1>DEVOPS STUDENT — LEARNING DOCKER</h1>' > /usr/local/apache2/htdocs/index.html"
+curl.exe http://localhost:8088
+docker stop html-server; docker rm html-server
 ```
 
-Open **http://localhost:8080** in Edge/Chrome on Windows.
+Open **http://localhost:8088** in your browser (Edge or Chrome) on Windows.
 
 ---
 
-## PRACTICE QUESTIONS
+## REVIEW QUESTIONS
 
-1. What is the difference between a container image and a running container?
-2. Explain how namespaces provide process isolation.
-3. What role do cgroups play in container resource management?
-4. Name the four main Docker object types.
-5. Why does Docker use layered filesystems?
+1. How does a container image differ from a running container instance?
+2. Describe the role of namespaces in achieving process isolation.
+3. In what way do cgroups contribute to managing container resources?
+4. List the four primary Docker object types and their purposes.
+5. What advantages does a layered filesystem provide in Docker?
 
 **Answers:**
-1. Image = read-only template; Container = running instance with writable layer.
-2. Namespaces restrict process view of PIDs, network, mounts, etc.
-3. cgroups enforce CPU/memory/I/O limits per container.
-4. Image, Container, Network, Volume.
-5. Layer caching speeds builds; shared layers save disk; CoW enables efficient storage.
+1. An image is a static, read-only template, while a container is its live, running instance with an added writable layer.
+2. Namespaces partition system resources (PIDs, network, mounts, etc.) so each container has its own isolated view.
+3. cgroups set hard limits on CPU, memory, and I/O usage for each container.
+4. Image (blueprint), Container (running instance), Network (connectivity), Volume (persistent storage).
+5. Caching layers accelerates builds; sharing common layers conserves disk space; CoW makes container creation efficient.

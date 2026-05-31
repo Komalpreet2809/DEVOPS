@@ -1,85 +1,85 @@
-# INT332 — Exam-Style Questions & Solutions (Windows / Docker Desktop)
+# INT332 — Practice Questions & Worked Solutions (Windows / Docker Desktop)
 
-All commands tested on **Windows PowerShell** with Docker Desktop.
+Every command below has been verified using **Windows PowerShell** with Docker Desktop.
 
 ---
 
-## Unit I — Container Basics
+## Unit I — Container Fundamentals
 
-### Q1. Deploy Apache httpd on port 8081
+### Q1. Launch an Apache httpd container on port 8085
 ```powershell
 docker pull httpd:alpine
 docker images
-docker run -d --name apache-web -p 8081:80 httpd:alpine
+docker run -d --name httpd-demo -p 8085:80 httpd:alpine
 docker ps
-curl.exe http://localhost:8081
+curl.exe http://localhost:8085
 ```
-**Browser:** http://localhost:8081
+**Open in browser:** http://localhost:8085
 
-### Q2. Display custom message in Apache container
+### Q2. Serve a custom message from an Apache container
 ```powershell
-docker run -d --name web-test -p 8080:80 httpd:alpine
-docker exec web-test sh -c "echo '<h1>AMAN IS LEARNING DOCKER</h1>' > /usr/local/apache2/htdocs/index.html"
-curl.exe http://localhost:8080
-docker stop web-test; docker rm web-test
+docker run -d --name html-test -p 8082:80 httpd:alpine
+docker exec html-test sh -c "echo '<h1>EXPLORING DOCKER CONTAINERS</h1>' > /usr/local/apache2/htdocs/index.html"
+curl.exe http://localhost:8082
+docker stop html-test; docker rm html-test
 ```
 
-### Q3. Run MongoDB with port mapping
+### Q3. Start a MongoDB container with port forwarding
 ```powershell
-# Host port 27017 → container port 27017
-docker run -d --name DB-app -p 27017:27017 mongo:7
+# Map host port 27018 to container port 27017
+docker run -d --name mongo-instance -p 27018:27017 mongo:7
 docker ps
 ```
 
-### Q4. List all Docker object types
+### Q4. Show all Docker object categories
 ```powershell
-docker images      # Images
-docker ps -a       # Containers
-docker network ls  # Networks
-docker volume ls   # Volumes
+docker images      # List images
+docker ps -a       # List all containers
+docker network ls  # List networks
+docker volume ls   # List volumes
 ```
 
 ---
 
 ## Unit II — Dockerfile & Networking
 
-### Q5. Build and run custom Node.js app
+### Q5. Build and launch a custom Node.js application
 ```powershell
 cd labs\unit-2-dockerfile
-docker build -t devops-node-lab:1.0 .
-docker run -d --name node-lab -p 3000:3000 devops-node-lab:1.0
-curl.exe http://localhost:3000
+docker build -t node-app-demo:1.0 .
+docker run -d --name node-demo -p 3001:3000 node-app-demo:1.0
+curl.exe http://localhost:3001
 ```
 
-### Q6. Create custom network and connect containers
+### Q6. Set up a custom network and link containers
 ```powershell
-docker network create app-network
-docker run -d --name redis --network app-network redis:alpine
-docker run -it --rm --network app-network alpine ping -c 3 redis
+docker network create services-net
+docker run -d --name redis --network services-net redis:alpine
+docker run -it --rm --network services-net alpine ping -c 3 redis
 ```
 
-### Q7. Create named volume for persistence
+### Q7. Use a named volume for data persistence
 ```powershell
-docker volume create mydata
-docker run -d -v mydata:/data --name vol-test alpine sleep 3600
-docker exec vol-test sh -c "echo persistent > /data/file.txt"
-docker rm -f vol-test
-docker run --rm -v mydata:/data alpine cat /data/file.txt
+docker volume create appdata
+docker run -d -v appdata:/data --name storage-test alpine sleep 3600
+docker exec storage-test sh -c "echo persistent > /data/file.txt"
+docker rm -f storage-test
+docker run --rm -v appdata:/data alpine cat /data/file.txt
 ```
 
-### Q8. Copy file from container to Windows Desktop
+### Q8. Extract a file from a container to the Windows Desktop
 ```powershell
-docker run -d --name task nginx:alpine
-docker exec task sh -c "mkdir -p /project && echo 'I am Learning Docker' > /project/notes.txt"
-docker cp task:/project/notes.txt "$env:USERPROFILE\Desktop\notes.txt"
-docker rm -f task
+docker run -d --name helper nginx:alpine
+docker exec helper sh -c "mkdir -p /project && echo 'Practicing Docker Commands' > /project/notes.txt"
+docker cp helper:/project/notes.txt "$env:USERPROFILE\Desktop\notes.txt"
+docker rm -f helper
 ```
 
-### Q9. Push image to GHCR
+### Q9. Push an image to GitHub Container Registry
 ```powershell
 docker build -t ghcr.io/YOUR_USERNAME/myapp:1.0 .
 docker login ghcr.io -u YOUR_USERNAME
-# Password: GitHub PAT (not account password)
+# Enter your GitHub Personal Access Token when prompted
 docker push ghcr.io/YOUR_USERNAME/myapp:1.0
 ```
 
@@ -87,16 +87,16 @@ docker push ghcr.io/YOUR_USERNAME/myapp:1.0
 
 ## Unit III — Docker Compose
 
-### Q10. WordPress + MySQL with Compose
+### Q10. Deploy WordPress + MySQL using Compose
 ```powershell
 cd labs\unit-3-wordpress
 docker compose up -d
 docker compose ps
-# Browser: http://localhost:8000
+# Open in browser: http://localhost:8005
 docker compose down -v
 ```
 
-### Q11. Validate compose file
+### Q11. Check compose file syntax
 ```powershell
 docker compose config
 ```
@@ -105,14 +105,14 @@ docker compose config
 
 ## Unit IV — Maven
 
-### Q12. Full Maven lifecycle
+### Q12. Execute the complete Maven build lifecycle
 ```powershell
 cd labs\unit-4-maven
 mvn clean compile test package install
 java -jar target\calculator-app-1.0.0-SNAPSHOT.jar
 ```
 
-### Q13. Dependency tree
+### Q13. View the dependency tree
 ```powershell
 mvn dependency:tree
 ```
@@ -121,51 +121,51 @@ mvn dependency:tree
 
 ## Unit V — GitHub Actions
 
-### Q14. Workflow triggers
-- `push` — on code push
-- `pull_request` — on PR open/update
-- `schedule` — cron-based
-- `workflow_dispatch` — manual run from GitHub UI
+### Q14. Types of workflow triggers
+- `push` — fires on code push to a branch
+- `pull_request` — fires when a PR is opened or updated
+- `schedule` — runs on a cron schedule
+- `workflow_dispatch` — allows manual execution from the GitHub interface
 
-See: `labs/unit-5-github-actions/.github/workflows/java-ci.yml`
+Reference: `labs/unit-5-github-actions/.github/workflows/java-ci.yml`
 
 ---
 
 ## Unit VI — Jenkins
 
-### Q15. Run Jenkins on Windows via Docker
+### Q15. Set up Jenkins on Windows using Docker
 ```powershell
-docker volume create jenkins_home
-docker run -d -p 8080:8080 -p 50000:50000 `
-  -v jenkins_home:/var/jenkins_home `
-  --name jenkins-lab jenkins/jenkins:lts
-docker exec jenkins-lab cat /var/jenkins_home/secrets/initialAdminPassword
+docker volume create jenkins_data
+docker run -d -p 8083:8080 -p 50001:50000 `
+  -v jenkins_data:/var/jenkins_home `
+  --name jenkins-server jenkins/jenkins:lts
+docker exec jenkins-server cat /var/jenkins_home/secrets/initialAdminPassword
 ```
-**Browser:** http://localhost:8080
+**Open in browser:** http://localhost:8083
 
-### Q16. Jenkins pipeline stages (typical)
-1. Checkout (Git)
-2. Build (Maven/npm)
-3. Test (Surefire/JUnit)
-4. Package (JAR/Docker image)
-5. Deploy (SSH/cloud)
-6. Post (always notify/cleanup)
-
----
-
-## Quick Reference — Most Used Commands
-
-| Task | Command |
-|------|---------|
-| Pull image | `docker pull nginx:alpine` |
-| Run detached | `docker run -d --name app -p 8080:80 nginx` |
-| View logs | `docker logs app` |
-| Shell into container | `docker exec -it app sh` |
-| Stop & remove | `docker stop app; docker rm app` |
-| Build image | `docker build -t myapp:1.0 .` |
-| Compose up | `docker compose up -d` |
-| Maven build | `mvn clean verify` |
+### Q16. Standard Jenkins pipeline stages
+1. Checkout (pull from Git)
+2. Build (Maven/npm compile)
+3. Test (Surefire/JUnit execution)
+4. Package (create JAR or Docker image)
+5. Deploy (push to SSH/cloud target)
+6. Post (notifications and cleanup)
 
 ---
 
-*See `week1`–`week17` for detailed theory and screenshot references.*
+## Handy Command Reference
+
+| Action | Command |
+|--------|---------|
+| Download image | `docker pull nginx:alpine` |
+| Start detached container | `docker run -d --name webapp -p 8085:80 nginx` |
+| Check logs | `docker logs webapp` |
+| Open a shell | `docker exec -it webapp sh` |
+| Stop and remove | `docker stop webapp; docker rm webapp` |
+| Build an image | `docker build -t myapp:1.0 .` |
+| Launch Compose stack | `docker compose up -d` |
+| Run Maven build | `mvn clean verify` |
+
+---
+
+*Refer to `week1`–`week17` folders for in-depth theory notes and screenshot references.*

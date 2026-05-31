@@ -1,113 +1,114 @@
-UNIT III: MICROSERVICES WITH DOCKER COMPOSE
-WEEK 8: SERVICE DEPENDENCY & USE CASE DEPLOYMENTS
+UNIT III: CONTAINERIZED MICROSERVICES USING DOCKER COMPOSE
+WEEK 8: MANAGING SERVICE DEPENDENCIES AND DEPLOYING REAL-WORLD STACKS
 
-1. SERVICE DEPENDENCY ORDERING
-In a microservices architecture, the order in which services start is critical. An API service will crash if it tries to connect to a database that hasn't booted up yet.
-- `depends_on`: Controls startup and shutdown order in Compose.
-- Note: Standard `depends_on` only waits for the container to be running, not for the application inside to be "ready". 
-- Healthchecks: For true readiness waiting, you combine `depends_on` with a `condition: service_healthy`, requiring the database container to define a `healthcheck` block (like executing a `pg_isready` ping).
+Topic A. CONTROLLING SERVICE STARTUP ORDER
+When running a microservices stack, the sequence in which containers come online matters significantly. For example, an API server that attempts to query a database before it has finished initializing will fail immediately.
+- `depends_on`: This Compose directive manages the order in which services are created and destroyed.
+- Caveat: By default, `depends_on` only ensures the dependent container process has started — it does not guarantee the application inside is fully ready to accept connections.
+- Health-based waiting: To achieve true readiness awareness, pair `depends_on` with `condition: service_healthy`. The target service must define a `healthcheck` block (such as running `pg_isready` for PostgreSQL) that Compose monitors before proceeding.
 
-2. MULTI-CONTAINER APPS: DATABASE + BACKEND + FRONTEND
-A classic 3-tier architecture involves:
-- Frontend Container: Serves static assets (React/Angular) via Nginx.
-- Backend Container: The API logic (Node.js/Spring Boot/Django).
-- Database Container: Persistent storage (MySQL/MongoDB/Postgres).
-Docker Compose places all these on a default custom bridge network, allowing them to communicate via service names (e.g., the backend can connect to `http://database:3306`).
+Topic B. THREE-TIER CONTAINERIZED APPLICATIONS
+A standard 3-tier web architecture maps neatly to containers:
+- Presentation Layer: A container serving static files (React, Angular, or Vue) through Nginx or a similar web server.
+- Application Layer: A container running API business logic (built with Node.js, Spring Boot, Django, Flask, etc.).
+- Data Layer: A container providing persistent storage (MySQL, PostgreSQL, MongoDB, etc.).
+Docker Compose automatically sets up a shared bridge network, enabling services to reach each other by name (for example, the app layer connects to `http://data-svc:3306`).
 
-3. USE CASE: WORDPRESS + MYSQL
-WordPress requires a relational database to function.
-- We define a `mysql` service with persistent volumes to ensure blog posts aren't lost when the container stops.
-- We define a `wordpress` service that depends on the MySQL service and uses environment variables to configure the database connection automatically.
+Topic C. DEPLOYMENT SCENARIO: WORDPRESS WITH MYSQL
+WordPress needs a relational database backend to store content.
+- A MySQL service is configured with named volumes so that all blog data persists even after the container is stopped or removed.
+- A WordPress service is declared with a dependency on MySQL, using environment variables to automatically wire the database connection.
 
-4. USE CASE: NODE.JS + MONGODB
-The MERN/MEAN stack relies heavily on NoSQL.
-- The Node.js application connects to MongoDB using a connection string like `mongodb://mongo:27017/mydb`.
-- Volumes are mapped to `/data/db` inside the Mongo container to persist JSON documents.
+Topic D. DEPLOYMENT SCENARIO: NODE.JS WITH MONGODB
+Full-stack JavaScript applications (MERN/MEAN) commonly pair Node.js with MongoDB.
+- The Node.js app connects via a URI like `mongodb://mongo-svc:27018/appdata`.
+- MongoDB data is persisted by mounting a volume to `/data/db` inside the container.
 
-5. USE CASE: JAVA SPRING BOOT + POSTGRESQL
-Enterprise deployments often use Java.
-- Spring Boot uses an `application.properties` file. We can override these properties using Docker environment variables (e.g., `SPRING_DATASOURCE_URL`).
+Topic E. DEPLOYMENT SCENARIO: SPRING BOOT WITH POSTGRESQL
+Java-based enterprise services frequently rely on PostgreSQL.
+- Spring Boot reads settings from `application.properties`, and Docker environment variables (such as `SPRING_DATASOURCE_URL`) can override these values at container startup.
 
 =======================================================
-PRACTICAL LABS FOR WEEK 8
+LAB EXERCISES — WEEK 8
 =======================================================
 
-### Practical 5: WordPress and MySQL Deployment
-**Question/Scenario:**
-Write a full Docker Compose configuration to deploy a WordPress blog backed by a MySQL 5.7 database. Ensure that the database data is persisted using a named volume, and that WordPress uses the correct database credentials.
+### Lab Exercise 5: Deploying a WordPress Blog with MySQL
+**Task Description:**
+Compose a full Docker configuration to stand up a WordPress site backed by MySQL 5.7. The database must use a named volume for persistence, and WordPress should connect using the proper credentials.
 
-**Solution / Code:**
+**Answer:**
 ```yaml
 version: '3.8'
 
 services:
-  db:
+  database-svc:
     image: mysql:5.7
     volumes:
-      - db_data:/var/lib/mysql
+      - mysql_storage:/var/lib/mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wp_user
-      MYSQL_PASSWORD: wp_password
+      MYSQL_ROOT_PASSWORD: r00tSecret
+      MYSQL_DATABASE: wp_content
+      MYSQL_USER: blog_admin
+      MYSQL_PASSWORD: blogPass2025
 
-  wordpress:
+  wp-demo:
     depends_on:
-      - db
+      - database-svc
     image: wordpress:latest
     ports:
-      - "8000:80"
+      - "8005:80"
     restart: always
     environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: wp_user
-      WORDPRESS_DB_PASSWORD: wp_password
-      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_HOST: database-svc:3306
+      WORDPRESS_DB_USER: blog_admin
+      WORDPRESS_DB_PASSWORD: blogPass2025
+      WORDPRESS_DB_NAME: wp_content
 
 volumes:
-  db_data:
+  mysql_storage:
 ```
 
-### Practical 6: Healthchecks for Dependency Ordering
-**Question/Scenario:**
-Your backend Node.js application crashes immediately because the PostgreSQL database takes 10 seconds to fully initialize. Write a compose snippet using a `healthcheck` on the Postgres container, and configure the backend to wait for that healthcheck before starting.
+### Lab Exercise 6: Using Healthchecks to Manage Startup Timing
+**Task Description:**
+Your Node.js backend keeps crashing because the PostgreSQL database requires several seconds to fully start. Write a Compose snippet that adds a `healthcheck` to the Postgres service and configures the backend to delay its startup until that healthcheck succeeds.
 
-**Solution / Code:**
+**Answer:**
 ```yaml
 version: '3.8'
 services:
-  postgres:
+  pg-server:
     image: postgres:13
     environment:
-      POSTGRES_PASSWORD: secret
+      POSTGRES_PASSWORD: pgSecret123
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  backend:
+  api-backend:
     build: ./backend
     depends_on:
-      postgres:
+      pg-server:
         condition: service_healthy
 ```
-*Explanation:* The `pg_isready` command physically pings the database. The `backend` service will not attempt to boot until the healthcheck returns a success status.
-### Windows Lab — WordPress + MySQL
+*How it works:* The `pg_isready` utility verifies that the database is accepting connections. The `api-backend` service will remain on hold until the health probe returns a passing status.
+
+### Windows Lab — WordPress + MySQL Stack
 ```powershell
-cd labs\unit-3-wordpress
+cd labs\unit-3-wp-demo
 docker compose up -d
 docker compose ps
-# Open http://localhost:8000
+# Visit http://localhost:8005 in your browser
 ```
 
-![docker compose up on Windows](assets/screenshots/unit-3/01-compose-up.svg)
-*docker compose up on Windows — captured on Windows PowerShell + Docker Desktop*
+![Starting compose services](assets/screenshots/unit-3/01-compose-up.svg)
+*Launching all services with docker compose up — PowerShell on Windows*
 
-![Compose services running](assets/screenshots/unit-3/02-compose-ps.svg)
-*Compose services running — captured on Windows PowerShell + Docker Desktop*
+![Listing running compose services](assets/screenshots/unit-3/02-compose-ps.svg)
+*Checking service status via docker compose ps — PowerShell terminal*
 
-![Database container logs](assets/screenshots/unit-3/03-compose-logs.svg)
-*Database container logs — captured on Windows PowerShell + Docker Desktop*
+![Viewing database logs](assets/screenshots/unit-3/03-compose-logs.svg)
+*Inspecting database container log output — PowerShell terminal*
 

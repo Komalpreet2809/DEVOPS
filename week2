@@ -1,68 +1,66 @@
-# UNIT I (continued): DOCKER ARCHITECTURE & OBJECTS
-## WEEK 2: Container Runtime, CLI, Registry & Filesystem Deep Dive
+# UNIT I (continued): DOCKER INTERNALS & OBJECT MANAGEMENT
+## WEEK 2: Runtime Stack, CLI Usage, Registry Operations & Filesystem Details
 
 ---
 
-### 2.1 Container Runtime Stack (OCI)
-The **Open Container Initiative (OCI)** defines standards for container images and runtimes.
+### A. Container Runtime Stack (OCI Standards)
+The **Open Container Initiative (OCI)** establishes industry standards for how container images are formatted and how runtimes execute them.
 
-| Layer | Tool |
-|-------|------|
-| High-level runtime | containerd, CRI-O |
-| Low-level runtime | runc, crun |
-| Orchestration | Kubernetes, Docker Compose |
+- **High-level runtime** — containerd, CRI-O
+- **Low-level runtime** — runc, crun
+- **Orchestration layer** — Kubernetes, Docker Compose
 
 ---
 
-### 2.2 Docker CLI Essentials (Windows PowerShell)
+### B. Essential Docker CLI Commands (Windows PowerShell)
 
 ```powershell
-docker version          # Client + server versions
-docker info             # Daemon details, storage driver, CPUs
-docker help run         # Command reference
+docker version          # Shows client and server version info
+docker info             # Daemon configuration, storage driver, CPU count
+docker help run         # Detailed help for the run command
 ```
 
-**Common object commands:**
+**Listing Docker objects:**
 ```powershell
-docker images           # List images
-docker ps               # Running containers
-docker ps -a            # All containers
-docker network ls       # Networks
-docker volume ls        # Volumes
-```
-
----
-
-### 2.3 Working with Containers — Lifecycle
-
-```powershell
-docker run -d --name my-nginx -p 8082:80 nginx:alpine   # Create + start
-docker stop my-nginx                                       # Stop gracefully
-docker start my-nginx                                      # Restart stopped
-docker restart my-nginx                                    # Stop + start
-docker pause my-nginx                                      # Freeze processes
-docker unpause my-nginx
-docker rm -f my-nginx                                      # Force remove
+docker images           # Show all local images
+docker ps               # Show running containers
+docker ps -a            # Include stopped containers
+docker network ls       # Display all networks
+docker volume ls        # Display all volumes
 ```
 
 ---
 
-### 2.4 Copy Files: Container ↔ Host (Windows paths)
+### C. Container Lifecycle Management
 
 ```powershell
-docker run -d --name file-lab nginx:alpine
-docker exec file-lab sh -c "echo 'DevOps Notes' > /tmp/notes.txt"
-docker cp file-lab:/tmp/notes.txt "$env:USERPROFILE\Desktop\notes.txt"
-docker rm -f file-lab
+docker run -d --name web-container -p 8090:80 nginx:alpine   # Create and start
+docker stop web-container                                       # Graceful shutdown
+docker start web-container                                      # Resume a stopped container
+docker restart web-container                                    # Restart (stop + start)
+docker pause web-container                                      # Suspend all processes
+docker unpause web-container
+docker rm -f web-container                                      # Forcefully remove
 ```
-
-> **Windows tip:** Use `$env:USERPROFILE\Desktop` instead of Linux `/home/user/Desktop`.
 
 ---
 
-### 2.5 Docker Registry & Docker Hub
+### D. Transferring Files Between Container & Host (Windows paths)
 
-**Workflow:** Build → Tag → Push → Pull
+```powershell
+docker run -d --name copy-demo nginx:alpine
+docker exec copy-demo sh -c "echo 'DevOps Notes' > /tmp/notes.txt"
+docker cp copy-demo:/tmp/notes.txt "$env:USERPROFILE\Desktop\notes.txt"
+docker rm -f copy-demo
+```
+
+> **Windows note:** Reference `$env:USERPROFILE\Desktop` rather than Linux-style paths like `/home/user/Desktop`.
+
+---
+
+### E. Working with Docker Registries & Docker Hub
+
+**Typical workflow:** Build → Tag → Push → Pull
 
 ```powershell
 docker tag httpd:alpine yourusername/my-httpd:1.0
@@ -71,83 +69,83 @@ docker push yourusername/my-httpd:1.0
 docker pull yourusername/my-httpd:1.0
 ```
 
-**Tag format:** `registry/namespace/repository:tag`
-- `nginx:alpine` → Docker Hub, library namespace
+**Image naming convention:** `registry/namespace/repository:tag`
+- `nginx:alpine` → defaults to Docker Hub, library namespace
 - `ghcr.io/user/app:v1` → GitHub Container Registry
 
 ---
 
-### 2.6 Image Layers — Deep Dive
+### F. Image Layers — In-Depth Look
 
-Each `docker pull` downloads only missing layers. Inspect with:
+When pulling an image, Docker only downloads layers that are not already present locally. Use these commands to inspect:
 ```powershell
 docker image inspect httpd:alpine --format "{{.RootFS.Layers}}"
 docker history httpd:alpine
 ```
 
-**Benefits:**
-- Faster builds (cache unchanged layers)
-- Less disk (shared base layers)
-- Faster deploys (partial pulls)
+**Why layers matter:**
+- Unchanged layers are cached, making builds faster
+- Common base layers are shared across images, saving disk space
+- Only missing layers are transferred during pulls, speeding up deployments
 
 ---
 
-### 2.7 Copy-on-Write (CoW)
-When a container modifies a file from a read-only layer:
-1. File is copied to the writable container layer
-2. Modification happens on the copy
-3. Original image layer stays unchanged
+### G. Copy-on-Write (CoW) Strategy
+When a container needs to modify a file that lives in a read-only image layer:
+1. The file gets copied up to the writable container layer
+2. The modification is applied to this copy
+3. The original layer remains untouched
 
-This is why containers are ephemeral — delete container = lose writable layer.
+This is why containers are considered ephemeral — removing a container erases its writable layer and any unsaved data.
 
 ---
 
-### 2.8 Docker Desktop on Windows Architecture
+### H. Docker Desktop Architecture on Windows
 
 ```
 Windows Host
   └── Docker Desktop
-        └── WSL2 Linux VM (dockerd runs here)
-              └── Your Linux containers
+        └── WSL2 Linux VM (dockerd executes here)
+              └── Linux-based containers
 ```
 
-Enable WSL2 backend in Docker Desktop → Settings → General.
+To enable the WSL2 backend: Docker Desktop → Settings → General.
 
 ---
 
-## PRACTICAL LAB — Explore Docker Objects
+## LAB EXERCISE — Working with Docker Objects
 
 ```powershell
-# Images
+# Pull an image
 docker pull redis:alpine
 docker images redis
 
-# Container with env var
-docker run -d --name redis-lab -e REDIS_PASSWORD=secret redis:alpine
+# Start a container with an environment variable
+docker run -d --name cache-instance -e REDIS_SECRET=pass123 redis:alpine
 
-# Logs
-docker logs redis-lab
+# View container logs
+docker logs cache-instance
 
-# Exec into container
-docker exec -it redis-lab sh
+# Open a shell inside the container
+docker exec -it cache-instance sh
 
-# Cleanup
-docker rm -f redis-lab
+# Tear down
+docker rm -f cache-instance
 ```
 
 ---
 
-## PRACTICE QUESTIONS
+## REVIEW QUESTIONS
 
-1. What is the OCI and why does it matter?
-2. Difference between `docker stop` and `docker kill`?
-3. Explain Docker Hub tagging convention.
-4. What happens to data in the writable layer when a container is removed?
-5. Why does Docker Desktop on Windows use WSL2?
+1. What is the OCI and what problem does it solve?
+2. How does `docker stop` differ from `docker kill` in terms of signal handling?
+3. Describe the Docker Hub image tagging convention with an example.
+4. What is the fate of data in the writable layer once a container is deleted?
+5. Why does Docker Desktop on Windows rely on WSL2?
 
 **Answers:**
-1. OCI standardizes container image format and runtime — enables interoperability.
-2. `stop` sends SIGTERM (graceful); `kill` sends SIGKILL (immediate).
-3. `[registry/]namespace/repo:tag` — defaults to Docker Hub/library if omitted.
-4. Writable layer is deleted — data is lost unless stored in volumes.
-5. Linux containers need a Linux kernel; WSL2 provides one efficiently on Windows.
+1. The OCI defines open standards for container image formats and runtimes, ensuring tools from different vendors can interoperate.
+2. `stop` issues SIGTERM allowing graceful shutdown; `kill` sends SIGKILL for immediate termination.
+3. Format: `[registry/]namespace/repo:tag` — when registry and namespace are omitted, Docker Hub and the library namespace are assumed.
+4. The writable layer is destroyed along with the container — all data not stored in volumes is permanently lost.
+5. Linux containers require a Linux kernel; WSL2 provides a real Linux kernel within Windows without the overhead of a full VM.

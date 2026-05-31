@@ -1,12 +1,12 @@
-# Run Jenkins LTS on Windows (Docker Desktop required)
-# PowerShell:
-#   docker volume create jenkins_home
-#   docker run -d -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home --name jenkins-lab jenkins/jenkins:lts
+# Deploy Jenkins LTS using Docker Desktop on Windows
+# PowerShell commands:
+#   docker volume create jenkins_data
+#   docker run -d -p 8089:8080 -p 50001:50000 -v jenkins_data:/var/jenkins_home --name jenkins-server jenkins/jenkins:lts
 #
-# Get initial admin password:
-#   docker exec jenkins-lab cat /var/jenkins_home/secrets/initialAdminPassword
+# Retrieve the initial admin password:
+#   docker exec jenkins-server cat /var/jenkins_home/secrets/initialAdminPassword
 #
-# Open: http://localhost:8080
+# Access: http://localhost:8089
 
 FROM jenkins/jenkins:lts
 USER root

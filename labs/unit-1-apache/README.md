@@ -1,13 +1,13 @@
-# Unit I Lab — Apache httpd on Windows
-# Run from repo root:
+# Part I Lab — Apache httpd Deployment on Windows
+# Execute from the repository root:
 
 docker pull httpd:alpine
-docker run -d --name apache-lab -p 8081:80 httpd:alpine
+docker run -d --name httpd-server -p 8085:80 httpd:alpine
 docker ps
-curl.exe http://localhost:8081
+curl.exe http://localhost:8085
 
-# Custom HTML:
-docker exec apache-lab sh -c "echo '<h1>AMAN IS LEARNING DOCKER</h1>' > /usr/local/apache2/htdocs/index.html"
+# Serve custom HTML page:
+docker exec httpd-server sh -c "echo '<h1>EXPLORING DOCKER CONTAINERS</h1>' > /usr/local/apache2/htdocs/index.html"
 
-# Cleanup:
-docker stop apache-lab && docker rm apache-lab
+# Teardown:
+docker stop httpd-server && docker rm httpd-server

@@ -1,33 +1,33 @@
-UNIT V: CONTINUOUS INTEGRATION WITH GITHUB ACTIONS
-WEEK 13: JOBS, STEPS, MATRIX STRATEGIES & CACHING
+UNIT V: CI USING GITHUB ACTIONS
+WEEK 13: MATRIX BUILDS, STEP EXECUTION & DEPENDENCY CACHING
 
-1. JOBS & MATRIX STRATEGIES
-A matrix strategy lets you use variables in a single job definition to automatically create multiple job runs that are based on the combinations of the variables.
-For example, if you are building an open-source library, you want to ensure it works on Node 14, 16, and 18, and on both Ubuntu and Windows. A matrix strategy will spawn 6 parallel jobs automatically to test every combination.
+Section A — MATRIX BUILD STRATEGIES
+A matrix strategy allows you to define variables within a single job configuration, and GitHub Actions will automatically generate multiple parallel job runs for every combination of those variables.
+For instance, when maintaining an open-source library, you might need to verify compatibility across Node versions 14, 16, and 18 on both Ubuntu and Windows runners. A matrix configuration will automatically create 6 concurrent jobs covering all combinations.
 
-2. STEPS & SHELL COMMANDS
-Steps execute sequentially within a Job. Using the `run` keyword, you can execute native shell commands.
-You can write multi-line shell scripts using the pipe `|` character:
+Section B — STEP EXECUTION & SHELL SCRIPTS
+Within a Job, Steps run one after another in sequence. The `run` keyword lets you invoke native shell commands.
+For multi-line scripts, use the pipe `|` operator:
 ```yaml
 - run: |
-    echo "Starting build process"
+    echo "Initiating build sequence"
     make build
     make test
 ```
 
-3. USING MARKETPLACE ACTIONS
-You don't have to write everything from scratch. GitHub Marketplace contains thousands of pre-built actions.
-- Language-specific setup: `actions/setup-python`, `actions/setup-java` configure the environment PATHs perfectly.
-- Cloud Authentication: Actions like `aws-actions/configure-aws-credentials` safely inject IAM roles into the runner.
-- Security Scanning: Actions for SonarQube or Snyk can scan your code for vulnerabilities automatically.
+Section C — LEVERAGING MARKETPLACE ACTIONS
+There is no need to build everything yourself. The GitHub Marketplace hosts thousands of ready-made actions.
+- Security Scanning: Tools like SonarQube or Snyk can be integrated to automatically detect code vulnerabilities.
+- Language Environments: `actions/setup-python`, `actions/setup-java` handle environment PATH configuration automatically.
+- Cloud Credentials: Actions such as `aws-actions/configure-aws-credentials` securely inject IAM roles into the runner context.
 
-4. USING CACHING FOR FASTER BUILDS
-Downloading internet dependencies (`node_modules`, `~/.m2`) on every run wastes minutes of compute time. The `actions/cache` action stores these folders between runs.
-It uses a hash of your lockfile (like `package-lock.json`) as the cache key. If the lockfile hasn't changed, it restores the massive dependency folder from cache in seconds instead of re-downloading it.
+Section D — DEPENDENCY CACHING FOR FASTER PIPELINES
+Re-downloading dependencies (`node_modules`, `~/.m2`) every run wastes significant compute time. The `actions/cache` action persists these directories across workflow runs.
+The cache key is derived from a hash of your lock file (e.g., `package-lock.json`). When the lock file remains unchanged, the cached dependency folder is restored in seconds rather than downloading everything again.
 
-5. MULTI-JOB WORKFLOWS
-By default, all jobs in a workflow run simultaneously in parallel.
-To create a pipeline (e.g., Build -> Test -> Deploy), you use the `needs` keyword.
+Section E — ORCHESTRATING MULTI-JOB WORKFLOWS
+All jobs within a workflow execute in parallel by default.
+To enforce sequential execution (e.g., Build → Test → Deploy), apply the `needs` keyword:
 ```yaml
 jobs:
   test:
@@ -36,47 +36,47 @@ jobs:
     needs: test
     ...
 ```
-The `deploy` job will not start until the `test` job successfully finishes.
+Here the `deploy` job waits until `test` completes successfully before starting.
 
 =======================================================
-PRACTICAL LABS FOR WEEK 13
+LAB EXERCISES — WEEK 13
 =======================================================
 
-### Practical 3: Implementing a Matrix Testing Strategy
-**Question/Scenario:**
-Write a workflow job that tests a Python application across three versions of Python (3.8, 3.9, 3.10) using the matrix strategy.
+### Lab Exercise 3: Matrix Strategy for Cross-Version Testing
+**Scenario:**
+Create a workflow job that validates a Python application against three Python versions (3.8, 3.9, 3.10) using the matrix strategy feature.
 
-**Solution / Code:**
+**Code:**
 ```yaml
 jobs:
-  matrix_test:
+  cross-version-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.8", "3.9", "3.10"]
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Configure Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies and Test
+      - name: Install and run tests
         run: |
           pip install pytest
           pytest tests/
 ```
-*Explanation:* GitHub will dynamically spawn 3 independent runners. The `${{ matrix.python-version }}` expression injects the current iteration's value.
+*Note:* GitHub dynamically provisions 3 separate runners. The expression `${{ matrix.python-version }}` substitutes the value for the current matrix iteration.
 
-### Practical 4: Caching Maven Dependencies
-**Question/Scenario:**
-Your Maven build takes 5 minutes to download jars. Write a caching step that caches the `~/.m2/repository` directory. The cache key should be based on the runner's OS and a hash of the `pom.xml` file.
+### Lab Exercise 4: Caching Maven Repository
+**Scenario:**
+Your Maven build spends 5 minutes downloading JAR dependencies. Implement a caching step that stores the `~/.m2/repository` folder. Use a cache key derived from the runner OS and a hash of the `pom.xml` file.
 
-**Solution / Code:**
+**Code:**
 ```yaml
 steps:
   - uses: actions/checkout@v3
   
-  - name: Cache Maven packages
+  - name: Restore Maven cache
     uses: actions/cache@v3
     with:
       path: ~/.m2/repository
@@ -84,10 +84,10 @@ steps:
       restore-keys: |
         ${{ runner.os }}-maven-
         
-  - name: Build with Maven
+  - name: Execute Maven build
     run: mvn -B package --file pom.xml
 ```
-*Explanation:* `hashFiles('**/pom.xml')` generates a unique string based on the contents of the POM. If you add a new dependency, the POM hash changes, causing a cache miss, and downloading the new dependencies cleanly.
-### Windows Lab — Matrix build
-Add `strategy.matrix` with Java 17 and 21 in workflow YAML.
+*Note:* The function `hashFiles('**/pom.xml')` produces a unique string from the POM contents. Adding a new dependency alters the POM hash, triggering a cache miss and a fresh download.
+### Windows Lab — Matrix configuration
+Include `strategy.matrix` with Java versions 17 and 21 in your workflow YAML file.
 

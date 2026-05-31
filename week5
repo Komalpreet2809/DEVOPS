@@ -1,56 +1,55 @@
-# UNIT II (continued): CONTAINER REGISTRIES
-## WEEK 5: Docker Hub, GHCR, Private Registries & Authentication
+# UNIT II (continued): WORKING WITH CONTAINER REGISTRIES
+## WEEK 5: Docker Hub, GHCR, Private Registries & Token-Based Authentication
 
 ---
 
-### 5.1 Registry Types
-| Registry | URL format | Auth |
-|----------|-----------|------|
-| Docker Hub | `docker.io/user/repo:tag` | `docker login` |
-| GHCR | `ghcr.io/user/repo:tag` | PAT token |
-| Private (Harbor) | `registry.company.com/repo:tag` | Username/password or token |
+### A. Types of Container Registries
+
+- **Docker Hub** — `docker.io/user/repo:tag` — authenticated via `docker login`
+- **GHCR (GitHub Container Registry)** — `ghcr.io/user/repo:tag` — requires a Personal Access Token (PAT)
+- **Private registries (Harbor, Nexus, etc.)** — `registry.company.com/repo:tag` — uses username/password or token-based auth
 
 ---
 
-### 5.2 Docker Hub Workflow (Windows)
+### B. Publishing Images to Docker Hub (Windows)
 
 ```powershell
-docker build -t yourusername/devops-demo:1.0 .
+docker build -t yourusername/devops-app:1.0 .
 docker login
-docker push yourusername/devops-demo:1.0
-docker pull yourusername/devops-demo:1.0
+docker push yourusername/devops-app:1.0
+docker pull yourusername/devops-app:1.0
 ```
 
 ---
 
-### 5.3 GitHub Container Registry (GHCR)
+### C. Using GitHub Container Registry (GHCR)
 
-**Step 1 — Create Personal Access Token (PAT):**
-GitHub → Settings → Developer Settings → Personal Access Tokens  
-Enable: `write:packages`, `read:packages`
+**Step 1 — Generate a Personal Access Token (PAT):**
+Navigate to GitHub → Settings → Developer Settings → Personal Access Tokens
+Required scopes: `write:packages`, `read:packages`
 
-**Step 2 — Build & tag:**
+**Step 2 — Build and tag the image for GHCR:**
 ```powershell
-docker build -t ghcr.io/YOUR_GITHUB_USERNAME/devops-demo:1.0 .
+docker build -t ghcr.io/YOUR_GITHUB_USERNAME/devops-app:1.0 .
 ```
 
-**Step 3 — Login (use PAT as password):**
+**Step 3 — Authenticate with GHCR (use PAT as password):**
 ```powershell
 docker login ghcr.io -u YOUR_GITHUB_USERNAME
-# Password: paste PAT (NOT GitHub password)
+# When prompted for password: paste your PAT (NOT your GitHub account password)
 ```
 
-**Step 4 — Push:**
+**Step 4 — Push the image:**
 ```powershell
-docker push ghcr.io/YOUR_GITHUB_USERNAME/devops-demo:1.0
+docker push ghcr.io/YOUR_GITHUB_USERNAME/devops-app:1.0
 ```
 
-Verify at: `https://github.com/YOUR_GITHUB_USERNAME?tab=packages`
+Confirm the upload at: `https://github.com/YOUR_GITHUB_USERNAME?tab=packages`
 
 ---
 
-### 5.4 Private Registries
-Enterprises run Harbor, Nexus, or cloud registries (ECR, ACR):
+### D. Enterprise & Private Registries
+Organizations typically run self-hosted registries like Harbor, Nexus, or use cloud-managed options (AWS ECR, Azure ACR):
 ```powershell
 docker login registry.company.com
 docker tag myapp:1.0 registry.company.com/team/myapp:1.0
@@ -59,27 +58,27 @@ docker push registry.company.com/team/myapp:1.0
 
 ---
 
-### 5.5 Access Tokens & Security
-- Never commit tokens to Git
-- Use GitHub Secrets in CI/CD
-- Rotate tokens regularly
-- Use read-only tokens for pull-only agents
+### E. Authentication & Token Security Best Practices
+- Never store tokens or credentials in version control
+- Leverage GitHub Secrets or equivalent vault services in CI/CD pipelines
+- Rotate access tokens on a regular schedule
+- Assign read-only tokens to agents that only need to pull images
 
 ---
 
-## PRACTICAL LAB — Push to GHCR
+## LAB EXERCISE — Push an Image to GHCR
 
-1. Create `labs/unit-2-dockerfile` image tagged for GHCR
-2. Login with PAT
-3. Push and verify on GitHub Packages page
-4. Pull on another machine to confirm
+1. Build the image from `labs/unit-2-dockerfile` and tag it for GHCR
+2. Authenticate using your PAT
+3. Push the image and verify it appears on your GitHub Packages page
+4. Pull the image on a different machine to confirm availability
 
 ---
 
-## PRACTICE QUESTIONS
+## REVIEW QUESTIONS
 
-1. What is the full image name format for GHCR?
-2. Why use PAT instead of GitHub password for docker login?
-3. Difference between public and private registry?
-4. How to authenticate Docker in GitHub Actions for GHCR push?
-5. What command lists all tags of a local image?
+1. What is the complete image name format when pushing to GHCR?
+2. Why should you use a PAT rather than your GitHub password when running `docker login` for GHCR?
+3. How do public and private container registries differ in terms of access control?
+4. Describe how to authenticate Docker within a GitHub Actions workflow to push images to GHCR.
+5. Which Docker command shows all tags available for a locally stored image?

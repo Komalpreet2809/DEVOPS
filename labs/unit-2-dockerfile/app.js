@@ -1,13 +1,13 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.get('/', (req, res) => {
   res.json({
-    message: 'AMAN IS LEARNING DOCKER',
-    service: process.env.APP_NAME || 'DevOps Lab',
+    message: 'EXPLORING DOCKER CONTAINERS',
+    service: process.env.APP_NAME || 'Container Lab',
     platform: 'Windows + Docker Desktop'
   });
 });
 
-app.listen(port, () => console.log(`Server on port ${port}`));
+app.listen(port, () => console.log(`App running on port ${port}`));

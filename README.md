@@ -1,89 +1,82 @@
-# INT332 — Advanced DevOps Course Notes & Practical Labs
+# INT332 — DevOps Engineering: Notes, Labs & Practice
 
-[![Docker](https://img.shields.io/badge/Docker-Desktop-blue?logo=docker)](https://www.docker.com/products/docker-desktop/)
-[![Maven](https://img.shields.io/badge/Maven-Build-red?logo=apache-maven)](https://maven.apache.org/)
-[![GitHub Actions](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?logo=github-actions)](https://github.com/features/actions)
-
-**Complete syllabus-aligned DevOps notes** with theory, **Windows PowerShell labs**, runnable projects, and **real terminal screenshots** captured on Docker Desktop for Windows.
-
-Repository: [github.com/softways1/INT332](https://github.com/softways1/INT332)
+**Comprehensive DevOps course material** covering theory, **hands-on PowerShell labs**, executable projects, and **authentic terminal output screenshots** produced using Docker Desktop on Windows.
 
 ---
 
-## What’s Inside
+## Contents Overview
 
-| Folder / File | Description |
-|---------------|-------------|
-| `week1` … `week17` | Week-wise notes — theory + labs + practice questions |
-| `labs/` | Runnable lab projects (Dockerfile, Compose, Maven, CI workflows) |
-| `assets/screenshots/` | Real command output from Windows (SVG terminal screenshots) |
-| `notes/README.md` | Detailed index and setup guide |
-| `All Questions Solutions` | Exam-style question answers |
+- `week1` through `week17` — Weekly modules containing theory, lab exercises, and practice problems
+- `labs/` — Ready-to-run lab projects (Dockerfile, Compose, Maven, CI pipelines)
+- `assets/screenshots/` — Actual terminal output from Windows sessions (SVG format)
+- `notes/README.md` — Comprehensive index with environment setup instructions
+- `All Questions Solutions` — Practice questions with worked solutions
 
 ---
 
-## Syllabus Coverage
+## Topics Covered
 
-### Unit I — Basics of DevOps Infrastructure
-**Weeks:** `week1`, `week2`
+### Part A — DevOps Infrastructure Fundamentals
+**Modules:** `week1`, `week2`
 
-- Origin of containers, modern containerization, DevOps integration
-- Container runtime, namespaces, cgroups
-- Container images, layers, registries
-- Docker architecture (CLI, daemon, Hub)
-- Object types: container, image, network, volume
-- Layering & filesystem (overlay2, Copy-on-Write)
+- Evolution of containers, modern containerization practices, DevOps workflow
+- Container runtime internals, namespaces, control groups
+- Container images, layered filesystem, image registries
+- Docker platform components (CLI, daemon, Docker Hub)
+- Core object types: containers, images, networks, volumes
+- Storage layering & filesystem mechanics (overlay2, Copy-on-Write)
 
-### Unit II — Image Building & Container Management
-**Weeks:** `week3`, `week4`, `week5`
+### Part B — Building Images & Managing Containers
+**Modules:** `week3`, `week4`, `week5`
 
-- Dockerfile instructions (FROM, RUN, COPY, ADD, CMD, ENTRYPOINT, …)
-- Build context, `.dockerignore`, `docker build`, tagging
-- Bridge/host/overlay networks, DNS, port mapping
-- Volumes vs bind mounts, CoW mechanism
-- Docker Hub, GHCR, private registries, PAT authentication
+- Dockerfile directives (FROM, RUN, COPY, ADD, CMD, ENTRYPOINT, etc.)
+- Build context, `.dockerignore`, `docker build`, image tagging
+- Network modes: bridge, host, overlay — DNS resolution, port forwarding
+- Volumes versus bind mounts, Copy-on-Write behavior
+- Docker Hub, GitHub Container Registry, private registries, token-based auth
 
-### Unit III — Microservices with Docker Compose
-**Weeks:** `week6`, `week7`, `week8`
+### Part C — Microservices & Docker Compose
+**Modules:** `week6`, `week7`, `week8`
 
-- Monolithic vs microservices, API Gateway
-- Compose YAML: services, volumes, networks, env, secrets
-- `depends_on`, healthchecks, build vs image
-- WordPress + MySQL, Node.js + MongoDB, Spring Boot + PostgreSQL
+- Monolithic vs microservice design, API Gateway patterns
+- Compose YAML syntax: services, volumes, networks, environment variables, secrets
+- Service dependencies (`depends_on`), healthchecks, build vs image directives
+- Example stacks: WordPress + MySQL, Node.js + MongoDB, Spring Boot + PostgreSQL
 
-### Unit IV — Maven Build Automation
-**Weeks:** `week9`, `week10`, `week11`
+### Part D — Build Automation with Maven
+**Modules:** `week9`, `week10`, `week11`
 
-- POM structure, build lifecycle phases
-- Dependency scope, transitive deps, version conflicts
-- Compiler, Surefire, Shade plugins, Maven Wrapper
-- Dockerizing Maven apps, registry push
+- POM file anatomy, build lifecycle stages
+- Dependency scoping, transitive dependencies, version resolution
+- Key plugins: Compiler, Surefire, Shade — Maven Wrapper usage
+- Containerizing Maven applications, pushing to registries
 
-### Unit V — CI with GitHub Actions
-**Weeks:** `week12`, `week13`, `week14`
+### Part E — Continuous Integration via GitHub Actions
+**Modules:** `week12`, `week13`, `week14`
 
-- Workflows, triggers (push, PR, schedule, manual)
-- Jobs, steps, actions, runners
-- Matrix strategies, caching, multi-job pipelines
-- Docker build/push in CI, GHCR, deployments
+- Workflow definitions, trigger events (push, PR, cron, manual dispatch)
+- Jobs, steps, reusable actions, hosted runners
+- Matrix builds, dependency caching, multi-job workflows
+- Docker image build/push within CI, GHCR integration, deployment stages
 
-### Unit VI — CI/CD with Jenkins
-**Weeks:** `week15`, `week16`, `week17`
+### Part F — CI/CD Pipelines with Jenkins
+**Modules:** `week15`, `week16`, `week17`
 
-- Master/agent architecture, plugins, security/RBAC
-- Declarative vs scripted pipelines, Jenkinsfile
-- Docker & Maven in Jenkins, webhooks, shared libraries
+- Controller/agent topology, plugin ecosystem, security & RBAC
+- Declarative vs scripted pipeline syntax, Jenkinsfile authoring
+- Docker & Maven integration in Jenkins, webhook triggers, shared libraries
 
 ---
 
-## Windows Setup (Required for Labs)
+## Environment Setup (Windows)
 
-1. **Docker Desktop for Windows** — enable WSL2 backend
-2. **PowerShell** (built-in)
-3. **Java JDK 17+** and **Maven** — Unit IV
-4. **Git** — Unit V/VI
+1. **Docker Desktop for Windows** — make sure WSL2 backend is enabled
+2. **PowerShell** (pre-installed on Windows)
+3. **Java JDK 17+** along with **Maven** — needed for Part D
+4. **Git** — needed for Part E and Part F
 
 ```powershell
+# Verify all tools are installed
 docker --version
 docker compose version
 java -version
@@ -92,56 +85,49 @@ mvn -version
 
 ---
 
-## Quick Start — Run Your First Lab
+## Getting Started — First Lab
 
 ```powershell
-git clone https://github.com/softways1/INT332.git
-cd INT332
-
-# Unit I — Run Apache
+# Part A — Launch Apache httpd
 docker pull httpd:alpine
-docker run -d --name apache-lab -p 8081:80 httpd:alpine
-curl.exe http://localhost:8081
-# Browser: http://localhost:8081
+docker run -d --name httpd-server -p 8085:80 httpd:alpine
+curl.exe http://localhost:8085
+# Open in browser: http://localhost:8085
 
-# Unit II — Build custom image
+# Part B — Build a custom image
 cd labs\unit-2-dockerfile
-docker build -t devops-node-lab:1.0 .
-docker run -d -p 3000:3000 devops-node-lab:1.0
-curl.exe http://localhost:3000
+docker build -t node-app-demo:1.0 .
+docker run -d -p 3001:3000 node-app-demo:1.0
+curl.exe http://localhost:3001
 
-# Unit III — WordPress + MySQL
+# Part C — WordPress + MySQL stack
 cd ..\unit-3-wordpress
 docker compose up -d
-# Browser: http://localhost:8000
+# Open in browser: http://localhost:8005
 
-# Unit IV — Maven build
+# Part D — Maven project build
 cd ..\unit-4-maven
 mvn -B clean verify
 ```
 
 ---
 
-## Lab Projects
+## Lab Directory
 
-| Lab | Path | Syllabus Unit |
-|-----|------|---------------|
-| Apache httpd deployment | `labs/unit-1-apache/` | Unit I |
-| Custom Node.js Dockerfile | `labs/unit-2-dockerfile/` | Unit II |
-| WordPress + MySQL Compose | `labs/unit-3-wordpress/` | Unit III |
-| Maven calculator app | `labs/unit-4-maven/` | Unit IV |
-| GitHub Actions CI workflow | `labs/unit-5-github-actions/` | Unit V |
-| Jenkins Docker setup | `labs/unit-6-jenkins/` | Unit VI |
+- **Apache httpd deployment** — `labs/unit-1-apache/` (Part A)
+- **Custom Node.js Dockerfile** — `labs/unit-2-dockerfile/` (Part B)
+- **WordPress + MySQL Compose** — `labs/unit-3-wordpress/` (Part C)
+- **Maven calculator project** — `labs/unit-4-maven/` (Part D)
+- **GitHub Actions CI pipeline** — `labs/unit-5-github-actions/` (Part E)
+- **Jenkins Docker configuration** — `labs/unit-6-jenkins/` (Part F)
 
 ---
 
-## Screenshots
+## Terminal Screenshots
 
-All screenshots in `assets/screenshots/` were captured by running commands on **Windows 11 + Docker Desktop + PowerShell**. They show real output from:
+Every screenshot under `assets/screenshots/` was generated on a **Windows 11 machine running Docker Desktop with PowerShell**. They capture real output from:
 
 - `docker pull`, `docker run`, `docker ps`, `docker build`
-- `docker network`, `docker volume` commands
-- `docker compose up` (WordPress stack)
-- `mvn clean verify` (Maven lifecycle)
-
-
+- `docker network`, `docker volume` operations
+- `docker compose up` (WordPress multi-container stack)
+- `mvn clean verify` (Maven build lifecycle)

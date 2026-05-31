@@ -1,4 +1,4 @@
-name: INT332 CI
+name: INT332 Pipeline
 
 on:
   push:
@@ -8,32 +8,32 @@ on:
   workflow_dispatch:
 
 jobs:
-  maven-build:
+  maven-verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Configure JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
 
-      - name: Build and test Maven lab
+      - name: Maven build and test
         run: mvn -B clean verify
         working-directory: labs/unit-4-maven
 
-  docker-build:
+  container-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Docker lab image
-        run: docker build -t int332-node-lab ./labs/unit-2-dockerfile
+      - name: Build Node.js container image
+        run: docker build -t demo-node-app ./labs/unit-2-dockerfile
 
-      - name: Test container starts
+      - name: Verify container runs
         run: |
-          docker run -d --name test-lab -p 3000:3000 int332-node-lab
+          docker run -d --name app-test -p 3001:3001 demo-node-app
           sleep 3
-          curl -f http://localhost:3000
+          curl -f http://localhost:3001

@@ -1,41 +1,41 @@
-UNIT VI: CI/CD WITH JENKINS
-WEEK 16: JENKINS PIPELINES & JENKINSFILE
+UNIT VI: CI/CD USING JENKINS
+WEEK 16: PIPELINE SYNTAX & JENKINSFILE CONFIGURATION
 
-1. DECLARATIVE VS SCRIPTED PIPELINE SYNTAX
-A Pipeline in Jenkins is a suite of plugins that supports implementing continuous delivery pipelines.
-There are two Groovy-based syntaxes:
-- Declarative Pipeline: The modern approach. It provides a strict, structured, and simple syntax using blocks like `pipeline`, `stages`, `steps`, and `post`. It is easier to read and validate.
-- Scripted Pipeline: The legacy approach. It is basically raw Groovy code running inside Jenkins. It offers immense flexibility and complex control flow (if/else loops) but can become unmaintainable spaghetti code.
+Section A — DECLARATIVE VS SCRIPTED PIPELINE
+A Jenkins Pipeline is a collection of plugins that enables continuous delivery workflows.
+Two Groovy-based syntaxes exist:
+- Declarative Pipeline: The recommended modern syntax. It enforces a rigid, organized structure using blocks such as `pipeline`, `stages`, `steps`, and `post`. This approach is simpler to read and validate.
+- Scripted Pipeline: The older syntax. Essentially raw Groovy code executed within Jenkins. It provides extreme flexibility and complex control flow (conditionals, loops), but can quickly become difficult to maintain.
 
-2. JENKINSFILE STRUCTURE (Declarative)
-A standard Jenkinsfile resides in the root of the Git repository.
-Key blocks:
-- `pipeline`: The root element.
-- `agent`: Defines WHERE the pipeline executes (e.g., `agent any`, `agent { label 'linux' }`).
-- `stages`: Contains a sequence of one or more `stage` directives.
-- `stage`: Represents a logical phase of the pipeline (e.g., "Build", "Test").
-- `steps`: The actual tasks executed within a stage (e.g., running shell commands via `sh`).
-- `post`: Actions that run at the very end of the pipeline depending on the status (e.g., `success`, `failure`, `always`).
+Section B — ANATOMY OF A DECLARATIVE JENKINSFILE
+A Jenkinsfile is typically stored in the root directory of the Git repository.
+Essential blocks include:
+- `pipeline`: The top-level wrapper element.
+- `agent`: Specifies WHERE execution happens (e.g., `agent any`, `agent { label 'linux' }`).
+- `stages`: A container holding one or more `stage` directives in sequence.
+- `stage`: Represents a distinct phase of the pipeline (e.g., "Build", "Test").
+- `steps`: The concrete tasks performed within a stage (e.g., shell commands via `sh`).
+- `post`: Actions executed after the pipeline finishes, conditioned on the outcome (e.g., `success`, `failure`, `always`).
 
-3. PARAMETERS AND ENVIRONMENT VARIABLES
-Pipelines can be parameterized to accept dynamic inputs when a user clicks "Build with Parameters" in the UI.
-Environment variables can be defined globally in the `environment` block and accessed via \`${env.VAR_NAME}\`.
+Section C — PARAMETERS AND ENVIRONMENT VARIABLES
+Pipelines support parameterization, allowing users to provide dynamic inputs when clicking "Build with Parameters" in the Jenkins UI.
+Environment variables are declared in the `environment` block and referenced using \`${env.VAR_NAME}\`.
 
-4. JENKINS MULTI-BRANCH PIPELINES
-A Multi-branch Pipeline project type automatically scans a Git repository. For every branch or Pull Request it finds that contains a `Jenkinsfile`, it automatically creates a corresponding Jenkins job. This is essential for modern GitFlow practices.
+Section D — MULTI-BRANCH PIPELINE PROJECTS
+A Multi-branch Pipeline automatically scans a Git repository. For every branch or Pull Request containing a `Jenkinsfile`, Jenkins creates a corresponding pipeline job automatically. This is critical for teams following GitFlow or trunk-based development.
 
-5. MANAGING ARTIFACTS
-After compiling code, the resulting binaries (JAR files, ZIPs, or test reports) are ephemeral and will be deleted when the workspace is cleaned. The `archiveArtifacts` step saves these files permanently on the Jenkins master so users can download them from the build dashboard.
+Section E — PRESERVING BUILD ARTIFACTS
+Compiled output files (JAR archives, ZIP packages, test reports) are temporary and disappear when the workspace is cleaned. The `archiveArtifacts` step copies selected files to persistent storage on the Jenkins controller, making them available for download from the build results page.
 
 =======================================================
-PRACTICAL LABS FOR WEEK 16
+LAB EXERCISES — WEEK 16
 =======================================================
 
-### Practical 3: Writing a Declarative Pipeline
-**Question/Scenario:**
-Write a `Jenkinsfile` using Declarative syntax. It should run on any agent. It must have two stages: "Build" (which runs `make build`) and "Test" (which runs `make test`). Finally, regardless of success or failure, it must print "Pipeline Complete" in a post block.
+### Lab Exercise 3: Creating a Declarative Pipeline
+**Scenario:**
+Write a `Jenkinsfile` using Declarative syntax. It should execute on any available agent. Define two stages: "Build" (executing `make build`) and "Test" (executing `make test`). Include a post block that prints "Pipeline finished" regardless of the build outcome.
 
-**Solution / Code:**
+**Code:**
 ```groovy
 pipeline {
     agent any
@@ -43,13 +43,13 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Starting compilation...'
+                echo 'Running compilation step...'
                 sh 'make build'
             }
         }
         stage('Test') {
             steps {
-                echo 'Executing unit tests...'
+                echo 'Running test suite...'
                 sh 'make test'
             }
         }
@@ -57,33 +57,33 @@ pipeline {
     
     post {
         always {
-            echo 'Pipeline Complete!'
+            echo 'Pipeline finished!'
         }
     }
 }
 ```
 
-### Practical 4: Archiving Build Artifacts
-**Question/Scenario:**
-In your Jenkins pipeline, the "Build" stage produces a file named `app-release.zip` inside the `target/` directory. Add a step to securely archive this file so it appears on the Jenkins build results page.
+### Lab Exercise 4: Archiving Build Output
+**Scenario:**
+Your Jenkins pipeline's "Build" stage generates a file called `release-bundle.zip` inside the `target/` directory. Add a step to archive this output so it is accessible on the Jenkins build results dashboard.
 
-**Solution / Code:**
+**Code:**
 ```groovy
 pipeline {
     agent any
     stages {
         stage('Build and Archive') {
             steps {
-                sh 'mkdir -p target && touch target/app-release.zip'
+                sh 'mkdir -p target && touch target/release-bundle.zip'
                 
-                // Archive the generated artifact
+                // Persist the build output to Jenkins storage
                 archiveArtifacts artifacts: 'target/*.zip', fingerprint: true
             }
         }
     }
 }
 ```
-*Explanation:* The `archiveArtifacts` step copies files matching the glob pattern from the ephemeral agent workspace to the persistent Jenkins controller storage. `fingerprint: true` allows tracking the artifact across different jobs.
-### Windows Lab — Jenkinsfile
-Create Jenkinsfile with Checkout, Build, Test, Package stages.
+*Note:* The `archiveArtifacts` step transfers files matching the glob pattern from the temporary agent workspace to permanent storage on the Jenkins controller. Setting `fingerprint: true` enables artifact tracking across different pipeline runs.
+### Windows Lab — Pipeline configuration
+Create a Jenkinsfile containing Checkout, Build, Test, and Package stages.
 

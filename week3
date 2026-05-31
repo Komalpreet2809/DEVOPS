@@ -1,32 +1,30 @@
-# UNIT II: IMAGE BUILDING & CONTAINER MANAGEMENT
-## WEEK 3: Dockerfile Core Concepts & Image Creation
+# UNIT II: BUILDING IMAGES & MANAGING CONTAINERS
+## WEEK 3: Dockerfile Essentials & Custom Image Creation
 
 ---
 
-### 3.1 Dockerfile Fundamentals
-A **Dockerfile** is a text recipe for building an image layer-by-layer.
+### A. Dockerfile Basics
+A **Dockerfile** is a plain-text script that defines how to assemble an image, one layer at a time.
 
-**Core instructions:**
+**Key instructions:**
 
-| Instruction | Purpose |
-|-------------|---------|
-| `FROM` | Base image (required first instruction) |
-| `RUN` | Execute command during build (creates layer) |
-| `COPY` | Copy files from build context |
-| `ADD` | Like COPY + auto-extract tar + URL fetch |
-| `WORKDIR` | Set working directory |
-| `ENV` | Set environment variables |
-| `EXPOSE` | Document port (doesn't publish) |
-| `VOLUME` | Declare mount point |
-| `CMD` | Default command (overridable) |
-| `ENTRYPOINT` | Main executable (harder to override) |
+- `FROM` — Sets the base image (must be the first instruction)
+- `RUN` — Runs a command at build time (produces a new layer)
+- `COPY` — Transfers files from the build context into the image
+- `ADD` — Similar to COPY but also extracts tar archives and supports URLs
+- `WORKDIR` — Defines the working directory inside the container
+- `ENV` — Sets environment variables
+- `EXPOSE` — Documents which port the app listens on (does not publish it)
+- `VOLUME` — Declares a mount point for external storage
+- `CMD` — Specifies the default command (can be overridden at runtime)
+- `ENTRYPOINT` — Defines the primary executable (not easily overridden)
 
 ---
 
-### 3.2 Build Context & .dockerignore
-Everything sent to the daemon during `docker build` is the **build context**.
+### B. Build Context & .dockerignore
+The **build context** includes everything in the directory sent to the Docker daemon when running `docker build`.
 
-Create `.dockerignore` to exclude:
+Use `.dockerignore` to keep unnecessary files out:
 ```
 node_modules
 .git
@@ -34,113 +32,113 @@ node_modules
 .env
 ```
 
-Smaller context = faster builds.
+A smaller build context means faster image builds.
 
 ---
 
-### 3.3 Build Process (Windows)
+### C. Building Images on Windows
 
 ```powershell
 cd labs\unit-2-dockerfile
-docker build -t devops-node-lab:1.0 .
+docker build -t node-app-demo:1.0 .
 ```
 
-![Building custom Node.js image on Windows](assets/screenshots/unit-2/01-docker-build.svg)
-*Building custom Node.js image on Windows — captured on Windows PowerShell + Docker Desktop*
+![Custom Node.js image build output](assets/screenshots/unit-2/01-docker-build.svg)
+*Building a Node.js application image — Docker Desktop on Windows*
 
 
-**Stages:**
-1. Send build context to daemon
-2. Execute each instruction (cache check per layer)
-3. Tag final image
+**Build stages:**
+1. Build context is transmitted to the Docker daemon
+2. Each instruction is executed with a cache check per layer
+3. The resulting image is tagged
 
 ---
 
-### 3.4 Inspecting Built Images
+### D. Examining Built Images
 
 ```powershell
-docker images devops-node-lab
-docker history devops-node-lab:1.0
-docker inspect devops-node-lab:1.0
+docker images node-app-demo
+docker history node-app-demo:1.0
+docker inspect node-app-demo:1.0
 ```
 
-![Custom built image listed](assets/screenshots/unit-2/02-docker-images.svg)
-*Custom built image listed — captured on Windows PowerShell + Docker Desktop*
+![Newly built image in the image list](assets/screenshots/unit-2/02-docker-images.svg)
+*Custom image visible in local registry — Docker Desktop on Windows*
 
 
-![Layer history of custom image](assets/screenshots/unit-2/03-docker-history.svg)
-*Layer history of custom image — captured on Windows PowerShell + Docker Desktop*
+![Layer breakdown of the custom image](assets/screenshots/unit-2/03-docker-history.svg)
+*Layer-by-layer history of the built image — Docker Desktop on Windows*
 
 
 ---
 
-### 3.5 Run & Test Custom Image
+### E. Running & Testing the Custom Image
 
 ```powershell
-docker run -d --name devops-node-lab -p 3000:3000 devops-node-lab:1.0
-curl.exe http://localhost:3000
+docker run -d --name node-app-demo -p 3001:3000 node-app-demo:1.0
+curl.exe http://localhost:3001
 ```
 
-![Running custom container](assets/screenshots/unit-2/04-docker-run.svg)
-*Running custom container — captured on Windows PowerShell + Docker Desktop*
+![Custom container running in detached mode](assets/screenshots/unit-2/04-docker-run.svg)
+*Application container started — Docker Desktop on Windows*
 
 
-![JSON response from custom app](assets/screenshots/unit-2/05-curl-app.svg)
-*JSON response from custom app — captured on Windows PowerShell + Docker Desktop*
+![Application JSON response](assets/screenshots/unit-2/05-curl-app.svg)
+*JSON output from the running application — Docker Desktop on Windows*
 
 
 ---
 
-### 3.6 Image Tagging & Versioning
+### F. Tagging & Versioning Images
 
 ```powershell
-docker tag devops-node-lab:1.0 devops-node-lab:1.1
-docker tag devops-node-lab:1.0 yourusername/devops-node-lab:1.0
+docker tag node-app-demo:1.0 node-app-demo:1.1
+docker tag node-app-demo:1.0 yourusername/node-app-demo:1.0
 ```
 
-**Best practices:**
-- Use semantic versioning (`1.0.0`, `1.0.1`)
-- Never rely on `:latest` in production
-- Tag with Git commit SHA in CI
+**Recommended practices:**
+- Adopt semantic versioning (`1.0.0`, `1.0.1`)
+- Avoid depending on the `:latest` tag in production environments
+- In CI pipelines, tag images with the Git commit SHA for traceability
 
 ---
 
-### 3.7 CMD vs ENTRYPOINT
+### G. CMD vs ENTRYPOINT Explained
 
 ```dockerfile
-# CMD — easily overridden
+# CMD — the default command, easily replaced at runtime
 CMD ["node", "app.js"]
 
-# ENTRYPOINT — fixed executable
+# ENTRYPOINT — the fixed executable for the container
 ENTRYPOINT ["node", "app.js"]
-CMD ["--port", "3000"]
+CMD ["--port", "3001"]
 ```
 
 ```powershell
-docker run myapp                    # runs entrypoint + default cmd
-docker run myapp --port 4000        # entrypoint + override cmd args
+docker run myapp                    # runs entrypoint with default cmd args
+docker run myapp --port 4000        # entrypoint runs with overridden args
 ```
 
 ---
 
-## PRACTICAL LAB — Build from labs/unit-2-dockerfile
+## LAB EXERCISE — Build from labs/unit-2-dockerfile
 
-See full project in `labs/unit-2-dockerfile/`:
-- `Dockerfile` — multi-layer Node.js build
-- `.dockerignore` — excludes node_modules
-- `app.js` — returns "AMAN IS LEARNING DOCKER"
+The project in `labs/unit-2-dockerfile/` includes:
+- `Dockerfile` — multi-layer Node.js image build
+- `.dockerignore` — filters out node_modules
+- `app.js` — returns "DEVOPS STUDENT — LEARNING DOCKER"
 
-**Challenge:** Modify `app.js`, rebuild only the changed layers, observe cache behavior.
+**Challenge:** Edit `app.js`, rebuild the image, and observe how Docker reuses cached layers for unchanged steps.
 
 ---
 
-## PRACTICE QUESTIONS
+## REVIEW QUESTIONS
 
-1. What is the difference between COPY and ADD?
-2. Why use .dockerignore?
-3. What does EXPOSE actually do?
-4. How does Docker layer caching work?
-5. Write a Dockerfile for a Python Flask app on port 5000.
+1. What distinguishes COPY from ADD in a Dockerfile?
+2. Why is a .dockerignore file important?
+3. Does the EXPOSE instruction open a port on the host? Explain.
+4. How does Docker's layer caching mechanism work during builds?
+5. Write a Dockerfile to containerize a Python Flask application listening on port 5000.
 
 **Sample answer (Q5):**
 ```dockerfile

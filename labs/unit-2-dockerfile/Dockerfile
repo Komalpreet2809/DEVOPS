@@ -1,9 +1,9 @@
-# Unit II Lab: Custom image with layering demonstration
+# Part II Lab: Building a custom image with layer caching
 FROM node:20-alpine
 WORKDIR /app
 COPY package.json ./
 RUN npm install --production
 COPY app.js ./
-EXPOSE 3000
-ENV APP_NAME="DevOps Lab"
+EXPOSE 3001
+ENV APP_NAME="Container Lab"
 CMD ["node", "app.js"]

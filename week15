@@ -1,62 +1,65 @@
-UNIT VI: CI/CD WITH JENKINS
-WEEK 15: JENKINS FOUNDATIONS & ARCHITECTURE
+UNIT VI: CI/CD USING JENKINS
+WEEK 15: JENKINS FUNDAMENTALS & SYSTEM ARCHITECTURE
 
-1. INTRODUCTION TO JENKINS
-Jenkins is the most widely used open-source automation server. It provides hundreds of plugins to support building, deploying, and automating any project. Unlike GitHub Actions which is a SaaS, Jenkins is self-managed infrastructure.
+Section A — WHAT IS JENKINS?
+Jenkins is the most popular open-source automation server available today. With hundreds of plugins, it supports building, deploying, and automating virtually any project. Unlike GitHub Actions, which is a cloud-hosted service, Jenkins requires you to manage your own infrastructure.
 
-2. JENKINS ARCHITECTURE (MASTER/AGENT MODEL)
-Jenkins operates on a distributed architecture to handle heavy workloads:
-- Master (Controller) Node: The central control unit. It serves the web UI, handles HTTP requests, parses configurations, schedules jobs, and monitors agents. It should NOT execute heavy builds itself to prevent crashing.
-- Agent (Worker/Slave) Nodes: Machines connected to the master that actually execute the jobs. Agents can be static VMs, bare-metal servers, or dynamically provisioned Docker/Kubernetes pods.
+Section B — MASTER/AGENT ARCHITECTURE
+Jenkins follows a distributed architecture designed for scalability:
+- Agent (Worker) Nodes: Machines connected to the controller that perform the actual build execution. Agents can be permanent VMs, physical servers, or dynamically provisioned Docker/Kubernetes pods.
+- Master (Controller) Node: The central hub that hosts the web UI, processes HTTP requests, parses job configurations, schedules builds, and monitors agents. Heavy build workloads should NOT run on the master to avoid performance degradation.
 
-3. INSTALLATION & UI OVERVIEW
-Jenkins is a Java application distributed as a `.war` file. It can run standalone via `java -jar jenkins.war`, be deployed on Tomcat, or run inside a Docker container.
-The Classic UI is function-focused, while the "Blue Ocean" plugin UI provides modern, graphical visualizations of CI pipelines.
+Section C — INSTALLING JENKINS & NAVIGATING THE UI
+Jenkins is a Java-based application packaged as a `.war` file. You can run it standalone using `java -jar jenkins.war`, deploy it on Tomcat, or launch it inside a Docker container.
+The default Classic UI focuses on functionality, while the "Blue Ocean" plugin offers a modern, visual interface for CI pipeline visualization.
 
-4. PLUGINS MANAGEMENT
-Jenkins' true power is its plugin ecosystem. Out of the box, Jenkins does very little.
-Plugins add integrations for Git, Maven, Docker, AWS, Slack notifications, and Pipeline syntax.
-Plugins are managed via the web UI (`Manage Jenkins -> Manage Plugins`) or via CLI tools during automated provisioning.
+Section D — THE PLUGIN ECOSYSTEM
+The real strength of Jenkins lies in its extensive plugin ecosystem. A fresh Jenkins installation has limited functionality.
+Plugins provide integrations for Git, Maven, Docker, AWS, Slack notifications, Pipeline DSL, and much more.
+Plugin management is done through the web UI (`Manage Jenkins -> Manage Plugins`) or via CLI during automated setup.
 
-5. SECURITY, USERS, ROLES
-Security is critical because Jenkins executes arbitrary code and holds deployment secrets.
-- Authentication: Can be internal, or integrated with LDAP/Active Directory, GitHub OAuth, or SAML.
-- Authorization (RBAC): Using the Role-Based Strategy plugin, administrators can define who can read jobs, trigger builds, or access the underlying system configuration.
+Section E — SECURITY, AUTHENTICATION & AUTHORIZATION
+Since Jenkins executes arbitrary code and stores deployment credentials, security configuration is essential.
+- Authentication: Supports internal user databases, LDAP/Active Directory integration, GitHub OAuth, or SAML providers.
+- Authorization (RBAC): The Role-Based Strategy plugin allows administrators to control who can view jobs, start builds, or modify system settings.
 
-6. FREESTYLE VS PIPELINE JOBS
-- Freestyle Jobs: Configured by clicking through web UI forms. Easy to start, but impossible to track changes (no version control for the job config).
-- Pipeline Jobs: Configured by writing code (a `Jenkinsfile`) stored alongside the application source code in Git (Pipeline-as-Code). This is the industry standard.
+Section F — FREESTYLE JOBS VS PIPELINE JOBS
+- Freestyle Jobs: Set up through web UI forms by clicking options. Simple to get started, but job configurations are not version-controlled and cannot be tracked in Git.
+- Pipeline Jobs: Defined in code through a `Jenkinsfile` that lives alongside your application source in Git (Pipeline-as-Code). This is the recommended industry practice.
 
 =======================================================
-PRACTICAL LABS FOR WEEK 15
+LAB EXERCISES — WEEK 15
 =======================================================
 
-### Practical 1: Installing Jenkins via Docker
-**Question/Scenario:**
-You need to spin up a local Jenkins controller for testing without installing Java on your laptop. Write the docker command to run the official `jenkins/jenkins:lts` image, exposing the UI on port 8080 and persisting the data.
+### Lab Exercise 1: Running Jenkins in a Docker Container
+**Scenario:**
+You want to launch a local Jenkins controller for experimentation without installing Java on your machine. Write a docker command to start the `jenkins/jenkins:lts` image, expose the web interface on port 8089, and persist all data using a volume.
 
-**Solution / Code:**
+**Code:**
 ```bash
-docker run -d -p 8080:8080 -p 50000:50000 \
-  -v jenkins_home:/var/jenkins_home \
-  --name jenkins-master \
+docker run -d -p 8089:8080 -p 50001:50000 \
+  -v jenkins_data:/var/jenkins_home \
+  --name jenkins-controller \
   jenkins/jenkins:lts
 ```
-*Explanation:* Port 8080 serves the Web UI. Port 50000 is used by agents to communicate with the master via JNLP/TCP. The named volume `jenkins_home` ensures job configurations aren't lost when the container stops.
+*Note:* Port 8089 on the host maps to port 8080 inside the container for the Web UI. Port 50001 is used for JNLP/TCP agent communication with the controller. The named volume `jenkins_data` ensures all configurations and jobs survive container restarts.
 
-### Practical 2: Extracting the Initial Admin Password
-**Question/Scenario:**
-When you first boot Jenkins, it locks the UI and asks for an "initial admin password" generated during installation. Assuming Jenkins is running in a Docker container named `jenkins-master`, how do you retrieve this password via the CLI?
+### Lab Exercise 2: Retrieving the Initial Admin Password
+**Scenario:**
+On first launch, Jenkins requires an auto-generated admin password to unlock the setup wizard. If Jenkins runs inside a Docker container named `jenkins-controller`, how do you obtain this password from the command line?
 
-**Solution / Code:**
+**Code:**
 ```bash
-docker exec jenkins-master cat /var/jenkins_home/secrets/initialAdminPassword
+docker exec jenkins-controller cat /var/jenkins_home/secrets/initialAdminPassword
 ```
-*Explanation:* The `docker exec` command allows you to run a command inside a running container. We use `cat` to read the auto-generated security token file required to unlock the Jenkins setup wizard.
-### Windows Lab — Jenkins in Docker
+*Note:* The `docker exec` command runs a process inside the specified container. Here we use `cat` to display the security token file that Jenkins generates during its initial setup.
+### Windows Lab — Jenkins Docker Setup
 ```powershell
-docker volume create jenkins_home
-docker run -d -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home --name jenkins-lab jenkins/jenkins:lts
-docker exec jenkins-lab cat /var/jenkins_home/secrets/initialAdminPassword
+# Create a persistent volume for Jenkins data
+docker volume create jenkins_data
+# Launch Jenkins container with mapped ports
+docker run -d -p 8089:8080 -p 50001:50000 -v jenkins_data:/var/jenkins_home --name jenkins-server jenkins/jenkins:lts
+# Retrieve the auto-generated admin password
+docker exec jenkins-server cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 

@@ -1,79 +1,79 @@
-UNIT V: CONTINUOUS INTEGRATION WITH GITHUB ACTIONS
-WEEK 14: RUNNERS, DOCKER & CLOUD DEPLOYMENTS
+UNIT V: CI USING GITHUB ACTIONS
+WEEK 14: EXECUTION RUNNERS, DOCKER BUILDS & CLOUD DEPLOYMENT
 
-1. RUNNERS: GITHUB-HOSTED VS SELF-HOSTED
-- GitHub-Hosted Runners: VMs fully managed by GitHub. They are spun up fresh for your job and destroyed immediately after. They come pre-installed with Docker, Node, Python, etc. They are extremely convenient but have minute quotas on private repositories.
-- Self-Hosted Runners: You install the GitHub Actions Agent software on your own infrastructure (AWS EC2, Raspberry Pi, On-Prem servers). You get full control over hardware and no execution time limits, but you are responsible for OS updates, security, and cleaning up workspaces between runs.
+Section A — GITHUB-HOSTED VS SELF-HOSTED RUNNERS
+- GitHub-Hosted Runners: Virtual machines fully managed by GitHub. A fresh VM is provisioned for each job and destroyed afterward. These runners come with Docker, Node, Python, and other tools pre-installed. They are very convenient but subject to usage limits on private repos.
+- Self-Hosted Runners: You install the GitHub Actions runner agent on your own machines (e.g., AWS EC2 instances, Raspberry Pi devices, or on-premise servers). This gives you full hardware control and no time limits, but you must handle OS patching, security hardening, and workspace cleanup between job runs.
 
-2. RUNNER SECURITY & MANAGEMENT
-When using Self-Hosted runners, NEVER allow them on public repositories where anyone can open a Pull Request. A malicious PR could execute arbitrary code on your internal corporate network.
+Section B — SECURITY CONSIDERATIONS FOR SELF-HOSTED RUNNERS
+Self-Hosted runners should NEVER be used on public repositories that accept Pull Requests from external contributors. A malicious PR could run arbitrary commands on your internal infrastructure.
 
-3. DOCKER & GITHUB ACTIONS
-Building and publishing Docker containers is the most common use case for modern CI/CD.
-GitHub hosted runners (`ubuntu-latest`) natively support Docker commands out of the box.
+Section C — DOCKER INTEGRATION WITH GITHUB ACTIONS
+One of the most prevalent CI/CD use cases is building and publishing Docker containers.
+GitHub-hosted runners (using `ubuntu-latest`) have Docker available natively without additional setup.
 
-4. PUSHING TO DOCKER HUB
-You can use official marketplace actions (`docker/build-push-action`) to build images securely. Authentication secrets (like passwords and tokens) should NEVER be hardcoded. They must be stored in "GitHub Repository Secrets" and accessed via `${{ secrets.SECRET_NAME }}`.
+Section D — PUBLISHING IMAGES TO DOCKER HUB
+Official marketplace actions like `docker/build-push-action` simplify secure image builds. Sensitive credentials such as passwords and tokens must NEVER appear in workflow files. Instead, store them in "GitHub Repository Secrets" and reference them using `${{ secrets.SECRET_NAME }}`.
 
-5. GITHUB CONTAINER REGISTRY (GHCR)
-GitHub provides its own container registry. It is deeply integrated with GitHub Actions. The implicit `${{ secrets.GITHUB_TOKEN }}` provided to every workflow run can be used to automatically authenticate and push images to GHCR without needing to set up external Docker Hub credentials.
+Section E — GITHUB CONTAINER REGISTRY (GHCR)
+GitHub offers its own container registry tightly coupled with GitHub Actions. Every workflow run receives an automatic `${{ secrets.GITHUB_TOKEN }}` that can authenticate and push images to GHCR — no external Docker Hub credentials needed.
 
-6. DEPLOYING TO SERVERS/CLOUD
-Once artifacts/images are built, Actions can trigger deployments.
-- SSH Actions: To SSH into a remote Linux server and run `git pull && docker-compose up`.
-- Cloud CLI: Actions come pre-installed with AWS CLI, Azure CLI, and Google Cloud SDK to trigger serverless deployments or Kubernetes rolling updates.
+Section F — DEPLOYING TO REMOTE SERVERS AND CLOUD PLATFORMS
+After artifacts or images are produced, Actions can orchestrate deployments:
+- Cloud CLI Tools: Runners include AWS CLI, Azure CLI, and Google Cloud SDK for triggering serverless deployments or Kubernetes rollouts.
+- SSH Actions: Connect to a remote Linux host over SSH to execute commands like `git pull && docker-compose up`.
 
 =======================================================
-PRACTICAL LABS FOR WEEK 14
+LAB EXERCISES — WEEK 14
 =======================================================
 
-### Practical 5: Building and Pushing to Docker Hub
-**Question/Scenario:**
-Write a workflow job that checks out the code, logs into Docker Hub using secrets `DOCKER_USER` and `DOCKER_PASS`, builds the Dockerfile in the repository, and pushes it to `myuser/myapp:latest`.
+### Lab Exercise 5: Build and Publish a Docker Image to Docker Hub
+**Scenario:**
+Create a workflow job that pulls the source code, authenticates with Docker Hub using secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`, builds the Dockerfile, and pushes the image as `devuser/webapp:latest`.
 
-**Solution / Code:**
+**Code:**
 ```yaml
 jobs:
-  docker-release:
+  publish-image:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Pull source code
         uses: actions/checkout@v3
 
-      - name: Log in to Docker Hub
+      - name: Authenticate with Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PASS }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build and publish Docker image
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: myuser/myapp:latest
+          tags: devuser/webapp:latest
 ```
 
-### Practical 6: Deploying via SSH
-**Question/Scenario:**
-After your image is pushed, you need to tell your production server to pull the latest image and restart. Write a step using the `appleboy/ssh-action` to connect to your server and execute a restart script.
+### Lab Exercise 6: Remote Server Deployment via SSH
+**Scenario:**
+Once your container image is published, you need the production server to fetch the latest image and restart services. Write a step using `appleboy/ssh-action` to connect to your server and run a restart sequence.
 
-**Solution / Code:**
+**Code:**
 ```yaml
 steps:
-  - name: Execute deployment script over SSH
+  - name: Run remote deployment commands via SSH
     uses: appleboy/ssh-action@master
     with:
-      host: ${{ secrets.SERVER_HOST }}
-      username: ${{ secrets.SERVER_USER }}
-      key: ${{ secrets.SERVER_SSH_KEY }}
+      host: ${{ secrets.DEPLOY_HOST }}
+      username: ${{ secrets.DEPLOY_USER }}
+      key: ${{ secrets.DEPLOY_SSH_KEY }}
       script: |
-        cd /opt/myapp
-        docker pull myuser/myapp:latest
+        cd /opt/webapp
+        docker pull devuser/webapp:latest
         docker-compose down
         docker-compose up -d
 ```
-*Explanation:* This connects to the remote server securely using an SSH private key stored in GitHub Secrets, and executes raw shell commands on the remote machine to restart the Docker stack.
-### Windows Lab — Docker in CI
-Add a `docker build` step tagged with `${{ github.sha }}` in your workflow.
+*Note:* This step uses an SSH private key stored in GitHub Secrets to securely connect to the remote machine and execute shell commands that restart the Docker application stack.
+### Windows Lab — Docker in CI pipeline
+Include a `docker build` step in your workflow, tagging the image with `${{ github.sha }}`.
 

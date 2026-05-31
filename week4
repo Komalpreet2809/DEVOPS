@@ -1,135 +1,131 @@
-# UNIT II (continued): DOCKER NETWORKING & STORAGE
-## WEEK 4: Networks, Volumes, Port Mapping & CoW
+# UNIT II (continued): NETWORKING & PERSISTENT STORAGE IN DOCKER
+## WEEK 4: Network Drivers, Volumes, Port Forwarding & Copy-on-Write
 
 ---
 
-### 4.1 Docker Networking Overview
-Containers are isolated by default. Docker networks enable communication.
+### A. Docker Networking Fundamentals
+By default, containers run in isolation. Docker networking allows them to communicate with each other and the outside world.
 
-| Network Driver | Use Case |
-|----------------|----------|
-| **bridge** | Default — containers on same host |
-| **host** | Container uses host network directly |
-| **overlay** | Multi-host (Swarm/Kubernetes) |
-| **none** | No networking |
+- **bridge** — Default driver; suitable for containers on the same host
+- **host** — Container shares the host's network stack directly
+- **overlay** — Enables communication across multiple hosts (used with Swarm/Kubernetes)
+- **none** — Completely disables networking
 
 ---
 
-### 4.2 Bridge Network & Port Mapping
+### B. Custom Bridge Networks & Port Forwarding
 
 ```powershell
-docker network create devnet-lab
+docker network create lab-network
 docker network ls
-docker network inspect devnet-lab
+docker network inspect lab-network
 ```
 
-![Creating custom bridge network](assets/screenshots/unit-2/06-network-create.svg)
-*Creating custom bridge network — captured on Windows PowerShell + Docker Desktop*
+![Custom bridge network creation output](assets/screenshots/unit-2/06-network-create.svg)
+*Bridge network created successfully — Docker Desktop on Windows*
 
 
-![Listing custom network](assets/screenshots/unit-2/07-network-ls.svg)
-*Listing custom network — captured on Windows PowerShell + Docker Desktop*
+![Network listing showing custom network](assets/screenshots/unit-2/07-network-ls.svg)
+*All Docker networks listed — Docker Desktop on Windows*
 
 
-![Network inspect output](assets/screenshots/unit-2/08-network-inspect.svg)
-*Network inspect output — captured on Windows PowerShell + Docker Desktop*
+![Detailed network inspection output](assets/screenshots/unit-2/08-network-inspect.svg)
+*Inspecting the custom network details — Docker Desktop on Windows*
 
 
-**Port mapping** (`-p host:container`):
+**Port forwarding** uses the syntax `-p host:container`:
 ```powershell
-docker run -d -p 8080:80 --name web --network devnet-lab nginx:alpine
+docker run -d -p 8088:80 --name web --network lab-network nginx:alpine
 ```
 
-Access from Windows browser: `http://localhost:8080`
+Open in your Windows browser: `http://localhost:8088`
 
 ---
 
-### 4.3 DNS Inside Docker
-On **custom bridge networks**, containers resolve each other by **name**:
+### C. Container DNS Resolution
+On **user-defined bridge networks**, containers can reach each other using **container names** as hostnames:
 ```powershell
-docker run -d --name db --network devnet-lab mysql:8.0
-docker run -d --name api --network devnet-lab my-api
-# api connects to hostname "db" — not IP
+docker run -d --name db --network lab-network mysql:8.0
+docker run -d --name api --network lab-network my-api
+# The api container connects to "db" by name — no IP address needed
 ```
 
-Default `bridge` network does NOT support DNS by container name.
+The default `bridge` network does **not** provide DNS-based name resolution between containers.
 
 ---
 
-### 4.4 Linking Containers (Legacy)
-`--link` is deprecated. Use **custom user-defined networks** instead.
+### D. Container Linking (Deprecated)
+The `--link` flag is a legacy feature. Always prefer **user-defined networks** for inter-container communication.
 
 ---
 
-### 4.5 Volumes vs Bind Mounts
+### E. Storage Options: Volumes vs Bind Mounts
 
-| Type | Managed by | Best for |
-|------|-----------|----------|
-| **Volume** | Docker | Production data (DB, uploads) |
-| **Bind mount** | User path | Dev hot-reload, config files |
-| **tmpfs** | Memory | Sensitive temp data |
+- **Volume** — Managed by Docker; ideal for production data such as databases and uploads
+- **Bind mount** — Maps a host directory; best for development hot-reload and configuration files
+- **tmpfs** — Stored in memory only; suitable for sensitive temporary data
 
 ```powershell
-docker volume create vol-lab
+docker volume create data-vol
 docker volume ls
-docker run -d -v vol-lab:/data --name vol-test alpine sleep 3600
-docker exec vol-test sh -c "echo hello > /data/test.txt"
-docker rm -f vol-test
-docker run --rm -v vol-lab:/data alpine cat /data/test.txt
+docker run -d -v data-vol:/data --name storage-test alpine sleep 3600
+docker exec storage-test sh -c "echo hello > /data/test.txt"
+docker rm -f storage-test
+docker run --rm -v data-vol:/data alpine cat /data/test.txt
 ```
 
-![Creating named volume](assets/screenshots/unit-2/09-volume-create.svg)
-*Creating named volume — captured on Windows PowerShell + Docker Desktop*
+![Named volume creation output](assets/screenshots/unit-2/09-volume-create.svg)
+*Docker volume created — Docker Desktop on Windows*
 
 
-![Listing volumes](assets/screenshots/unit-2/10-volume-ls.svg)
-*Listing volumes — captured on Windows PowerShell + Docker Desktop*
+![Volume listing output](assets/screenshots/unit-2/10-volume-ls.svg)
+*All Docker volumes displayed — Docker Desktop on Windows*
 
 
-**Bind mount (Windows path):**
+**Using a bind mount on Windows:**
 ```powershell
 docker run -d -v ${env:USERPROFILE}/devops-data:/data nginx:alpine
 ```
 
 ---
 
-### 4.6 Copy-on-Write Mechanism
-Image layers = read-only. Container layer = writable CoW overlay.
-- **Advantage:** Fast container creation, shared base
-- **Risk:** Heavy writes fill container layer — use volumes for persistent/large data
+### F. Copy-on-Write in Practice
+Image layers remain read-only. The container adds a writable CoW layer on top.
+- **Benefit:** Container startup is almost instant because the base image is shared
+- **Caution:** Excessive writes bloat the container layer — use volumes for persistent or large data
 
 ---
 
-### 4.7 Container Lifecycle Lab
+### G. Container Lifecycle Walkthrough
 
 ```powershell
-docker run -d --name lifecycle nginx:alpine
-docker pause lifecycle
-docker unpause lifecycle
-docker stop lifecycle
-docker start lifecycle
-docker restart lifecycle
-docker rm lifecycle
+docker run -d --name lifecycle-demo nginx:alpine
+docker pause lifecycle-demo
+docker unpause lifecycle-demo
+docker stop lifecycle-demo
+docker start lifecycle-demo
+docker restart lifecycle-demo
+docker rm lifecycle-demo
 ```
 
 ---
 
-## PRACTICAL LAB — Two-Container Network
+## LAB EXERCISE — Multi-Container Networking
 
 ```powershell
-docker network create app-net
-docker run -d --name redis --network app-net redis:alpine
-docker run -it --rm --network app-net alpine ping -c 3 redis
-docker network rm app-net
+docker network create test-net
+docker run -d --name redis --network test-net redis:alpine
+docker run -it --rm --network test-net alpine ping -c 3 redis
+docker network rm test-net
 docker rm -f redis
 ```
 
 ---
 
-## PRACTICE QUESTIONS
+## REVIEW QUESTIONS
 
-1. Difference between bridge and host network?
-2. When to use volumes vs bind mounts on Windows?
-3. How does DNS work on custom bridge networks?
-4. What is Copy-on-Write?
-5. Map host port 9090 to container port 80 — write the flag.
+1. How does the bridge network driver differ from the host driver?
+2. On Windows, when should you choose volumes over bind mounts?
+3. Explain how DNS-based discovery works within user-defined bridge networks.
+4. Describe the Copy-on-Write mechanism and its purpose.
+5. Write the Docker flag to forward host port 9090 to container port 80.

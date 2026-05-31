@@ -1,51 +1,51 @@
-UNIT IV: MAVEN BUILD AUTOMATION
-WEEK 10: DEPENDENCY MANAGEMENT AND MAVEN PLUGINS
+UNIT IV: BUILD AUTOMATION WITH MAVEN
+WEEK 10: MANAGING DEPENDENCIES AND LEVERAGING MAVEN PLUGINS
 
-1. PARENT POM
-In large organizations, you often have dozens of microservices. Instead of duplicating configurations, you can create a "Parent POM". Child modules inherit dependency versions, properties, and plugin configurations from this parent, enforcing strict standardization across the entire codebase.
+Topic A. THE PARENT POM CONCEPT
+Large organizations often maintain dozens of microservices. Rather than duplicating configuration across every project, teams create a "Parent POM." Child modules inherit shared dependency versions, properties, and plugin settings from this parent, ensuring uniform standards across the entire codebase.
 
-2. DEPENDENCY SCOPE
-Dependencies are not always needed at all times. Maven uses "Scopes" to optimize the build:
-- `compile` (Default): Required for compiling and running the app. Included in the final JAR.
-- `provided`: Required for compiling, but assumed to be provided by the server at runtime (e.g., Servlet API on Tomcat).
-- `runtime`: Not needed for compiling, but required for execution (e.g., MySQL JDBC Driver).
-- `test`: Only needed during the test phase (e.g., JUnit, Mockito).
+Topic B. DEPENDENCY SCOPES
+Not every dependency is needed at every stage. Maven uses scopes to control when a library is included:
+- `compile` (Default): Needed for both compilation and execution. Bundled into the final artifact.
+- `provided`: Required at compile time but expected to be supplied by the runtime environment (e.g., the Servlet API is provided by Tomcat).
+- `runtime`: Not used during compilation but necessary when the application runs (e.g., a JDBC driver for MySQL).
+- `test`: Only available during the testing phase (e.g., JUnit 5, Mockito).
 
-3. TRANSITIVE DEPENDENCIES & VERSION CONFLICTS
-When you declare a dependency on Library A, and Library A requires Library B, Maven automatically downloads Library B. This is a transitive dependency.
-Version Conflicts occur when your project brings in multiple different versions of Library B through different transitive paths. Maven resolves this using "Nearest Definition" (the version closest to your project root wins). You can also use `<exclusions>` to manually remove conflicting sub-dependencies.
+Topic C. TRANSITIVE DEPENDENCIES AND CONFLICT RESOLUTION
+When your project depends on Library X, and Library X internally requires Library Y, Maven automatically pulls in Library Y. This is known as a transitive dependency.
+Conflicts arise when different dependency paths bring in incompatible versions of Library Y. Maven resolves this with the "Nearest Definition" rule — the version declared closest to the project root takes precedence. You can also manually exclude problematic transitive dependencies using the `<exclusions>` element.
 
-4. USING DEPENDENCY MANAGEMENT
-The `<dependencyManagement>` tag is usually placed in a Parent POM. It does NOT add dependencies to the project; it merely declares the *versions* of dependencies. When child modules declare the dependency, they omit the version tag, automatically inheriting the version from the Parent POM.
+Topic D. CENTRALIZED VERSION CONTROL WITH dependencyManagement
+The `<dependencyManagement>` section, typically defined in a Parent POM, does not add any dependencies directly. Instead, it declares which version of each dependency should be used. When child modules list a dependency, they can omit the `<version>` tag and automatically receive the version specified by the parent.
 
-5. MAVEN PLUGINS
-Maven is essentially a plugin execution framework. Every phase in the lifecycle is executed by a plugin.
-- Compiler Plugin: Compiles Java source files. You can configure it to target specific Java versions (e.g., Java 17).
-- Surefire Plugin: The testing workhorse. It executes JUnit/TestNG tests during the `test` phase and generates reports.
-- Shade Plugin: By default, a Maven JAR only contains your code, not your dependencies. The Shade plugin creates an "Uber JAR" (or Fat JAR) which unpacks all dependencies and bundles them into a single, executable JAR file.
+Topic E. ESSENTIAL MAVEN PLUGINS
+At its core, Maven is a plugin execution engine. Every lifecycle phase is handled by a plugin:
+- Compiler Plugin: Compiles Java source code. Can be configured to target a specific Java version (e.g., Java 17 or Java 21).
+- Surefire Plugin: Runs unit tests (JUnit, TestNG) during the `test` phase and produces test result reports.
+- Shade Plugin: By default, a Maven-built JAR includes only your project's classes. The Shade plugin produces an "Uber JAR" (also called a Fat JAR) that extracts and bundles all dependency classes into a single, self-contained executable JAR.
 
-6. MAVEN WRAPPER (mvnw)
-The Maven Wrapper is a script (`mvnw`) bundled with the project repository. It automatically downloads the correct version of Maven defined by the project. This ensures that CI/CD pipelines and new developers don't have to manually install Maven on their operating systems.
+Topic F. THE MAVEN WRAPPER (mvnw)
+The Maven Wrapper is a pair of scripts (`mvnw` for Linux/Mac, `mvnw.cmd` for Windows) committed alongside your source code. When invoked, they automatically download and use the exact Maven version the project requires. This guarantees that CI/CD pipelines, new team members, and different machines all use a consistent Maven version without manual installation.
 
 =======================================================
-PRACTICAL LABS FOR WEEK 10
+LAB EXERCISES — WEEK 10
 =======================================================
 
-### Practical 3: Analyzing and Resolving Transitive Dependencies
-**Question/Scenario:**
-Your build is failing due to a conflicting version of the `guava` library. You need to visualize the dependency tree to find out which library is bringing in the wrong version of Guava. What command do you run?
+### Lab Exercise 3: Debugging Transitive Dependency Conflicts
+**Task Description:**
+Your build is breaking because of a conflicting version of the `guava` library pulled in transitively. You need to inspect the dependency hierarchy to identify which path introduces the problematic version. What command should you execute?
 
-**Solution / Code:**
+**Answer:**
 ```bash
 mvn dependency:tree -Dincludes=com.google.guava:guava
 ```
-*Explanation:* The `dependency:tree` plugin visualizes the hierarchy. The `-Dincludes` flag filters the massive output to only show paths leading to the Guava library, making debugging trivial.
+*How it works:* The `dependency:tree` goal outputs the full dependency graph. Adding `-Dincludes` narrows the output to only show branches that lead to the Guava artifact, making the conflict source easy to spot.
 
-### Practical 4: Creating an Executable Uber JAR with Shade
-**Question/Scenario:**
-Your command-line application requires the Apache Commons library. Write the plugin configuration in the `pom.xml` to use the `maven-shade-plugin` so that `mvn package` produces a single standalone executable JAR file with the main class `com.demo.Main`.
+### Lab Exercise 4: Building a Self-Contained Executable JAR with Shade
+**Task Description:**
+Your CLI application depends on the Apache Commons library. Add the `maven-shade-plugin` configuration to your `pom.xml` so that running `mvn package` generates a single runnable JAR with `com.example.App` as the entry point.
 
-**Solution / Code:**
+**Answer:**
 ```xml
 <build>
   <plugins>
@@ -62,7 +62,7 @@ Your command-line application requires the Apache Commons library. Write the plu
           <configuration>
             <transformers>
               <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                <mainClass>com.demo.Main</mainClass>
+                <mainClass>com.example.App</mainClass>
               </transformer>
             </transformers>
           </configuration>
@@ -72,8 +72,8 @@ Your command-line application requires the Apache Commons library. Write the plu
   </plugins>
 </build>
 ```
-![Maven dependency tree](assets/screenshots/unit-4/03-mvn-dependency-tree.svg)
-*Maven dependency tree — captured on Windows PowerShell + Docker Desktop*
+![Dependency tree visualization](assets/screenshots/unit-4/03-mvn-dependency-tree.svg)
+*Viewing the dependency tree output in PowerShell*
 
 ```powershell
 cd labs\unit-4-maven

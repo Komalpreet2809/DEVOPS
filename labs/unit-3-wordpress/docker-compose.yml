@@ -1,33 +1,33 @@
 services:
-  db:
+  database-svc:
     image: mysql:8.0
     volumes:
-      - db_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wp_user
-      MYSQL_PASSWORD: wp_pass
+      MYSQL_ROOT_PASSWORD: r00tSecret
+      MYSQL_DATABASE: wpsite
+      MYSQL_USER: blog_admin
+      MYSQL_PASSWORD: blogPass2025
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  wordpress:
+  wp-demo:
     depends_on:
-      db:
+      database-svc:
         condition: service_healthy
     image: wordpress:latest
     ports:
-      - "8000:80"
+      - "8005:80"
     restart: always
     environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: wp_user
-      WORDPRESS_DB_PASSWORD: wp_pass
-      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_HOST: database-svc:3306
+      WORDPRESS_DB_USER: blog_admin
+      WORDPRESS_DB_PASSWORD: blogPass2025
+      WORDPRESS_DB_NAME: wpsite
 
 volumes:
-  db_data:
+  mysql_data:
